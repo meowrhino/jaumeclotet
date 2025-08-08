@@ -46,10 +46,37 @@ async function loadFeatured() {
   checkUnlock(slugs);
 }
 
-function checkUnlock(slugs) {
+async function checkUnlock(slugs) {
   const allSeen = slugs.every(s => localStorage.getItem('proyecto-' + s + '-visto') === '1');
   const overlay = document.getElementById('unlock7');
-  if (allSeen && overlay) overlay.classList.add('show');
+  if (!overlay) return;
+
+  if (allSeen) {
+    overlay.classList.add('show');
+
+    // Usar el último slug o uno especial para el 7º
+    const specialSlug = 'alusinasons'; // o el que quieras
+    const logoUrl = await resolveAsset(specialSlug, ['titol.png', 'img/titol.png']);
+
+    // Limpiar el contenido y poner solo el logo centrado
+    overlay.innerHTML = '';
+    const a = document.createElement('a');
+    a.href = `projecte.html?slug=${encodeURIComponent(specialSlug)}`;
+    a.className = 'logo-link';
+
+    const logo = document.createElement('img');
+    logo.className = 'logo';
+    logo.src = logoUrl;
+    logo.alt = specialSlug;
+
+    a.appendChild(logo);
+    overlay.appendChild(a);
+
+    // Quitar fondo oscuro si no quieres velo
+    overlay.style.background = 'transparent';
+  } else {
+    overlay.classList.remove('show');
+  }
 }
 
 window.addEventListener('storage', () => {

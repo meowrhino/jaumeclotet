@@ -1,19 +1,18 @@
 {
   "slug": "alusinasons",
   "titulo": "Alusinasons",
-  "logo": "./img/cover.png",
+  "logo": "./img/titol.png",
   "bg": "./img/fons.jpg",
-  "sinopsis": "Proyecto Alusinasons (texto breve).",
+  "sinopsis": "Un innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
   "elemento_divertido": {
-    "src": "./img/fun.png",
-    "follow_anchor": "center",
-    "rotation_offset_deg": 0,
-    "lerp": 0.12,
-    "max_speed_px": 28,
-    "mobile_mode": "idle"
+    "src": "./img/fun.png"
   },
   "textos": [
-    "Añade aquí el texto largo o varios bloques de texto."
+    "ALUSINASONS és una oda transgressora al món festiu i a l’imaginari que l’acompanya: un concert instal·latiu on un personatge es veu dominat i arrossegat per lògiques alcohòliques delirants i caricaturesques.",
+    "Encallat frenèticament en la gresca, l’artista es desdobla en el seu alter ego, jaujeje, un cantant amateur que aprofita per presentar el seu primer àlbum de música electrònica, amb cançons costumistes, còmiques i metafòriques.",
+    "El show deriva ràpidament cap a un ‘botellón’ imaginatiu i paròdic que col·lecciona i exposa bromes musicals, objectuals, lingüístiques, audiovisuals, plàstiques i performatives.",
+    "Una experiència enginyosa on els marges de l’stand-up i del concert convencional es desborden per destapar un estil d’humor innocent, incert i fràgil.",
+    "Tonto qui ho escolti…"
   ],
   "galeria": {
     "images": [
@@ -23,13 +22,11 @@
       "./img/Alusinasons-foto 4.jpg",
       "./img/Alusinasons-foto 5.jpg",
       "./img/Alusinasons-foto 6.jpg"
-    ],
-    "thumb_height": 220,
-    "full_on_click": true
+    ]
   },
   "libre": [],
   "creditos": {
     "formato": "text",
-    "contenido": "Créditos del proyecto."
+    "contenido": "Co-produït per ANTIC TEATRE (Barcelona) i Jaume Clotet\nEstrenat al GREC FESTIVAL 2024 (Barcelona)\nAmb el suport del segell musical AUSTROHÚNGARO, de la NAU ESTRUCH 2022/2023 (Sabadell) i del KONVENT (Berga).\n\nDirecció: Jaume Clotet\nProjecte creat i desenvolupat amb Max Feriche, Alicia Garrido i Albert Sánchez\nIntèrprets: Jaume Clotet i Alicia Garrido\nProducció musical: Max Feriche i Jaume Clotet\nVestuari: Alicia Garrido\nVídeo i dissenys: Albert Sánchez\nInstal·lació lumínica: Max Milà amb Altea i Marc\nEscenografia cotxe: CNC Carpinteria Moderna\nDissenys 3D: Léa Ferraton\nTècnic de llums: Marcos Zappia\nFotografia: Anna Izquierdo, Irene Moray, Dani Cantó i Britt Hecker\nMasterització: Adrià Gil"
   }
 }

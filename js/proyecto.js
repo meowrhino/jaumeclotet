@@ -67,6 +67,7 @@ function renderProject(p){
   const root = document.getElementById('project-root');
   if (!root) { console.warn('[projecte] #project-root not found'); return; }
   root.innerHTML = `
+    ${p.bg ? `<div class="project-bg"><img src="${p.bg}" alt=""></div>` : ''}
     <header class="project-header" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:12px;">
       ${p.logo ? `<img class="project-logo" src="${p.logo}" alt="${p.titulo||p.slug}" style="max-width:420px;width:60vw;">` : ''}
       ${p.sinopsis ? `<p class='project-sinopsis' style="opacity:.9;text-align:center;max-width:800px;">${p.sinopsis}</p>` : ''}

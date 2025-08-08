@@ -1,86 +1,188 @@
-/* Minimal layout & responsive grid */
+/* =========================
+   Reset & Base
+   ========================= */
 * { box-sizing: border-box; }
-html, body { margin:0; padding:0; height:100%; }
-body { background:#111; color:#eee; font-family: system-ui, sans-serif; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
 
-/* Viewport container on index */
-#index { height:100vh; width:100vw; overflow:hidden; }
+/* =========================
+   Index (grid de 6)
+   ========================= */
+#index { height: 100vh; width: 100vw; overflow: hidden; }
 
-/* Grid: depends on aspect ratio; mobile breakpoint goes 1x6 + scroll */
-.grid { display:grid; height:100%; width:100%; gap:4px; padding:4px; }
+.grid {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  gap: 4px;
+  padding: 4px;
+}
 
-/* Portrait (más alta que ancha): 2 x 3 */
+/* Retrato: 2 x 3 */
 @media (max-aspect-ratio: 1/1) {
-  .grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); }
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+  }
 }
 
-/* Landscape o cuadrado: 3 x 2 */
+/* Apaisado/cuadrado: 3 x 2 */
 @media (min-aspect-ratio: 1/1) {
-  .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
 }
 
-/* Mobile: 1 x 6 + scroll vertical (usamos ancho pequeño como heurística) */
+/* Móvil: 1 x 6 + scroll vertical */
 @media (max-width: 640px) {
-  #index { height:auto; }
-  .grid { grid-template-columns: 1fr; grid-template-rows: repeat(6, min(50vh, 360px)); height:auto; }
-  body { overflow:auto; }
+  #index { height: auto; }
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, min(50vh, 360px));
+    height: auto;
+  }
+  body { overflow: auto; }
 }
 
+/* Tiles */
 .tile {
   position: relative;
   overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#000;
-  border-radius: 0; /* sin estilo extra */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
 }
 
-/* Fondo cubre y recorta lo que sobre */
+/* Fondo del tile (cover + crop) */
 .tile .bg {
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit: cover; /* fill y crop automático */
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
   filter: brightness(.9) contrast(1);
-  pointer-events:none;
+  pointer-events: none;
 }
 
-/* Logo centrado */
-.tile .logo-link { position:relative; z-index:2; display:block; }
+/* Logo centrado en tile */
+.tile .logo-link { position: relative; z-index: 2; display: block; }
 .tile .logo {
   max-width: 62%;
   max-height: 62%;
-  display:block;
-  margin:auto;
+  display: block;
+  margin: auto;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,.65));
 }
 
-/* 7º proyecto overlay centrado */
+/* 7º proyecto overlay */
+/* 7º proyecto centrado (sin velo) */
 #unlock7 {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   display: none;
-  align-items:center; justify-content:center;
-  background: rgba(0,0,0,.85);
+  align-items: center;
+  justify-content: center;
+  background: transparent;   /* <— sin velo */
   z-index: 50;
 }
-#unlock7.show { display:flex; }
-#unlock7 img { max-width: 40vw; max-height: 40vh; filter: drop-shadow(0 0 30px rgba(255,255,255,.2)); }
+#unlock7.show { display: flex; }
+#unlock7 img {
+  max-width: clamp(160px, 30vw, 420px);
+  max-height: 40vh;
+  filter: none;              /* sin glow raro */
+}
+/* =========================
+   Project page (detalle)
+   ========================= */
 
-/* Project page (mínimo) */
-.back { position:fixed; top:8px; left:10px; color:#fff; text-decoration:none; z-index:10; }
-#project-root { padding: 16px; max-width: 1200px; margin: 0 auto; }
-.project-header { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; }
+/* Quitamos el back fijo de arriba (si algún HTML viejo lo tiene) */
+/* .back { }  <-- eliminado a propósito */
+
+/* Contenedor principal del detalle */
+#project-root {
+  padding: 16px;
+  margin: 0 auto;
+  max-width: 1200px;
+  color: #000;            /* texto negro en la página de proyecto */
+  background: transparent;/* dejamos ver el fondo si lo hay */
+}
+
+/* En pantallas > 640px, 80dvw centrado */
+@media (min-width: 641px) {
+  #project-root { width: 80dvw; }
+}
+
+/* Fondo del proyecto (inyectado por JS con .project-bg > img) */
+.project-bg { position: fixed; inset: 0; z-index: -1; }
+.project-bg img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Cabecera: logo + sinopsis */
+.project-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
 .project-logo { max-width: 420px; width: 60vw; }
-.project-sinopsis { opacity:.9; text-align:center; max-width: 800px; }
-.project-textos p { max-width: 800px; margin: 0 auto 1em; line-height:1.6; }
+.project-sinopsis {
+  text-align: center;
+  white-space: pre-line;   /* respeta \n en la sinopsis */
+  max-width: 900px;
+  margin: 0 auto 24px;
+  line-height: 1.4;
+}
 
-/* Galería: scroll horizontal, click -> fullscreen */
-.scroller { display:flex; gap:8px; overflow-x:auto; padding:8px 0; }
-.gal-thumb { height:220px; flex:0 0 auto; border-radius: 6px; cursor:pointer; }
+/* Textos largos */
+.project-textos p {
+  max-width: 800px;
+  margin: 0 auto 1em;
+  line-height: 1.6;
+}
 
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,.96); display:none; align-items:center; justify-content:center; z-index:60; }
-.overlay.show { display:flex; }
+/* Galería: horizontal con scroll (como tienes ahora) */
+.project-galeria.scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.gal-thumb {
+  height: 220px;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Overlay fullscreen para imágenes */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.96);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 60;
+}
+.overlay.show { display: flex; }
 .overlay-img { max-width: 92vw; max-height: 92vh; }
 
-/* Fun follower minimal */
-.fun { position:fixed; left:0; top:0; width:72px; pointer-events:none; }
+/* Elemento divertido (seguidor) */
+.fun {
+  position: fixed;
+  left: 0; top: 0;
+  width: 72px;
+  pointer-events: none;
+}
+
+/* Botón volver solo abajo y centrado (cuando lo añadas) */
+.back-row { text-align: center; }
+.back-bottom {
+  display: inline-block;
+  margin: 40px auto 10px;
+  padding: 10px 16px;
+  border: 1px solid #0003;
+  border-radius: 6px;
+  color: #000;
+  text-decoration: none;
+}
+.back-bottom:hover { background: #00000010; }
