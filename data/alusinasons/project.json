@@ -1,0 +1,35 @@
+{
+  "slug": "alusinasons",
+  "titulo": "Alusinasons",
+  "logo": "./img/cover.png",
+  "bg": "./img/fons.jpg",
+  "sinopsis": "Proyecto Alusinasons (texto breve).",
+  "elemento_divertido": {
+    "src": "./img/fun.png",
+    "follow_anchor": "center",
+    "rotation_offset_deg": 0,
+    "lerp": 0.12,
+    "max_speed_px": 28,
+    "mobile_mode": "idle"
+  },
+  "textos": [
+    "Añade aquí el texto largo o varios bloques de texto."
+  ],
+  "galeria": {
+    "images": [
+      "./img/Alusinasons-foto 1.jpg",
+      "./img/Alusinasons-foto 2.jpg",
+      "./img/Alusinasons-foto 3.jpg",
+      "./img/Alusinasons-foto 4.jpg",
+      "./img/Alusinasons-foto 5.jpg",
+      "./img/Alusinasons-foto 6.jpg"
+    ],
+    "thumb_height": 220,
+    "full_on_click": true
+  },
+  "libre": [],
+  "creditos": {
+    "formato": "text",
+    "contenido": "Créditos del proyecto."
+  }
+}
