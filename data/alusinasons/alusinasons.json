@@ -1,0 +1,43 @@
+{
+  "slug": "proy1",
+  "titulo": "Nombre del proyecto (opcional si el logo ya lo es)",
+  "logo": "./logo.png",
+  "bg": "./bg.jpg",
+  "sinopsis": "Texto breve del proyecto.",
+  "elemento_divertido": {
+    "src": "./fun.png",
+    "follow_anchor": "center",        // center | top-left | custom
+    "rotation_offset_deg": 0,         // para alinear el gráfico
+    "lerp": 0.12,                     // suavidad del seguimiento (0..1)
+    "max_speed_px": 28,               // cap de velocidad (opcional)
+    "mobile_mode": "idle"             // idle | follow-touch | none
+  },
+  "textos": [
+    "Bloque de texto 1. Puede ser largo.",
+    "Bloque de texto 2. (Ponemos varios si hace falta)."
+  ],
+  "galeria": {
+    "images": [
+      "./galeria/01.jpg",
+      "./galeria/02.jpg"
+    ],
+    "thumb_height": 220,               // px para el scroller
+    "full_on_click": true              // abre a pantalla completa
+  },
+  "libre": [
+    {
+      "tipo": "disco",
+      "titulo": "Disco Guay",
+      "link": "https://…",
+      "cover": "./libre/disco-cover.jpg"
+    },
+    {
+      "tipo": "embed",
+      "html": "<iframe src='…' loading='lazy'></iframe>"
+    }
+  ],
+  "creditos": {
+    "formato": "html",                 // html | markdown | text
+    "contenido": "Texto con <a href='…'>enlaces</a> si hace falta."
+  }
+}
