@@ -74,18 +74,27 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   filter: drop-shadow(0 4px 10px rgba(0,0,0,.65));
 }
 
-/* 7º proyecto overlay */
-/* 7º proyecto centrado (sin velo) */
+/* Overlay 7º proyecto */
 #unlock7 {
   position: fixed;
   inset: 0;
-  display: none;
+  display: none;             /* oculto por defecto */
   align-items: center;
   justify-content: center;
-  background: transparent;   /* <— sin velo */
-  z-index: 50;
+  background: transparent;
+  z-index: 10;
+  /* clave: que NO intercepte clics por defecto */
+  pointer-events: none;
 }
+
 #unlock7.show { display: flex; }
+
+/* Solo el enlace interno debe recibir clics */
+#unlock7 a {
+  pointer-events: auto;
+  display: inline-block;
+  text-decoration: none;
+}
 #unlock7 img {
   max-width: clamp(160px, 30vw, 420px);
   max-height: 40vh;
@@ -186,3 +195,13 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   text-decoration: none;
 }
 .back-bottom:hover { background: #00000010; }
+
+.back {
+  position: fixed;
+  bottom: 16px; right: 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 8px;
+  border-radius: 6px;
+}
