@@ -186,18 +186,28 @@ body {
   display: block;
 }
 
+/* Sinopsis: usar párrafos normales (no pre-wrap) */
 .project-sinopsis {
-  opacity: .9;
+  white-space: normal;       /* override del pre-wrap anterior */
+  line-height: 1.35;
   text-align: center;
   max-width: 800px;
   margin: 0 auto 1em;
-  line-height: 1.6;
-
-  white-space: pre-wrap;
-  /* respeta \n y \n\n y sigue haciendo wrap */
   overflow-wrap: anywhere;
-  /* por si hay palabras largas */
+
+  font-family: "Spectral SC", serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
+
+/* Inicial un pelín más grande al inicio de cada P */
+.project-sinopsis p::first-letter {
+  font-size: 1.22em;
+  line-height: 1;
+  font-weight: 400;
+}
+
 
 /* Textos */
 .project-textos p {

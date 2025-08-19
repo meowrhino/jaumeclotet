@@ -140,12 +140,30 @@ function normalizePaths(p, base) {
       if (it.type === 'video' && it.src) it.src = normAny(it.src);
       if (it.poster) it.poster = normImg(it.poster);
       // sanea align/width
-      if (it.align && !['left','center','right'].includes(it.align)) delete it.align;
-      if (it.width && !['auto','half','full'].includes(it.width)) delete it.width;
+      if (it.align && !['left', 'center', 'right'].includes(it.align)) delete it.align;
+      if (it.width && !['auto', 'half', 'full'].includes(it.width)) delete it.width;
       return it;
     });
   }
 }
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]
+  ));
+}
+
+function renderSinopsisHtml(raw) {
+  const txt = String(raw || '').replace(/\r\n?/g, '\n').trim();
+  if (!txt) return '';
+  // separa párrafos por líneas en blanco:
+  const paras = txt.split(/\n\s*\n+/);
+  // dentro de cada párrafo, \n -> <br>
+  return paras.map(p =>
+    `<p>${escapeHtml(p).replace(/\n/g, '<br>')}</p>`
+  ).join('');
+}
+
 
 // ============ Render principal del proyecto ============
 
@@ -163,7 +181,7 @@ function renderProject(p) {
 
     <header class="project-header">
       ${p.logo ? `<img class="project-logo" src="${p.logo}" alt="${p.titulo || p.slug}">` : ''}
-      ${p.sinopsis ? `<p class="project-sinopsis">${p.sinopsis}</p>` : ''}
+      ${p.sinopsis ? `<div class="project-sinopsis sinopsis--ligera">${renderSinopsisHtml(p.sinopsis)}</div>` : ''}
     </header>
 
     ${Array.isArray(p.textos)
@@ -193,11 +211,11 @@ function renderProject(p) {
   setupGalleryOverlay();
 
   // --- Inserta comodines (si hay) ---
-if (Array.isArray(p.comodin) && p.comodin.length) {
-  renderComodines(p.comodin);
-  // Como ahora hay más imágenes/vídeos clicables, re-inicializamos el overlay para incluirlos
-  setupGalleryOverlay(true); // le pasamos true para refrescar (ver función abajo)
-}
+  if (Array.isArray(p.comodin) && p.comodin.length) {
+    renderComodines(p.comodin);
+    // Como ahora hay más imágenes/vídeos clicables, re-inicializamos el overlay para incluirlos
+    setupGalleryOverlay(true); // le pasamos true para refrescar (ver función abajo)
+  }
 
 
   // --- Inicializa comportamiento del "elemento divertido" ---
@@ -278,7 +296,7 @@ function createComodinElement(it) {
     const fig = document.createElement('figure');
     fig.className = `comodin comodin-image${align}${width}`;
     fig.innerHTML = `<img src="${it.src}" alt="">` +
-                    (it.caption ? `<figcaption>${it.caption}</figcaption>` : '');
+      (it.caption ? `<figcaption>${it.caption}</figcaption>` : '');
     return fig;
   }
 
@@ -295,7 +313,7 @@ function createComodinElement(it) {
       it.autoplay ? 'autoplay' : ''
     ].filter(Boolean).join(' ');
     fig.innerHTML = `<video src="${it.src}" ${attrs}${poster}></video>` +
-                    (it.caption ? `<figcaption>${it.caption}</figcaption>` : '');
+      (it.caption ? `<figcaption>${it.caption}</figcaption>` : '');
     return fig;
   }
 
@@ -339,7 +357,7 @@ function resolvePlace(place, anchors, root) {
 
   if (!target) return def;
 
-  if (pos === 'after')  return { target, position: 'afterend' };
+  if (pos === 'after') return { target, position: 'afterend' };
   if (pos === 'before') return { target, position: 'beforebegin' };
   if (pos === 'append') return { target, position: 'beforeend' };
 
@@ -375,7 +393,7 @@ function setupGalleryOverlay(refresh = false) {
   medias.forEach(el => {
     el.addEventListener('click', () => {
       if (el.tagName === 'VIDEO') {
-        try { el.pause(); } catch(_) {}
+        try { el.pause(); } catch (_) { }
         const poster = el.getAttribute('poster') || '';
         showVideo(el.currentSrc || el.src, poster);
       } else {
@@ -427,8 +445,8 @@ function makeFunMover(fun, cfg = FUN_CFG) {
 
   // Utils locales
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const rand  = (a, b) => a + Math.random() * (b - a);
-  const pick  = () => [-1, 0, 1][(Math.random() * 3) | 0];
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = () => [-1, 0, 1][(Math.random() * 3) | 0];
 
   function scheduleDirChange() {
     clearTimeout(dirTimer);
@@ -478,7 +496,7 @@ function makeFunMover(fun, cfg = FUN_CFG) {
 
   function clampTargetToViewport() {
     const m = cfg.AUTO.MARGIN;
-    tx = clamp(tx, m, innerWidth  - m);
+    tx = clamp(tx, m, innerWidth - m);
     ty = clamp(ty, m, innerHeight - m);
   }
 
@@ -493,7 +511,7 @@ function makeFunMover(fun, cfg = FUN_CFG) {
 
       // Rebote suave en los bordes
       const m = cfg.AUTO.MARGIN;
-      const minX = m, maxX = innerWidth  - m;
+      const minX = m, maxX = innerWidth - m;
       const minY = m, maxY = innerHeight - m;
       if (tx <= minX || tx >= maxX) { vx = -vx; tx = clamp(tx, minX, maxX); }
       if (ty <= minY || ty >= maxY) { vy = -vy; ty = clamp(ty, minY, maxY); }
@@ -552,7 +570,7 @@ function setupFunFollower() {
   mover.startLoop((now) => {
     const fresh = (now - lastMouseTs) <= FUN_CFG.THRESHOLDS.IDLE_MS;
     if (!fresh && !mover.isAuto()) mover.enableAuto();
-    if (fresh && mover.isAuto())   mover.disableAuto();
+    if (fresh && mover.isAuto()) mover.disableAuto();
   });
 
   // Mantener objetivo dentro del viewport si cambia el tamaño
@@ -577,29 +595,29 @@ function setupFunFollowerGyro() {
   };
   fun.addEventListener('touchstart', (e) => { dragging = true; mover.disableAuto(); setFromTouch(e); }, { passive: true });
   window.addEventListener('touchmove', (e) => { if (dragging) setFromTouch(e); }, { passive: true });
-  window.addEventListener('touchend',  () => { dragging = false; /* el watchdog decidirá auto */ }, { passive: true });
+  window.addEventListener('touchend', () => { dragging = false; /* el watchdog decidirá auto */ }, { passive: true });
 
   // --- Giroscopio
   function onOri(ev) {
     const g = (typeof ev.gamma === 'number') ? ev.gamma : null; // -90..90 (X)
-    const b = (typeof ev.beta  === 'number') ? ev.beta  : null; // -180..180 (Y)
+    const b = (typeof ev.beta === 'number') ? ev.beta : null; // -180..180 (Y)
     const valid = g !== null && b !== null &&
-                  (Math.abs(g) > FUN_CFG.THRESHOLDS.GYRO_MIN_DEG ||
-                   Math.abs(b) > FUN_CFG.THRESHOLDS.GYRO_MIN_DEG);
+      (Math.abs(g) > FUN_CFG.THRESHOLDS.GYRO_MIN_DEG ||
+        Math.abs(b) > FUN_CFG.THRESHOLDS.GYRO_MIN_DEG);
     if (!valid) return;
 
     lastGyroTs = performance.now();
 
     const nx = clamp(g / 45, -1, 1);
     const ny = clamp(b / 45, -1, 1);
-    const tx = innerWidth  / 2 + nx * innerWidth  * 0.45;
+    const tx = innerWidth / 2 + nx * innerWidth * 0.45;
     const ty = innerHeight / 2 + ny * innerHeight * 0.45;
     mover.setTarget(tx, ty);
   }
 
   function enableGyro() {
     if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
       // iOS: permiso explícito
       const btn = document.createElement('button');
       btn.className = 'gyro-btn';
@@ -630,7 +648,7 @@ function setupFunFollowerGyro() {
   mover.startLoop((now) => {
     const gyroFresh = (now - lastGyroTs) <= FUN_CFG.THRESHOLDS.IDLE_MS;
     if (!dragging && !gyroFresh && !mover.isAuto()) mover.enableAuto();
-    if (gyroFresh && mover.isAuto())               mover.disableAuto();
+    if (gyroFresh && mover.isAuto()) mover.disableAuto();
   });
 
   window.addEventListener('resize', () => mover.clampTargetToViewport(), { passive: true });
