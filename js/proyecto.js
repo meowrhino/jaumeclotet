@@ -1,5 +1,26 @@
-// --- projecte loader (minimal + logs) ---
-function param(name) { return new URLSearchParams(location.search).get(name); }
+/* proyecto.js — versión revisada
+   - Mantiene el comportamiento DESKTOP (ratón) intacto.
+   - En MÓVIL: intenta GIROSCOPIO; si no hay permiso/eventos → fallback a TOUCH/DRAG;
+     y si tampoco se usa, arranca AUTO-ANIMACIÓN (random walk suave) hasta que el usuario interactúa.
+*/
+
+'use strict';
+
+// ============ Utilidades básicas ============
+
+function param(name) {
+  return new URLSearchParams(location.search).get(name);
+}
+
+// Detección de "dispositivo táctil" (mejor que userAgent)
+function isTouchDevice() {
+  return (
+    window.matchMedia &&
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches
+  );
+}
+
+// ============ Carga de datos del proyecto ============
 
 async function loadProject() {
   const slug = param('slug');
@@ -20,6 +41,8 @@ async function loadProject() {
     normalizePaths(p, base);
 
     renderProject(p);
+
+    // Marca este proyecto como "visto" para el sistema de desbloqueo
     localStorage.setItem('proyecto-' + slug + '-visto', '1');
     console.log('[projecte] render done');
   } catch (err) {
@@ -39,7 +62,7 @@ function normalizePaths(p, base) {
   if (p.logo) p.logo = normImg(p.logo);
   if (p.bg) p.bg = normImg(p.bg);
 
-  // fun
+  // elemento divertido
   if (p.elemento_divertido?.src) {
     p.elemento_divertido.src = normImg(p.elemento_divertido.src);
   }
@@ -49,12 +72,11 @@ function normalizePaths(p, base) {
     p.galeria.images = p.galeria.images.map(src => normImg(src));
   }
 
-  // hueco libre: solo normalizamos covers si existen, pero no forzamos img/
+  // libre: normaliza covers si existen (sin forzar 'img/' si ya hay carpeta)
   if (Array.isArray(p.libre)) {
     p.libre = p.libre.map(item => {
       if (item.cover) {
         let s = item.cover.replace(/^\.?\//, '');
-        // Si ya apunta a una carpeta (p.ej. libre/), no tocamos el prefijo
         if (!/^[^\/]+\//.test(s)) s = 'img/' + s;
         item.cover = base + s;
       }
@@ -63,79 +85,13 @@ function normalizePaths(p, base) {
   }
 }
 
-function isTouchDevice() {
-  return window.matchMedia &&
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-}
-
-function setupFunFollowerGyro() {
-  const fun = document.getElementById('fun');
-  if (!fun) return;
-
-  let x = innerWidth / 2, y = innerHeight / 2;
-  let tx = x, ty = y;
-
-  function tick() {
-    const k = 0.12;
-    x += (tx - x) * k; y += (ty - y) * k;
-    const ang = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
-    fun.style.transform = `translate(${x}px, ${y}px) rotate(${ang}deg)`;
-    requestAnimationFrame(tick);
-  }
-
-  function enableTouchDrag() {
-    let dragging = false;
-    const set = e => { const t = (e.touches?.[0] || e); tx = t.clientX; ty = t.clientY; };
-    fun.addEventListener('touchstart', e => { dragging = true; set(e); }, { passive: true });
-    window.addEventListener('touchmove', e => { if (dragging) set(e); }, { passive: true });
-    window.addEventListener('touchend', () => { dragging = false; }, { passive: true });
-  }
-
-  function enableGyro() {
-    function onOri(ev) {
-      const gamma = ev.gamma ?? 0;   // izq-der  (-90..90)
-      const beta = ev.beta ?? 0;   // delante-atrás (-180..180)
-      const nx = Math.max(-1, Math.min(1, gamma / 45));
-      const ny = Math.max(-1, Math.min(1, beta / 45));
-      tx = innerWidth / 2 + nx * innerWidth * 0.45;
-      ty = innerHeight / 2 + ny * innerHeight * 0.45;
-    }
-
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof DeviceOrientationEvent.requestPermission === 'function') {
-      // iOS necesita permiso
-      const btn = document.createElement('button');
-      btn.textContent = 'Activar movimiento';
-      Object.assign(btn.style, {
-        position: 'fixed', right: '1rem', bottom: '1rem', zIndex: 10000,
-        padding: '8px 12px', borderRadius: '999px', background: '#0008', color: '#fff', border: '1px solid #fff3', backdropFilter: 'blur(6px)'
-      });
-      btn.onclick = async () => {
-        try {
-          const res = await DeviceOrientationEvent.requestPermission();
-          if (res === 'granted') {
-            window.addEventListener('deviceorientation', onOri);
-            btn.remove();
-          } else {
-            btn.remove(); enableTouchDrag();
-          }
-        } catch { btn.remove(); enableTouchDrag(); }
-      };
-      document.body.appendChild(btn);
-    } else {
-      // Android / navegadores que no piden permiso
-      window.addEventListener('deviceorientation', onOri);
-    }
-  }
-
-  enableGyro();     // probamos giroscopio primero
-  tick();           // animación suave
-}
-
+// ============ Render principal del proyecto ============
 
 function renderProject(p) {
   const root = document.getElementById('project-root');
   if (!root) { console.warn('[projecte] #project-root not found'); return; }
+
+  // ⚠️ Nota: 'fun' se crea con pointer-events:none por defecto para no tapar clics en desktop.
   root.innerHTML = `
     ${p.bg ? `<div class="project-bg"><img src="${p.bg}" alt=""></div>` : ''}
     <header class="project-header" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:12px;">
@@ -147,13 +103,18 @@ function renderProject(p) {
     <section class="project-creditos">${renderCreditos(p.creditos)}</section>
     ${p.elemento_divertido?.src ? `<img id="fun" class="fun" src="${p.elemento_divertido.src}" alt="" style="position:fixed;left:0;top:0;width:72px;pointer-events:none;">` : ''}
   `;
+
   setupGalleryOverlay();
-  if (isTouchDevice()) {
-    // MÓVIL: giroscopio (con fallback a drag si no hay permiso)
-    setupFunFollowerGyro();
-  } else {
-    // DESKTOP: tu función existente (ratón) intacta
-    setupFunFollower();
+
+  // --- Inicializa comportamiento del "elemento divertido" ---
+  if (document.getElementById('fun')) {
+    if (isTouchDevice()) {
+      // En móvil permitimos tocar/arrastrar el elemento (necesita recibir eventos)
+      document.getElementById('fun').style.pointerEvents = 'auto'; // (antes era none en inline) :contentReference[oaicite:1]{index=1}
+      setupFunFollowerGyro();     // Gyro → Touch → Auto
+    } else {
+      setupFunFollower();         // Desktop: ratón (tu versión intacta)
+    }
   }
 }
 
@@ -163,6 +124,8 @@ function renderCreditos(c) {
   if (c.formato === 'markdown') return (c.contenido || ''); // parser opcional
   return `<pre>${(c.contenido || '')}</pre>`;
 }
+
+// ============ Overlay de galería (click para ampliar) ============
 
 function setupGalleryOverlay() {
   const imgs = document.querySelectorAll('.project-galeria img');
@@ -182,12 +145,16 @@ function setupGalleryOverlay() {
   overlay.addEventListener('click', () => overlay.style.display = 'none');
 }
 
+// ============ Elemento divertido: Desktop (ratón) ============
+// (SIN CAMBIOS respecto a tu versión)
 function setupFunFollower() {
   const fun = document.getElementById('fun');
   if (!fun) return;
   let x = window.innerWidth / 2, y = window.innerHeight / 2;
   let tx = x, ty = y;
+
   window.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+
   function tick() {
     const lerp = 0.12;
     x += (tx - x) * lerp;
@@ -198,5 +165,166 @@ function setupFunFollower() {
   }
   requestAnimationFrame(tick);
 }
+
+// ============ Elemento divertido: Móvil (gyro → touch → auto) ============
+
+function setupFunFollowerGyro() {
+  const fun = document.getElementById('fun');
+  if (!fun) return;
+
+  // Estado de animación
+  let x = innerWidth / 2, y = innerHeight / 2;
+  let tx = x, ty = y;
+
+  // Fallbacks / estado
+  let autoTimer = null;
+  let autoActive = false;
+  let gyroAlive = false;         // se pondrá true cuando llegue el primer evento de orientación
+
+  // --- Motor de animación (común a todos los modos) ---
+  function tick() {
+    const k = 0.12; // suavizado
+    x += (tx - x) * k;
+    y += (ty - y) * k;
+    const ang = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
+    fun.style.transform = `translate(${x}px, ${y}px) rotate(${ang}deg)`;
+    requestAnimationFrame(tick);
+  }
+
+  // --- Fallback 1: touch/drag ---
+  function enableTouchDrag() {
+    // Si el usuario toca, desactivamos la auto-animación (si estaba activa)
+    const stopAutoOnUser = () => disableAuto();
+
+    let dragging = false;
+
+    const setFromTouch = (e) => {
+      const t = (e.touches && e.touches[0]) ? e.touches[0] : e;
+      tx = t.clientX; ty = t.clientY;
+    };
+
+    fun.addEventListener('touchstart', (e) => {
+      dragging = true; setFromTouch(e); stopAutoOnUser();
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (dragging) setFromTouch(e);
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => { dragging = false; }, { passive: true });
+  }
+
+  // --- Fallback 2: auto-animación (random walk suave) ---
+  function enableAuto() {
+    if (autoActive) return;
+    autoActive = true;
+
+    // Cambia objetivo cada ~1.8s a un punto aleatorio (con margen)
+    const margin = 24;
+    const pickTarget = () => {
+      tx = margin + Math.random() * Math.max(1, innerWidth - margin * 2);
+      ty = margin + Math.random() * Math.max(1, innerHeight - margin * 2);
+    };
+    pickTarget();
+    autoTimer = setInterval(pickTarget, 1800);
+
+    // Si el usuario toca en cualquier momento, paramos auto
+    const stop = () => disableAuto();
+    window.addEventListener('touchstart', stop, { passive: true, once: true });
+  }
+
+  function disableAuto() {
+    if (!autoActive) return;
+    autoActive = false;
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = null;
+  }
+
+  // --- Modo giroscopio ---
+  function enableGyro() {
+    function onOri(ev) {
+      gyroAlive = true;          // Hemos recibido datos reales de sensor
+      disableAuto();             // Si había auto, lo paramos al primer evento real
+
+      // gamma: izq-der (-90..90), beta: delante-atrás (-180..180)
+      const gamma = ev.gamma ?? 0;
+      const beta = ev.beta ?? 0;
+
+      // Normaliza a [-1..1] y mapea a pantalla
+      const nx = Math.max(-1, Math.min(1, gamma / 45));
+      const ny = Math.max(-1, Math.min(1, beta / 45));
+
+      tx = innerWidth / 2 + nx * innerWidth * 0.45;
+      ty = innerHeight / 2 + ny * innerHeight * 0.45;
+    }
+
+    // iOS (permiso requerido)
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Activar movimiento';
+      Object.assign(btn.style, {
+        position: 'fixed',
+        right: '1rem',
+        bottom: '1rem',
+        zIndex: 10000,
+        padding: '8px 12px',
+        borderRadius: '999px',
+        background: '#0008',
+        color: '#fff',
+        border: '1px solid #fff3',
+        backdropFilter: 'blur(6px)',
+        cursor: 'pointer'
+      });
+
+      btn.onclick = async () => {
+        try {
+          const res = await DeviceOrientationEvent.requestPermission();
+          if (res === 'granted') {
+            window.addEventListener('deviceorientation', onOri);
+            btn.remove();
+
+            // Si en ~1.2s no llegan datos del sensor, cae a touch + auto
+            setTimeout(() => {
+              if (!gyroAlive) { enableTouchDrag(); enableAuto(); }
+            }, 1200);
+          } else {
+            btn.remove();
+            enableTouchDrag();
+            enableAuto();
+          }
+        } catch {
+          btn.remove();
+          enableTouchDrag();
+          enableAuto();
+        }
+      };
+
+      document.body.appendChild(btn);
+
+    } else {
+      // Android / otros: no piden permiso explícito
+      window.addEventListener('deviceorientation', onOri);
+
+      // Si no llegan eventos pronto, activa touch + auto
+      setTimeout(() => {
+        if (!gyroAlive) { enableTouchDrag(); enableAuto(); }
+      }, 1200);
+    }
+  }
+
+  // Arranca
+  enableGyro();
+  requestAnimationFrame(tick);
+
+  // Mantén dentro de viewport si cambia el tamaño/orientación
+  window.addEventListener('resize', () => {
+    tx = Math.min(Math.max(12, tx), innerWidth - 12);
+    ty = Math.min(Math.max(12, ty), innerHeight - 12);
+  }, { passive: true });
+}
+
+// ============ Bootstrap ============
 
 window.addEventListener('DOMContentLoaded', loadProject);
