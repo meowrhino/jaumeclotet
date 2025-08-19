@@ -78,7 +78,7 @@ body {
   background: #000;
 }
 
-/* Fondo del tile (cover + crop) */
+/* (Compat) Fondo del tile si existiera .bg como <img> */
 .tile .bg {
   position: absolute;
   inset: 0;
@@ -104,25 +104,23 @@ body {
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .65));
 }
 
-/* Overlay 7º proyecto */
+/* Overlay 7º proyecto (home) */
 #unlock7 {
   position: fixed;
   inset: 0;
   display: none;
-  /* oculto por defecto */
   align-items: center;
   justify-content: center;
   background: transparent;
   z-index: 10;
-  /* clave: que NO intercepte clics por defecto */
   pointer-events: none;
+  /* la capa no intercepta clics */
 }
 
 #unlock7.show {
   display: flex;
 }
 
-/* Solo el enlace interno debe recibir clics */
 #unlock7 a {
   pointer-events: auto;
   display: inline-block;
@@ -133,172 +131,28 @@ body {
   max-width: clamp(160px, 30vw, 420px);
   max-height: 40vh;
   filter: none;
-  /* sin glow raro */
 }
 
 /* =========================
-   Project page (detalle)
+   Project page
    ========================= */
 
-/* Quitamos el back fijo de arriba (si algún HTML viejo lo tiene) */
-/* .back { }  <-- eliminado a propósito */
-
-/* Contenedor principal del detalle */
+/* Contenedor principal */
 #project-root {
   padding: 16px;
   margin: 0 auto;
   max-width: 1200px;
   color: #000;
-  /* texto negro en la página de proyecto */
+  /* texto negro en detalle */
   background: transparent;
-  /* dejamos ver el fondo si lo hay */
+  /* deja ver el fondo si lo hay */
 }
 
-/* En pantallas > 640px, 80dvw centrado */
 @media (min-width: 641px) {
   #project-root {
     width: 80dvw;
   }
 }
-
-/* Fondo del proyecto (inyectado por JS con .project-bg > img) */
-.project-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-}
-
-.project-bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Cabecera: logo + sinopsis */
-.project-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.project-logo {
-  max-width: 420px;
-  width: 60vw;
-}
-
-.project-sinopsis {
-  text-align: center;
-  white-space: pre-line;
-  /* respeta \n en la sinopsis */
-  max-width: 900px;
-  margin: 0 auto 24px;
-  line-height: 1.4;
-}
-
-/* Textos largos */
-.project-textos p {
-  max-width: 800px;
-  margin: 0 auto 1em;
-  line-height: 1.6;
-}
-
-/* Galería: horizontal con scroll (como tienes ahora) */
-.project-galeria.scroller {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 8px 0;
-}
-
-.gal-thumb {
-  height: 220px;
-  flex: 0 0 auto;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* Overlay fullscreen para imágenes */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .96);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 60;
-}
-
-.overlay.show {
-  display: flex;
-}
-
-.overlay-img {
-  max-width: 92vw;
-  max-height: 92vh;
-}
-
-/* Elemento divertido (seguidor) */
-.fun {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 72px;
-  pointer-events: none;
-}
-
-/* Botón volver solo abajo y centrado (cuando lo añadas) */
-.back-row {
-  text-align: center;
-}
-
-.back-bottom {
-  display: inline-block;
-  margin: 40px auto 10px;
-  padding: 10px 16px;
-  border: 1px solid #0003;
-  border-radius: 6px;
-  color: #000;
-  text-decoration: none;
-}
-
-.back-bottom:hover {
-  background: #00000010;
-}
-
-.back {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  z-index: 100;
-  text-decoration: none;
-  font-size: 1.2em;
-  padding: 8px;
-  border-radius: 6px;
-}
-
-/* Galería: vertical (una imagen tras otra) */
-.project-galeria {
-  display: block;
-  padding: 8px 0;
-}
-
-.project-galeria.column {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.project-galeria img,
-.gal-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 6px;
-}
-
-/* ===== Project page (clases nuevas, sin inline) ===== */
 
 /* Fondo: usa var --bg-color si está definida desde JS */
 .project-bg {
@@ -346,7 +200,7 @@ body {
   line-height: 1.6;
 }
 
-/* Galería: vertical (una imagen tras otra) */
+/* Galería: vertical (una imagen/vídeo tras otro) */
 .project-galeria {
   display: block;
   padding: 8px 0;
@@ -366,7 +220,15 @@ body {
   cursor: pointer;
 }
 
-/* Overlay para ampliar imágenes */
+.project-galeria .gal-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* Overlay para ampliar (img + video) */
 .overlay {
   position: fixed;
   inset: 0;
@@ -381,9 +243,10 @@ body {
   display: flex;
 }
 
-.overlay-img {
+.overlay .overlay-media {
   max-width: 92vw;
   max-height: 92vh;
+  display: block;
 }
 
 /* Elemento divertido */
@@ -412,4 +275,83 @@ body {
   border: 1px solid #fff3;
   backdrop-filter: blur(6px);
   cursor: pointer;
+}
+
+/* Botón volver (si lo usas) */
+.back-row {
+  text-align: center;
+}
+
+.back-bottom {
+  display: inline-block;
+  margin: 40px auto 10px;
+  padding: 10px 16px;
+  border: 1px solid #0003;
+  border-radius: 6px;
+  color: #000;
+  text-decoration: none;
+}
+
+.back-bottom:hover {
+  background: #00000010;
+}
+
+.back {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* ===== Comodín (bloques libres con anclas) ===== */
+.comodin {
+  margin: 16px auto;
+  max-width: 800px;
+}
+
+.comodin.align-center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.comodin.align-left {
+  margin-left: 0;
+  text-align: left;
+}
+
+.comodin.align-right {
+  margin-right: 0;
+  text-align: right;
+}
+
+.comodin.width-auto {
+  max-width: 800px;
+}
+
+.comodin.width-half {
+  max-width: 600px;
+}
+
+.comodin.width-full {
+  max-width: none;
+  width: min(100%, 1200px);
+}
+
+.comodin-image img,
+.comodin-video video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+.comodin figcaption {
+  font-size: .9rem;
+  opacity: .75;
+  margin-top: 6px;
 }
