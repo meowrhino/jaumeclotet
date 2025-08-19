@@ -1,0 +1,28 @@
+{
+    "slug": "cantautot",
+    "titulo": "cantautot",
+    "logo": "./img/titol.png",
+    "bg": "#FF8040",
+    "sinopsis": "((aquet es dalusinasons))\nUn innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
+    "elemento_divertido": {
+        "src": "./img/fun.png"
+    },
+    "textos": [
+        "@jaujeje és un jove que no sap cantar i per això decideix convertir la seva vida instagram en un musical. Tampoc no té res més, de manera que és preferible convertir-la en una salmòdia, un cant amb la gràcia de no ser agraciat. A “Caraoque. Cançons by jaujeje”, cantusseja la seva existència a base de confessions videoclip que avorten qualsevol futur: és mandrós, pateix ànsia de bar, desitja ser un núvol multiforme i no tornar a pronunciar una sola paraula. A pesar del desastre, jaujeje acumula seguidors igual d’idiotes. Aquesta notorietat accelera la seva patacada en forma de clown alcoholitzat (Alusinasons). Per fi, una vida tan inútil que ja no necessita saber anglès. Qualsevol revés és una conquesta i no hi ha més èxit que en la caiguda. jaujeje ja s’atreveix amb tot.",
+        "Cantautot és el resultat de la residència de jaujeje a les cel·les del Centre d’art contemporani de Mataró (MAC). Indiferent a la convenció, la masmorra l’ha convertida en la Suite Premium, on la bèstia descansa i s’alimenta per donar el millor de si (the beast of).",
+        "text de Martí Peran"
+    ],
+    "galeria": {
+        "images": [
+            "./img/cantauttot-foto 1.jpg",
+            "./img/cantauttot-foto 2.jpg",
+            "./img/cantauttot-foto 3.jpg",
+            "./img/cantauttot-foto 4.jpg"
+        ]
+    },
+    "libre": [],
+    "creditos": {
+        "formato": "text",
+        "contenido": "Direcció: Jaume Clotet\nProducció musical: Juan Feduchi, Pol Clusella i jaujeje\nConstrucció centaure i muntatge expositiu: Borja Casanovas\nVestuari: Patricia Feliu\nFotografia: Helena Roig i Juan Feduchi\n\nEstrenat en format expositiu dintre de l’exposició “L’idiota” (MAC 2025, Mataró) comissariada per Martí Peran\n\nActuacions:\nExorcismes (Fundació Brossa 2025, Barcelona)\n[tba] Festival Adoberies (La Clota 2025, Vic)"
+    }
+}

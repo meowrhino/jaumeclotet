@@ -1,14 +1,31 @@
 /* =========================
    Reset & Base
    ========================= */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; }
-body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: #111;
+  color: #eee;
+  font-family: system-ui, sans-serif;
+}
 
 /* =========================
    Index (grid de 6)
    ========================= */
-#index { height: 100vh; width: 100vw; overflow: hidden; }
+#index {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
 
 .grid {
   display: grid;
@@ -36,13 +53,19 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
 
 /* Móvil: 1 x 6 + scroll vertical */
 @media (max-width: 640px) {
-  #index { height: auto; }
+  #index {
+    height: auto;
+  }
+
   .grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, min(50vh, 360px));
     height: auto;
   }
-  body { overflow: auto; }
+
+  body {
+    overflow: auto;
+  }
 }
 
 /* Tiles */
@@ -57,28 +80,36 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
 
 /* Fondo del tile (cover + crop) */
 .tile .bg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   filter: brightness(.9) contrast(1);
   pointer-events: none;
 }
 
 /* Logo centrado en tile */
-.tile .logo-link { position: relative; z-index: 2; display: block; }
+.tile .logo-link {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
 .tile .logo {
   max-width: 62%;
   max-height: 62%;
   display: block;
   margin: auto;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,.65));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .65));
 }
 
 /* Overlay 7º proyecto */
 #unlock7 {
   position: fixed;
   inset: 0;
-  display: none;             /* oculto por defecto */
+  display: none;
+  /* oculto por defecto */
   align-items: center;
   justify-content: center;
   background: transparent;
@@ -87,7 +118,9 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   pointer-events: none;
 }
 
-#unlock7.show { display: flex; }
+#unlock7.show {
+  display: flex;
+}
 
 /* Solo el enlace interno debe recibir clics */
 #unlock7 a {
@@ -95,11 +128,14 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   display: inline-block;
   text-decoration: none;
 }
+
 #unlock7 img {
   max-width: clamp(160px, 30vw, 420px);
   max-height: 40vh;
-  filter: none;              /* sin glow raro */
+  filter: none;
+  /* sin glow raro */
 }
+
 /* =========================
    Project page (detalle)
    ========================= */
@@ -112,18 +148,31 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   padding: 16px;
   margin: 0 auto;
   max-width: 1200px;
-  color: #000;            /* texto negro en la página de proyecto */
-  background: transparent;/* dejamos ver el fondo si lo hay */
+  color: #000;
+  /* texto negro en la página de proyecto */
+  background: transparent;
+  /* dejamos ver el fondo si lo hay */
 }
 
 /* En pantallas > 640px, 80dvw centrado */
 @media (min-width: 641px) {
-  #project-root { width: 80dvw; }
+  #project-root {
+    width: 80dvw;
+  }
 }
 
 /* Fondo del proyecto (inyectado por JS con .project-bg > img) */
-.project-bg { position: fixed; inset: 0; z-index: -1; }
-.project-bg img { width: 100%; height: 100%; object-fit: cover; }
+.project-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.project-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* Cabecera: logo + sinopsis */
 .project-header {
@@ -134,10 +183,15 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   margin-bottom: 12px;
 }
 
-.project-logo { max-width: 420px; width: 60vw; }
+.project-logo {
+  max-width: 420px;
+  width: 60vw;
+}
+
 .project-sinopsis {
   text-align: center;
-  white-space: pre-line;   /* respeta \n en la sinopsis */
+  white-space: pre-line;
+  /* respeta \n en la sinopsis */
   max-width: 900px;
   margin: 0 auto 24px;
   line-height: 1.4;
@@ -157,6 +211,7 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   overflow-x: auto;
   padding: 8px 0;
 }
+
 .gal-thumb {
   height: 220px;
   flex: 0 0 auto;
@@ -166,25 +221,38 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
 
 /* Overlay fullscreen para imágenes */
 .overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.96);
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .96);
   display: none;
-  align-items: center; justify-content: center;
+  align-items: center;
+  justify-content: center;
   z-index: 60;
 }
-.overlay.show { display: flex; }
-.overlay-img { max-width: 92vw; max-height: 92vh; }
+
+.overlay.show {
+  display: flex;
+}
+
+.overlay-img {
+  max-width: 92vw;
+  max-height: 92vh;
+}
 
 /* Elemento divertido (seguidor) */
 .fun {
   position: fixed;
-  left: 0; top: 0;
+  left: 0;
+  top: 0;
   width: 72px;
   pointer-events: none;
 }
 
 /* Botón volver solo abajo y centrado (cuando lo añadas) */
-.back-row { text-align: center; }
+.back-row {
+  text-align: center;
+}
+
 .back-bottom {
   display: inline-block;
   margin: 40px auto 10px;
@@ -194,14 +262,154 @@ body { background: #111; color: #eee; font-family: system-ui, sans-serif; }
   color: #000;
   text-decoration: none;
 }
-.back-bottom:hover { background: #00000010; }
+
+.back-bottom:hover {
+  background: #00000010;
+}
 
 .back {
   position: fixed;
-  bottom: 16px; right: 16px;
+  bottom: 16px;
+  right: 16px;
   z-index: 100;
   text-decoration: none;
   font-size: 1.2em;
   padding: 8px;
   border-radius: 6px;
+}
+
+/* Galería: vertical (una imagen tras otra) */
+.project-galeria {
+  display: block;
+  padding: 8px 0;
+}
+
+.project-galeria.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-galeria img,
+.gal-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+/* ===== Project page (clases nuevas, sin inline) ===== */
+
+/* Fondo: usa var --bg-color si está definida desde JS */
+.project-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-color, transparent);
+}
+
+.project-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Header / logo / sinopsis */
+.project-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.project-logo {
+  max-width: 420px;
+  width: 60vw;
+  height: auto;
+  display: block;
+}
+
+.project-sinopsis {
+  opacity: .9;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 1em;
+  line-height: 1.6;
+}
+
+/* Textos */
+.project-textos p {
+  max-width: 800px;
+  margin: 0 auto 1em;
+  line-height: 1.6;
+}
+
+/* Galería: vertical (una imagen tras otra) */
+.project-galeria {
+  display: block;
+  padding: 8px 0;
+}
+
+.project-galeria.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-galeria .gal-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Overlay para ampliar imágenes */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .96);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.overlay-img {
+  max-width: 92vw;
+  max-height: 92vh;
+}
+
+/* Elemento divertido */
+.fun {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 72px;
+  pointer-events: none;
+}
+
+.fun.touchable {
+  pointer-events: auto;
+}
+
+/* Botón de permiso para giroscopio (iOS) */
+.gyro-btn {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 10000;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #0008;
+  color: #fff;
+  border: 1px solid #fff3;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
 }
