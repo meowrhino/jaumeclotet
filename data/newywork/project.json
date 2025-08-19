@@ -2,7 +2,7 @@
   "slug": "newywork",
   "titulo": "NEW YWORK",
   "logo": "./img/titol.png",
-  "bg": "./img/fons.png",
+  "bg": "./img/fons.jpg",
   "sinopsis": "He decidit marxar\nArribo tard sempre\ni tinc pressa i vaig lent\n\nEl meu gran somni és ser humorista\nFer gràcia i viure de la gràcia\n\nPerò el món de la comèdia no em valora\ni estic com un peix fora de test\nque pixa fora de l’aigua\n\nTinc ganes d’aventura\nÉs hora de complir la meva fantasia\ni viatjar a la meca de l’entreteniment:\nNew Ywork.",
   "elemento_divertido": {
     "src": "./img/fun.png"
@@ -28,5 +28,17 @@
       "./img/newYwork-foto 11.jpg"
     ]
   },
+
+  "comodin": [
+  {
+    "id": "bate",
+    "type": "image",
+    "src": "./img/bate.png",
+    "place": "append:header",
+    "align": "center",
+    "width": "auto"
+  }
+],
+
   "creditos": "Co-produït per ANTIC TEATRE (Barcelona) i Jaume Clotet\nEstrenat al GREC FESTIVAL 2024 (Barcelona)\nAmb el suport del segell musical AUSTROHÚNGARO, de la NAU ESTRUCH 2022/2023 (Sabadell) i del KONVENT (Berga).\n\nDirecció: Jaume Clotet\nProjecte creat i desenvolupat amb Max Feriche, Alicia Garrido i Albert Sánchez\nIntèrprets: Jaume Clotet i Alicia Garrido\nProducció musical: Max Feriche i Jaume Clotet\nVestuari: Alicia Garrido\nVídeo i dissenys: Albert Sánchez\nInstal·lació lumínica: Max Milà amb Altea i Marc\nEscenografia cotxe: CNC Carpinteria Moderna\nDissenys 3D: Léa Ferraton\nTècnic de llums: Marcos Zappia\nFotografia: Anna Izquierdo, Irene Moray, Dani Cantó i Britt Hecker\nMasterització: Adrià Gil"
 }
