@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Formateador de sinopsis / créditos / textos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        }
+
+        body {
+            margin: 24px;
+            color: #222;
+        }
+
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            gap: 16px;
+        }
+
+        textarea,
+        pre,
+        code,
+        input[type="text"] {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .radios {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .out {
+            min-height: 140px;
+            white-space: pre;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 12px;
+            border-radius: 10px;
+            overflow: auto;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        button.primary {
+            background: #111827;
+            color: #fff;
+            border-color: #111827;
+        }
+
+        small.hint {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>Formateador de “sinopsis”, “créditos” y “textos”</h1>
+
+        <label for="entrada"><strong>1) Pega aquí tu texto</strong></label>
+        <textarea id="entrada" placeholder="Pega aquí los créditos o el poema de la sinopsis…"></textarea>
+
+        <div class="radios">
+            <strong>2) Elige salida:</strong>
+            <label><input type="radio" name="modo" value="sinopsis" checked> Sinopsis → JSON string</label>
+            <label><input type="radio" name="modo" value="creditos"> Créditos → JSON string</label>
+            <label><input type="radio" name="modo" value="textos"> Textos → array por párrafo</label>
+        </div>
+
+        <div class="row">
+            <button id="copiar">Copiar</button>
+            <button id="limpiar">Limpiar</button>
+            <small class="hint">El resultado aparece abajo. Se actualiza automáticamente.</small>
+        </div>
+
+        <div class="out" id="salida" aria-label="Salida JSON" tabindex="0"></div>
+    </div>
+
+    <script>
+        const entrada = document.getElementById('entrada');
+        const salida = document.getElementById('salida');
+        const radios = document.querySelectorAll('input[name="modo"]');
+        const btnCopiar = document.getElementById('copiar');
+        const btnLimpiar = document.getElementById('limpiar');
+
+        function normalizarSaltos(s) {
+            // Normaliza saltos (\r\n → \n), recorta espacios antes de salto y compacta >2 saltos
+            return s.replace(/\r\n?/g, '\n')
+                .replace(/[ \t]+\n/g, '\n')
+                .replace(/\n{3,}/g, '\n\n');
+        }
+
+        function jsonString(value) {
+            // Devuelve el valor como JSON (con comillas y escapado listo)
+            return JSON.stringify(value);
+        }
+
+        function generar() {
+            const modo = [...radios].find(r => r.checked).value;
+            let text = entrada.value || '';
+            text = normalizarSaltos(text);
+
+            if (!text.trim()) {
+                salida.textContent = '';
+                return;
+            }
+
+            if (modo === 'sinopsis') {
+                // Un solo string con \n donde haya saltos
+                const json = `"sinopsis": ${jsonString(text)}`;
+                salida.textContent = json;
+                return;
+            }
+
+            if (modo === 'creditos') {
+                // Un solo string con \n donde haya saltos (incluye dobles \n si hay línea en blanco)
+                const json = `"creditos": ${jsonString(text)}`;
+                salida.textContent = json;
+                return;
+            }
+
+            if (modo === 'textos') {
+                // Divide por párrafos (líneas en blanco). Dentro de cada párrafo, sustituye \n por espacios.
+                const parrafos = text.trim().split(/\n\s*\n+/).map(p =>
+                    p.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim()
+                ).filter(Boolean);
+
+                const cuerpo = parrafos.map(p => '  ' + jsonString(p)).join(',\n');
+                const json = `"textos": [\n${cuerpo}\n]`;
+                salida.textContent = json;
+                return;
+            }
+        }
+
+        entrada.addEventListener('input', generar);
+        radios.forEach(r => r.addEventListener('change', generar));
+
+        btnCopiar.addEventListener('click', async () => {
+            const txt = salida.textContent;
+            if (!txt) return;
+            try {
+                await navigator.clipboard.writeText(txt);
+                btnCopiar.textContent = '¡Copiado!';
+                setTimeout(() => (btnCopiar.textContent = 'Copiar'), 1200);
+            } catch {
+                // Fallback: selecciona el contenido para copiar manualmente
+                const range = document.createRange();
+                range.selectNodeContents(salida);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        });
+
+        btnLimpiar.addEventListener('click', () => {
+            entrada.value = '';
+            salida.textContent = '';
+            entrada.focus();
+        });
+
+        // Primera ejecución
+        generar();
+    </script>
+</body>
+
+</html>

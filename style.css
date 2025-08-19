@@ -146,6 +146,7 @@ body {
   /* texto negro en detalle */
   background: transparent;
   /* deja ver el fondo si lo hay */
+  padding-block: 10vh;
 }
 
 @media (min-width: 641px) {
@@ -191,6 +192,11 @@ body {
   max-width: 800px;
   margin: 0 auto 1em;
   line-height: 1.6;
+
+  white-space: pre-wrap;
+  /* respeta \n y \n\n y sigue haciendo wrap */
+  overflow-wrap: anywhere;
+  /* por si hay palabras largas */
 }
 
 /* Textos */
