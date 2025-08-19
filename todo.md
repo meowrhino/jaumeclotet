@@ -76,3 +76,4 @@
 
 
 
+vale y podemos ahcer que en desktop tambien cuando deje de moverse se mueva pero a la que se mueva siga el cursor de nuevo' o sea literal lo mismo que en movilpero en desktop

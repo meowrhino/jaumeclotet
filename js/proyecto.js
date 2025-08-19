@@ -391,59 +391,77 @@ function setupGalleryOverlay(refresh = false) {
 }
 
 
-// ============ Elemento divertido: Desktop (ratón) ============
+// ============ Elemento divertido: Desktop (ratón ↔ auto con random-walk) ============
 
 function setupFunFollower() {
   const fun = document.getElementById('fun');
   if (!fun) return;
-  let x = window.innerWidth / 2, y = window.innerHeight / 2;
-  let tx = x, ty = y;
 
-  window.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  // ---- Ajustes
+  const LERP = 0.10;          // suavizado hacia el objetivo
+  const IDLE_MS = 1000;       // sin ratón 1s -> auto
 
-  function tick() {
-    const lerp = 0.12;
-    x += (tx - x) * lerp;
-    y += (ty - y) * lerp;
-    const ang = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
-    fun.style.transform = `translate(${x}px, ${y}px) rotate(${ang}deg)`;
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
+  // Auto-movimiento (random walk)
+  const AUTO_MARGIN = 24;                 // borde de seguridad
+  const AUTO_DIR_INTERVAL_MIN = 350;      // ms
+  const AUTO_DIR_INTERVAL_MAX = 900;      // ms
+  const AUTO_SPEED_STEP = 6;              // px/s por “tick” de dirección
+  const AUTO_SPEED_MAX  = 28;             // px/s tope
+  const AUTO_SPEED_MIN  = 6;              // px/s mínimo cuando no sea 0
 
-// ============ Elemento divertido: Móvil (gyro ↔ auto con watchdog + touch) ============
-
-function setupFunFollowerGyro() {
-  const fun = document.getElementById('fun');
-  if (!fun) return;
-
-  // ---- Configurables
-  const LERP = 0.12;         // suavizado de movimiento
-  const GYRO_MIN_DEG = 0.5;  // ignorar ruido < 0.5º
-  const GYRO_IDLE_MS = 1000; // si no hay giro "real" en 1s -> auto
-
-  // Estado
+  // ---- Estado
   let x = innerWidth / 2, y = innerHeight / 2;
   let tx = x, ty = y;
 
-  let autoTimer = null;
   let autoActive = false;
-  let lastGyroTs = 0;     // timestamp del último evento "válido"
-  let dragging = false;
+  let dirTimer = null;        // temporizador para cambiar dirección
+  let vx = 0, vy = 0;         // velocidad auto en px/s
+
+  let lastMouseTs = performance.now(); // último movimiento de ratón
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const rand  = (a, b) => a + Math.random() * (b - a);
+  const pick  = () => [-1, 0, 1][(Math.random() * 3) | 0];
 
-  // --- Animación continua
+  // ---- Eventos ratón
+  window.addEventListener('mousemove', (e) => {
+    lastMouseTs = performance.now();
+    // sal del auto inmediatamente y sigue el cursor
+    if (autoActive) disableAuto();
+    tx = e.clientX;
+    ty = e.clientY;
+  }, { passive: true });
+
+  // si el cursor sale de la ventana, considera “idle” para que arranque el auto
+  window.addEventListener('mouseleave', () => {
+    lastMouseTs = performance.now() - IDLE_MS - 1;
+  });
+
+  // ---- Animación principal
+  let last = performance.now();
   function tick() {
     const now = performance.now();
+    const dt = (now - last) / 1000;
+    last = now;
 
-    // Watchdog: activa/desactiva auto según actividad del giroscopio
-    const gyroFresh = (now - lastGyroTs) <= GYRO_IDLE_MS;
-    if (!dragging && !gyroFresh && !autoActive) enableAuto();
-    if (gyroFresh && autoActive) disableAuto();
+    // Watchdog auto <-> ratón (si no hay ratón en 1s, activa auto; si hay, apágalo)
+    const mouseFresh = (now - lastMouseTs) <= IDLE_MS;
+    if (!mouseFresh && !autoActive) enableAuto();
+    if (mouseFresh && autoActive)   disableAuto();
 
-    // Interpolación hacia objetivo
+    // Integración del random-walk (mueve el objetivo tx,ty)
+    if (autoActive) {
+      tx += vx * dt;
+      ty += vy * dt;
+
+      // Rebote suave en bordes
+      const minX = AUTO_MARGIN, maxX = innerWidth  - AUTO_MARGIN;
+      const minY = AUTO_MARGIN, maxY = innerHeight - AUTO_MARGIN;
+      if (tx <= minX || tx >= maxX) { vx = -vx; tx = clamp(tx, minX, maxX); }
+      if (ty <= minY || ty >= maxY) { vy = -vy; ty = clamp(ty, minY, maxY); }
+    }
+
+    // Interpola hacia el objetivo y rota
     x += (tx - x) * LERP;
     y += (ty - y) * LERP;
     const ang = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
@@ -452,26 +470,174 @@ function setupFunFollowerGyro() {
     requestAnimationFrame(tick);
   }
 
-  // --- Auto-animación (random walk suave)
+  // ---- Auto-animación (random walk: cambia dir cada X ms con pasos -1/0/1)
+  function scheduleDirChange() {
+    clearTimeout(dirTimer);
+    dirTimer = setTimeout(() => {
+      // Cambia un poco la velocidad en cada eje con pasos -1 / 0 / 1
+      vx += pick() * AUTO_SPEED_STEP;
+      vy += pick() * AUTO_SPEED_STEP;
+
+      // A veces “pausa” (velocidad 0) un ratito
+      if (Math.random() < 0.12) { vx = 0; vy = 0; }
+
+      // Limita y asegura mínimos cuando no sea 0
+      const clampSpeed = (v) => {
+        if (v === 0) return 0;
+        const s = clamp(Math.abs(v), AUTO_SPEED_MIN, AUTO_SPEED_MAX);
+        return Math.sign(v) * s;
+      };
+      vx = clampSpeed(vx);
+      vy = clampSpeed(vy);
+
+      scheduleDirChange();
+    }, rand(AUTO_DIR_INTERVAL_MIN, AUTO_DIR_INTERVAL_MAX));
+  }
+
   function enableAuto() {
     if (autoActive) return;
     autoActive = true;
-    const margin = 24;
-    const pickTarget = () => {
-      tx = margin + Math.random() * Math.max(1, innerWidth  - margin * 2);
-      ty = margin + Math.random() * Math.max(1, innerHeight - margin * 2);
-    };
-    pickTarget();
-    autoTimer = setInterval(pickTarget, 1800);
+    // Semilla de velocidad muy suave
+    if (vx === 0 && vy === 0) {
+      vx = (Math.random() < 0.5 ? -1 : 1) * AUTO_SPEED_MIN;
+      vy = (Math.random() < 0.5 ? -1 : 1) * AUTO_SPEED_MIN;
+    }
+    scheduleDirChange();
   }
+
   function disableAuto() {
     if (!autoActive) return;
     autoActive = false;
-    if (autoTimer) clearInterval(autoTimer);
-    autoTimer = null;
+    clearTimeout(dirTimer);
+    dirTimer = null;
+    vx = 0; vy = 0;
   }
 
-  // --- Touch/drag (siempre disponible)
+  // ---- Arranque
+  // No activamos auto inmediatamente; el watchdog lo activará tras 1s sin ratón.
+  requestAnimationFrame(tick);
+
+  // Mantener dentro del viewport si cambia tamaño
+  window.addEventListener('resize', () => {
+    tx = clamp(tx, AUTO_MARGIN, innerWidth  - AUTO_MARGIN);
+    ty = clamp(ty, AUTO_MARGIN, innerHeight - AUTO_MARGIN);
+  }, { passive: true });
+}
+
+
+// ============ Elemento divertido: Móvil (gyro ↔ auto con watchdog + touch) ============
+
+// ============ Elemento divertido: Móvil (gyro ↔ auto con random-walk suave + touch) ============
+
+function setupFunFollowerGyro() {
+  const fun = document.getElementById('fun');
+  if (!fun) return;
+
+  // ---- Ajustes
+  const LERP = 0.10;          // suavizado hacia el objetivo
+  const GYRO_MIN_DEG = 0.5;   // umbral para considerar "movimiento real"
+  const GYRO_IDLE_MS = 1000;  // sin giro 1s -> vuelve a auto
+
+  // Auto-movimiento (random walk)
+  const AUTO_MARGIN = 24;                 // borde de seguridad
+  const AUTO_DIR_INTERVAL_MIN = 350;      // ms
+  const AUTO_DIR_INTERVAL_MAX = 900;      // ms
+  const AUTO_SPEED_STEP = 6;              // px/s por “tick” de dirección
+  const AUTO_SPEED_MAX  = 28;             // px/s tope
+  const AUTO_SPEED_MIN  = 6;              // px/s mínimo cuando no es 0
+
+  // ---- Estado
+  let x = innerWidth / 2, y = innerHeight / 2;
+  let tx = x, ty = y;
+
+  let autoActive = false;
+  let dirTimer = null;        // temporizador para cambiar dirección
+  let vx = 0, vy = 0;         // velocidad auto en px/s
+
+  let lastGyroTs = 0;         // último giro válido
+  let dragging = false;
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const rand  = (a, b) => a + Math.random() * (b - a);
+  const pick  = () => [-1, 0, 1][(Math.random() * 3) | 0];
+
+  // ---- Animación principal
+  let last = performance.now();
+  function tick() {
+    const now = performance.now();
+    const dt = (now - last) / 1000;
+    last = now;
+
+    // Watchdog auto <-> giro (si no hay giro en 1s, activa auto; si hay, apágalo)
+    const gyroFresh = (now - lastGyroTs) <= GYRO_IDLE_MS;
+    if (!dragging && !gyroFresh && !autoActive) enableAuto();
+    if (gyroFresh && autoActive) disableAuto();
+
+    // Integración del random-walk (mueve el objetivo tx,ty)
+    if (autoActive) {
+      tx += vx * dt;
+      ty += vy * dt;
+
+      // Rebote suave en bordes
+      const minX = AUTO_MARGIN, maxX = innerWidth  - AUTO_MARGIN;
+      const minY = AUTO_MARGIN, maxY = innerHeight - AUTO_MARGIN;
+      if (tx <= minX || tx >= maxX) { vx = -vx; tx = clamp(tx, minX, maxX); }
+      if (ty <= minY || ty >= maxY) { vy = -vy; ty = clamp(ty, minY, maxY); }
+    }
+
+    // Interpola hacia el objetivo y rota
+    x += (tx - x) * LERP;
+    y += (ty - y) * LERP;
+    const ang = Math.atan2(ty - y, tx - x) * 180 / Math.PI;
+    fun.style.transform = `translate(${x}px, ${y}px) rotate(${ang}deg)`;
+
+    requestAnimationFrame(tick);
+  }
+
+  // ---- Auto-animación (random walk: cambia dir cada X ms con pasos -1/0/1)
+  function scheduleDirChange() {
+    clearTimeout(dirTimer);
+    dirTimer = setTimeout(() => {
+      // Cambia un poco la velocidad en cada eje con pasos -1 / 0 / 1
+      vx += pick() * AUTO_SPEED_STEP;
+      vy += pick() * AUTO_SPEED_STEP;
+
+      // A veces “pausa” (velocidad 0) un ratito
+      if (Math.random() < 0.12) { vx = 0; vy = 0; }
+
+      // Limita y asegura mínimos cuando no sea 0
+      const clampSpeed = (v) => {
+        if (v === 0) return 0;
+        const s = clamp(Math.abs(v), AUTO_SPEED_MIN, AUTO_SPEED_MAX);
+        return Math.sign(v) * s;
+      };
+      vx = clampSpeed(vx);
+      vy = clampSpeed(vy);
+
+      scheduleDirChange();
+    }, rand(AUTO_DIR_INTERVAL_MIN, AUTO_DIR_INTERVAL_MAX));
+  }
+
+  function enableAuto() {
+    if (autoActive) return;
+    autoActive = true;
+    // Semilla de velocidad muy suave
+    if (vx === 0 && vy === 0) {
+      vx = (Math.random() < 0.5 ? -1 : 1) * AUTO_SPEED_MIN;
+      vy = (Math.random() < 0.5 ? -1 : 1) * AUTO_SPEED_MIN;
+    }
+    scheduleDirChange();
+  }
+
+  function disableAuto() {
+    if (!autoActive) return;
+    autoActive = false;
+    clearTimeout(dirTimer);
+    dirTimer = null;
+    vx = 0; vy = 0;
+  }
+
+  // ---- Touch/drag
   function enableTouchDrag() {
     const setFromTouch = (e) => {
       const t = (e.touches && e.touches[0]) ? e.touches[0] : e;
@@ -479,16 +645,14 @@ function setupFunFollowerGyro() {
     };
     fun.addEventListener('touchstart', (e) => { dragging = true; disableAuto(); setFromTouch(e); }, { passive: true });
     window.addEventListener('touchmove', (e) => { if (dragging) setFromTouch(e); }, { passive: true });
-    window.addEventListener('touchend', () => { dragging = false; /* el watchdog reactivará auto si no hay giro */ }, { passive: true });
+    window.addEventListener('touchend', () => { dragging = false; /* watchdog decide auto */ }, { passive: true });
   }
 
-  // --- Giroscopio
+  // ---- Giroscopio
   function enableGyro() {
     function onOri(ev) {
-      const g = (typeof ev.gamma === 'number') ? ev.gamma : null; // izq-der (-90..90)
-      const b = (typeof ev.beta  === 'number') ? ev.beta  : null; // delante-atrás (-180..180)
-
-      // Solo consideramos "válido" si hay inclinación real (evita apagar el auto con 0,0)
+      const g = (typeof ev.gamma === 'number') ? ev.gamma : null; // -90..90
+      const b = (typeof ev.beta  === 'number') ? ev.beta  : null; // -180..180
       const valid = g !== null && b !== null && (Math.abs(g) > GYRO_MIN_DEG || Math.abs(b) > GYRO_MIN_DEG);
       if (!valid) return;
 
@@ -500,10 +664,9 @@ function setupFunFollowerGyro() {
       ty = innerHeight / 2 + ny * innerHeight * 0.45;
     }
 
-    // iOS: pedir permiso; si lo deniegan, nos quedamos en auto (y touch)
     if (typeof DeviceOrientationEvent !== 'undefined' &&
         typeof DeviceOrientationEvent.requestPermission === 'function') {
-
+      // iOS: pedir permiso (auto ya activo de base)
       const btn = document.createElement('button');
       btn.className = 'gyro-btn';
       btn.textContent = 'Activar movimiento';
@@ -514,32 +677,29 @@ function setupFunFollowerGyro() {
             window.addEventListener('deviceorientation', onOri);
             btn.remove();
           } else {
-            btn.remove(); // auto y touch ya están activos
+            btn.remove();
           }
-        } catch {
-          btn.remove(); // auto y touch ya están activos
-        }
+        } catch { btn.remove(); }
       };
       document.body.appendChild(btn);
-
     } else {
-      // Android / desktop (Sensors): engancha directo
+      // Android/desktop (Sensors)
       window.addEventListener('deviceorientation', onOri);
     }
   }
 
-  // --- Arranque
-  enableAuto();       // empieza moviéndose solo
-  enableGyro();       // si hay giro válido, el watchdog apagará el auto
-  enableTouchDrag();  // permitir arrastrar siempre
+  // ---- Arranque
+  enableAuto();       // siempre empieza suave en auto
+  enableGyro();       // si llega giro, lo seguirá y apagará el auto
+  enableTouchDrag();  // arrastrar siempre disponible
   requestAnimationFrame(tick);
 
-  // Mantener dentro del viewport si cambia tamaño/orientación
   window.addEventListener('resize', () => {
-    tx = clamp(tx, 12, innerWidth  - 12);
-    ty = clamp(ty, 12, innerHeight - 12);
+    tx = clamp(tx, AUTO_MARGIN, innerWidth  - AUTO_MARGIN);
+    ty = clamp(ty, AUTO_MARGIN, innerHeight - AUTO_MARGIN);
   }, { passive: true });
 }
+
 
 
 // ============ Bootstrap ============
