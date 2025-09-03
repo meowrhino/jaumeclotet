@@ -186,3 +186,78 @@ assets.js:9
  HEAD http://127.0.0.1:5500/data/alusinasons/titol.png net::ERR_ABORTED 404 (Not Found)
 ﻿
  que crees que le esta pasando? estaba terminando de subir los datos de newywork
+---
+
+## Secreto — Fantasmito D6 (página 7 / overlay en home)
+**Fecha:** 2025-08-21 16:19
+**Estado:** Por hacer
+
+**Resumen**
+Añadir un "secreto" con un fantasma que actúa como dado (6 caras por defecto, configurable). Cada click cambia aleatoriamente la cara mostrada y, debajo, aparece el enlace asociado a esa cara. En cada carga de página, la cara inicial también es aleatoria. El “secreto” mantiene bloqueado el contenido hasta que el usuario haya clicado (al menos una vez) todas las caras.
+
+**Requisitos funcionales**
+- Nº de caras configurable (por defecto 6).
+- Al cargar la página: seleccionar cara aleatoria como estado inicial.
+- Al hacer click sobre el fantasma: cambiar a una cara aleatoria distinta de la actual.
+- Mostrar debajo del fantasma un **enlace** asociado a la cara activa.
+- Si la cara activa es la de **contacto**, en lugar de enlace aparece un **campo de texto + botón enviar**:
+  - Opción A: `mailto:` (fallback sin backend).
+  - Opción B: POST a endpoint (p.ej. `/api/ghostmail`) si tenemos backend.
+  - Captcha/honeypot simple (invisible) para evitar spam.
+- **Ubicación**: preferiblemente como **overlay “sobrevolando” la home**. Alternativa: implementar como **página 7** si el overlay complica la UX.
+- **Bloqueo/desbloqueo**: el secreto sigue **bloqueado** hasta que el usuario haya clicado todas las caras (al menos una vez). Al completar las 6, se **desbloquea**.
+- **Persistencia**: progreso en `localStorage` (p.ej. `ghostFacesSeen` con un Set de IDs). Botón oculto o comando para **reset**.
+- **Accesibilidad**: focus manejable por teclado, `aria-live` para cambios de cara/enlace, textos alternativos.
+
+**Criterios de aceptación**
+- Dado N=6, al **recargar** la home, la cara inicial es aleatoria y válida.
+- Al **hacer click**, la cara **cambia** y **nunca repite** la misma en clicks consecutivos.
+- Bajo el fantasma aparece el **enlace correcto** para cada cara.
+- La cara “contacto” muestra **input + enviar** y permite **enviar** (vía mailto o endpoint).
+- El estado de **caras vistas** se **guarda** y al completar las 6 se **desbloquea** el secreto (persistente entre recargas).
+- Con `localStorage` limpio, el secreto vuelve a estar **bloqueado**.
+- Overlay no bloquea navegación básica y **ESC** lo cierra si se implementa modal.
+- Responsive: móvil y desktop OK.
+
+**Enlaces propuestos (open a cambios)**
+1. https://www.youtube.com/@cuinali1332 (canal cuina.li)
+2. https://www.youtube.com/watch?v=ISQRmswyVjA&list=PLB4fYvk91x-3_8Umab86ougs6RJ3KRrky&ab_channel=ETMmusic (llista videoclips)
+3. https://www.instagram.com/jaume.clotet/ (IG Jaume)
+4. **Contacto por mail** (input + enviar)
+5. https://www.instagram.com/p/C2cin5AKk9H/ (bufanda que fuma)
+6. **Libre** (definir)
+
+**Assets**
+- Jaume sube al Drive el `.tif` del fantasma con 6 capas. Exportar a **PNG** individuales: `/assets/ghost/face-1.png` … `/face-6.png`.
+- (Temporal) Usar placeholders si aún no están los PNG definitivos.
+
+**Esquema de configuración sugerido (JSON)**
+```json
+{
+  "secreto": {
+    "ghost": {
+      "overlay": true,
+      "require_all_faces_to_unlock": true,
+      "faces": [
+        {"id":1,"img":"assets/ghost/face-1.png","label":"cuina.li","url":"https://www.youtube.com/@cuinali1332"},
+        {"id":2,"img":"assets/ghost/face-2.png","label":"videoclips","url":"https://www.youtube.com/watch?v=ISQRmswyVjA&list=PLB4fYvk91x-3_8Umab86ougs6RJ3KRrky&ab_channel=ETMmusic"},
+        {"id":3,"img":"assets/ghost/face-3.png","label":"instagram","url":"https://www.instagram.com/jaume.clotet/"},
+        {"id":4,"img":"assets/ghost/face-4.png","label":"contacto","type":"contact-form","mailto":"jaume@example.com"},
+        {"id":5,"img":"assets/ghost/face-5.png","label":"bufanda","url":"https://www.instagram.com/p/C2cin5AKk9H/"},
+        {"id":6,"img":"assets/ghost/face-6.png","label":"libre","url":""}
+      ]
+    }
+  }
+}
+```
+
+**Tareas**
+- [ ] Exportar 6 PNGs del `.tif` y subirlos a `/assets/ghost/` con nombres `face-{1..6}.png`.
+- [ ] Crear componente `GhostDice` (overlay/modal con accesibilidad).
+- [ ] Lógica de **cambio aleatorio** (sin repetir) y **estado inicial aleatorio**.
+- [ ] Mapeo cara → **enlace** o **formulario** (contacto).
+- [ ] Persistencia en `localStorage` del set de caras vistas.
+- [ ] Lógica de **desbloqueo** al completar las 6.
+- [ ] Hookear el componente en **home** (o preparar ruta `pag7` si se decide).
+- [ ] Pruebas en móvil/desktop y QA de accesibilidad.
+- [ ] (Opcional) Animación de fade entre caras y levitación del fantasma.

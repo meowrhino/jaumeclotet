@@ -1,0 +1,44 @@
+{
+  "slug": "difacil",
+  "titulo": "Difàcil",
+  "logo": "./img/titol.png",
+  "bg": "./img/fons.jpg",
+  "sinopsis": "Quan siguis gran\nel teu cor\ns'acabarà\ntransformant\nen cartó",
+  "elemento_divertido": {
+    "src": "./img/fun.png"
+  },
+  "textos": [
+    "Difàcil és un projecte desenvolupat en el marc d’espais c, programa del Consorci d’Educació i l’ICUB que connecta la pràctica artística amb l’educació primària mitjançant processos de convivència de llarga durada. Entre 2022 i 2024, l’artista Jaume Clotet ha treballat a l’Escola Aldana amb la mediació de La Capella i l’acompanyament de Judit López, transformant un espai del centre en un taller-estudi obert tant a la seva pràctica com a la participació dels infants.",
+    "L’estudi es concep com un espai i un temps compartits, on creació artística i imaginari infantil es contaminen mútuament en un procés obert, sense final predeterminat. El projecte dissol fronteres entre creació professional i amateur, enginy infantil i adult, superficialitat i profunditat.",
+    "Difàcil proposa un procés creatiu flexible i mutable, capaç de qüestionar jerarquies de valor i autoria, i d’elevar resultats aparentment “menys artístics” a la mateixa consideració que les obres més premeditades. A través d’un joc constant, explora la convivència entre oposats i construeix un terreny comú on plaer, experimentació i imaginació esdevenen indissociables."
+  ],
+  "galeria": {
+    "images": [
+      "./img/Difacil_01.jpg",
+      "./img/Difacil_02.jpg",
+      "./img/Difacil_03.jpg",
+      "./img/Difacil_04.jpg",
+      "./img/Difacil_05.jpg",
+      "./img/Difacil_06.jpg",
+      "./img/Difacil_07.jpg",
+      "./img/Difacil_08.jpg",
+      "./img/Difacil_09.jpg",
+      "./img/Difacil_10.jpg",
+      "./img/Difacil_11.jpg",
+      "./img/Difacil_12.jpg"
+    ]
+  },
+
+    "comodin": [
+  {
+    "id": "foto",
+    "type": "image",
+    "src": "./img/foto.png",
+    "place": "append:header",
+    "align": "center",
+    "width": "half"
+  }
+],
+
+  "creditos": "Poema: Khushal Purshwani Gajwani\nEspai Rampa, La Capella 2024 (Barcelona)\n<a href=\"https://www.barcelona.cat/espaisc/\">Espai c 2022-2024</a>\nProposta creada juntament amb els infants de l’ESCOLA ALDANA\nConstrucció de la càmera-biombo i muntatge expositiu: Borja Casanovas\nAssessorament edició vídeo: Albert Sánchez"
+}

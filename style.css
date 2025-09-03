@@ -141,12 +141,13 @@ body {
 #project-root {
   padding: 16px;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 800px;
   color: #000;
   /* texto negro en detalle */
   background: transparent;
   /* deja ver el fondo si lo hay */
   padding-block: 10vh;
+  /* overflow-x: hidden; */
 }
 
 @media (min-width: 641px) {
@@ -211,8 +212,7 @@ body {
 
 /* Textos */
 .project-textos p {
-  max-width: 800px;
-  margin: 0 auto 1em;
+  margin-bottom: 1em;
   line-height: 1.6;
 }
 
@@ -243,6 +243,14 @@ body {
   border-radius: 6px;
   outline: none;
 }
+/* 
+.project-creditos {
+  white-space: normal;        
+  overflow-wrap: anywhere;   
+  word-break: break-word;    
+  line-height: 1.5;          
+} */
+
 
 /* Overlay para ampliar (img + video) */
 .overlay {
