@@ -2,7 +2,7 @@
     "slug": "cantautot",
     "titulo": "Cantautot",
     "logo": "./img/titol.png",
-    "bg": "#FF8040",
+    "bg": "./img/fons.jpg",
     "sinopsis": "((aquet es dalusinasons))\nUn innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
     "elemento_divertido": {
         "src": "./img/fun.png"
