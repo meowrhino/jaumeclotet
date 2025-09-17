@@ -139,14 +139,14 @@ body {
 
 /* Contenedor principal */
 #project-root {
-  /* padding: 16px; */
+  padding: 16px;
   margin: 0 auto;
   max-width: 800px;
   color: #000;
   /* texto negro en detalle */
   background: transparent;
   /* deja ver el fondo si lo hay */
-  padding-block: 10vh;
+  padding-top: 10vh;
   /* overflow-x: hidden; */
 }
 
@@ -374,12 +374,14 @@ body {
 /* =========================
    Project navigation (random arrows)
    ========================= */
-.project-nav {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  align-items: center;
-
+.project-nav{
+  bottom: 6vh;           /* distancia al borde inferior del viewport */
+  display:flex;
+  gap: 40px;             /* más espacio entre flechas */
+  justify-content:center;
+  align-items:center;
+  margin-top: 15vh;      /* separa de los créditos/texto */
+  z-index: 20;           /* sobre el fondo si lo hubiera */
 }
 
 .nav-arrow {

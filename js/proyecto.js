@@ -280,11 +280,29 @@ function renderProject(p) {
   }
 }
 
-// Créditos: solo texto (compat con formato viejo)
+// Créditos: parsea por líneas, poniendo en negrita lo anterior a ":" en cada línea
 function renderCreditos(c) {
   if (!c) return "";
-  const text = typeof c === "string" ? c : c.contenido || "";
-  return `<pre>${text}</pre>`;
+  const raw = typeof c === "string" ? c : c.contenido || "";
+  const lines = String(raw).replace(/\r\n?/g, "\n").split("\n");
+
+  const html = lines
+    .map((line) => {
+      const t = line.trim();
+      if (!t) return "";
+      const i = t.indexOf(":");
+      if (i > 0) {
+        const label = escapeHtml(t.slice(0, i).trim());
+        const rest = escapeHtml(t.slice(i + 1).trim());
+        return `<div class="credit-line"><strong>${label}:</strong> ${rest}</div>`;
+      } else {
+        // línea sin ":", se muestra tal cual
+        return `<div class="credit-line">${escapeHtml(t)}</div>`;
+      }
+    })
+    .join("");
+
+  return html;
 }
 
 // ============ Overlay de galería (click para ampliar) ============
