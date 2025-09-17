@@ -2,21 +2,27 @@
 
 Guía completa para entender, publicar y mantener el sitio.
 
-- [Parte A — Publicar proyectos](#parte-a--publicar-proyectos)
-  - [Requisitos y entorno local](#requisitos-y-entorno-local)
-  - [Estructura de carpetas](#estructura-de-carpetas)
-  - [Cómo funciona la Home](#cómo-funciona-la-home)
-  - [Añadir un proyecto nuevo (paso a paso)](#añadir-un-proyecto-nuevo-paso-a-paso)
-  - [Plantilla y campos de `project.json`](#plantilla-y-campos-de-projectjson)
-  - [Bloques “comodín”](#bloques-comodín)
-- [Parte B — Mantenimiento / Dev](#parte-b--mantenimiento--dev)
-  - [Tecnologías y arquitectura](#tecnologías-y-arquitectura)
-  - [Scripts: qué hace cada uno](#scripts-qué-hace-cada-uno)
-  - [CSS: resumen de clases](#css-resumen-de-clases)
-  - [Depurar y probar](#depurar-y-probar)
-  - [Checklist de publicación](#checklist-de-publicación)
-  - [FAQ](#faq)
-  - [Decisiones clave](#decisiones-clave)
+- [jaumeclotet · README](#jaumeclotet--readme)
+  - [Parte A — Publicar proyectos](#parte-a--publicar-proyectos)
+    - [Requisitos y entorno local](#requisitos-y-entorno-local)
+    - [Estructura de carpetas](#estructura-de-carpetas)
+    - [Cómo funciona la Home](#cómo-funciona-la-home)
+    - [Añadir un proyecto nuevo (paso a paso)](#añadir-un-proyecto-nuevo-paso-a-paso)
+    - [Plantilla y campos de `project.json`](#plantilla-y-campos-de-projectjson)
+      - [Plantilla mínima](#plantilla-mínima)
+      - [Significado de cada campo](#significado-de-cada-campo)
+    - [Bloques “comodín”](#bloques-comodín)
+  - [Parte B — Mantenimiento / Dev](#parte-b--mantenimiento--dev)
+    - [Tecnologías y arquitectura](#tecnologías-y-arquitectura)
+    - [Scripts: qué hace cada uno](#scripts-qué-hace-cada-uno)
+      - [`js/assets.js` (módulo compartido)](#jsassetsjs-módulo-compartido)
+      - [`js/main.js` (Home)](#jsmainjs-home)
+      - [`js/proyecto.js` (Página de proyecto)](#jsproyectojs-página-de-proyecto)
+    - [CSS: resumen de clases](#css-resumen-de-clases)
+    - [Depurar y probar](#depurar-y-probar)
+    - [Checklist de publicación](#checklist-de-publicación)
+    - [FAQ](#faq)
+    - [Decisiones clave](#decisiones-clave)
 
 ---
 
@@ -85,7 +91,7 @@ Para cada `slug` crea un **tile**:
 3. (Opcional) **`fons.jpg`** si quieres fijar la imagen de fondo del tile.
 4. Crea **`project.json`** (usa la plantilla de abajo).
 5. En `featured.json` añade `{"slug":"mi-slug"}` dentro de `destacados` (decide si va como `secreto.slug` también).
-6. Abre la home y la página del proyecto para comprobar todo.
+6. Abre la home y la página de la obra para comprobar todo.
 
 ---
 
@@ -130,7 +136,15 @@ Para cada `slug` crea un **tile**:
     { "id": "intro", "place": "after:textos", "type": "text", "prose": ["Bloque libre con uno o varios párrafos."] },
     { "place": "after:@intro", "type": "image", "src": "img/extra.jpg", "caption": "Leyenda opcional" },
     { "place": "before:creditos", "type": "video", "src": "media/extra.mp4", "poster": "img/extra-poster.jpg" }
-  ]
+  ],
+
+  "comodin": [
+  { "type":"text", "place":"after:header", "align":"center", "width":"half", "text":"Lorem ipsum..." },
+  { "type":"image", "place":"append:galeria", "width":"third", "src":"./img/foto.png", "caption":"Peu de foto", "link":"https://..." },
+  { "type":"video", "place":"after:galeria", "width":"whole", "src":"./video/clip.mp4", "poster":"./img/poster.jpg", "muted":true, "loop":true },
+  { "type":"html", "place":"end", "raw":"<blockquote>…</blockquote>" },
+  { "type":"credits", "place":"before:creditos", "width":"fourth", "text":"Direcció: X\nProd: Y" }
+]
 }
 ```
 
@@ -161,10 +175,15 @@ Permiten insertar contenido **extra** en posiciones concretas de la página, en 
 
 **Tipos soportados**
 
-- `text` → `{ "prose": ["P1","P2"], "align":"center|left|right", "width":"auto|half|full" }`
-- `image` → `{ "src":"img/...", "caption"?, "align"?, "width"?, }`
+- `text` → `{ "text":"..."/"prose":["P1","P2"], "align":"left|center|right", "width":"whole|half|third|fourth" }`
+- `image` → `{ "src":"img/...", "caption"?, "link"?, "align"?, "width"? }` (`link` puede ser string o `{ "href":"...", "newtab": true }`)
 - `video` → `{ "src":"media/...", "poster"?, "muted"?, "loop"?, "autoplay"?, "align"?, "width"? }`
 - `html` *(opcional)* → `{ "raw":"<blockquote>…</blockquote>" }`
+- `credits` → `{ "text":"Direcció: ...", "place":"before:creditos", "width":"half" }` (reutiliza el formato de créditos principal)
+
+**`width`**: `whole` (por defecto), `half`, `third`, `fourth`.  
+Genera clases CSS `.width-*` para maquetar en flex/grid.  
+Sinónimos aceptados: `full|auto → whole`, `quarter → fourth`.
 
 **`place`** (anclas de inserción)
 
@@ -172,7 +191,7 @@ Permiten insertar contenido **extra** en posiciones concretas de la página, en 
 - `before:creditos`, `after:creditos`
 - `end` (al final del `#project-root`)
 - `after:@id` / `before:@id` (posicionar relativo a *otro* comodín con ese `id`)
-- `append:#selector` (avanzado; inserta dentro del selector)
+- `append:#selector`, `before:#selector`, `after:#selector` (avanzado; relativo a selectores CSS arbitrarios)
 
 > **Rutas**: imágenes se normalizan a `data/{slug}/img/...`; vídeos **no** se fuerzan a `/img` (pueden ir en `media/`). Evita URLs externas.
 

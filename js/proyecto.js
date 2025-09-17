@@ -155,14 +155,21 @@ function normalizePaths(p, base) {
   if (Array.isArray(p.comodin)) {
     p.comodin = p.comodin.map((raw) => {
       const it = { ...raw };
+      // Normaliza rutas donde aplique
       if (it.type === "image" && it.src) it.src = normImg(it.src);
       if (it.type === "video" && it.src) it.src = normAny(it.src);
       if (it.poster) it.poster = normImg(it.poster);
-      // sanea align/width
-      if (it.align && !["left", "center", "right"].includes(it.align))
+      // sanea align
+      if (it.align && !["left", "center", "right"].includes(it.align)) {
         delete it.align;
-      if (it.width && !["auto", "half", "full"].includes(it.width))
-        delete it.width;
+      }
+      // sanea width ampliado: whole|half|third|fourth (y sinónimos legacy)
+      if (it.width) {
+        const m = String(it.width).toLowerCase().trim();
+        const map = { full: "whole", auto: "whole", whole: "whole", half: "half", third: "third", fourth: "fourth", quarter: "fourth" };
+        const w = map[m];
+        if (w) it.width = w; else delete it.width;
+      }
       return it;
     });
   }
@@ -351,11 +358,11 @@ function renderComodines(list) {
 // Crea el nodo HTML del comodín según su tipo
 function createComodinElement(it) {
   const align = it.align ? ` align-${it.align}` : "";
-  const width = it.width ? ` width-${it.width}` : "";
+  const widthClass = ` width-${it.width ? it.width : "whole"}`; // por defecto 'whole'
 
   if (it.type === "text") {
     const section = document.createElement("section");
-    section.className = `comodin comodin-text${align}${width}`;
+    section.className = `comodin comodin-text${align}${widthClass}`;
     const ps = Array.isArray(it.prose) ? it.prose : it.prose ? [it.prose] : [];
     if (!ps.length && it.text) ps.push(it.text);
     if (!ps.length) return null;
@@ -365,16 +372,22 @@ function createComodinElement(it) {
 
   if (it.type === "image" && it.src) {
     const fig = document.createElement("figure");
-    fig.className = `comodin comodin-image${align}${width}`;
-    fig.innerHTML =
-      `<img src="${it.src}" alt="">` +
-      (it.caption ? `<figcaption>${it.caption}</figcaption>` : "");
+    fig.className = `comodin comodin-image${align}${widthClass}`;
+    // Imagen con enlace opcional
+    const imgTag = `<img src="${it.src}" alt="">`;
+    let wrapped = imgTag;
+    if (it.link) {
+      const href = typeof it.link === "string" ? it.link : it.link.href;
+      const newtab = typeof it.link === "object" && it.link.newtab ? ` target="_blank" rel="noopener noreferrer"` : "";
+      if (href) wrapped = `<a href="${href}"${newtab}>${imgTag}</a>`;
+    }
+    fig.innerHTML = wrapped + (it.caption ? `<figcaption>${it.caption}</figcaption>` : "");
     return fig;
   }
 
   if (it.type === "video" && it.src) {
     const fig = document.createElement("figure");
-    fig.className = `comodin comodin-video${align}${width}`;
+    fig.className = `comodin comodin-video${align}${widthClass}`;
     const poster = it.poster ? ` poster="${it.poster}"` : "";
     const attrs = [
       "controls",
@@ -395,9 +408,18 @@ function createComodinElement(it) {
   // (opcional) tipo 'html'
   if (it.type === "html" && it.raw) {
     const div = document.createElement("div");
-    div.className = `comodin comodin-html${align}${width}`;
+    div.className = `comodin comodin-html${align}${widthClass}`;
     div.innerHTML = it.raw;
     return div;
+  }
+
+  // tipo 'credits' → nueva sección de créditos reutilizando renderCreditos
+  if (it.type === "credits" && (it.text || it.contenido || it.creditos)) {
+    const section = document.createElement("section");
+    section.className = `project-creditos comodin comodin-credits${align}${widthClass}`;
+    const txt = it.creditos || it.text || it.contenido || "";
+    section.innerHTML = renderCreditos(txt);
+    return section;
   }
 
   console.warn("[comodin] tipo no soportado o datos incompletos:", it);

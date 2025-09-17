@@ -374,14 +374,14 @@ body {
 /* =========================
    Project navigation (random arrows)
    ========================= */
-.project-nav{
-  bottom: 6vh;           /* distancia al borde inferior del viewport */
-  display:flex;
-  gap: 40px;             /* más espacio entre flechas */
-  justify-content:center;
-  align-items:center;
-  margin-top: 15vh;      /* separa de los créditos/texto */
-  z-index: 20;           /* sobre el fondo si lo hubiera */
+.project-nav {
+  bottom: 6vh; /* distancia al borde inferior del viewport */
+  display: flex;
+  gap: 40px; /* más espacio entre flechas */
+  justify-content: center;
+  align-items: center;
+  margin-top: 15vh; /* separa de los créditos/texto */
+  z-index: 20; /* sobre el fondo si lo hubiera */
 }
 
 .nav-arrow {
@@ -416,9 +416,65 @@ body {
   transform: rotate(180deg);
 }
 
+.project-creditos {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .project-creditos pre {
   white-space: pre-wrap; /* respeta saltos de línea, pero permite cortar */
   word-wrap: break-word; /* para palabras muy largas */
   overflow-wrap: anywhere; /* opcional: corta en cualquier punto si no cabe */
+  font-family: "Spectral SC", serif !important;
+}
 
+/* ===== Comodines: anchos semánticos ===== */
+/* Compatibilidad legacy */
+.comodin.width-whole {
+  max-width: none;
+  width: min(100%, 1200px);
+}
+.comodin.width-half {
+  width: min(100%, 600px);
+}
+.comodin.width-third {
+  width: min(100%, 400px);
+}
+.comodin.width-fourth {
+  width: min(100%, 300px);
+}
+
+@media (max-width: 640px) {
+  .comodin.width-half,
+  .comodin.width-third,
+  .comodin.width-fourth {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Imagen de comodín con enlace */
+.comodin-image a {
+  display: block;
+  text-decoration: none;
+}
+.comodin-image a:focus-visible {
+  outline: 2px solid #8ed5ff;
+  outline-offset: 3px;
+}
+
+/* ===== Créditos en línea ===== */
+.project-creditos .credit-line {
+  margin: 0.5rem 0;
+}
+.project-creditos .credit-line strong {
+  font-weight: 700;
+}
+
+/* Créditos con tipografía monoespaciada (look anterior de <pre>) */
+.project-creditos,
+.project-creditos .credit-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
+               "Liberation Mono", "Courier New", monospace;
+  font-variant-ligatures: none; /* más limpio en monospace */
 }
