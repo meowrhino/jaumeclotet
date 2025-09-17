@@ -465,7 +465,8 @@ body {
 
 /* ===== Créditos en línea ===== */
 .project-creditos .credit-line {
-  margin: 0.5rem 0;
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
 }
 .project-creditos .credit-line strong {
   font-weight: 700;
