@@ -242,13 +242,6 @@ body {
   border-radius: 6px;
   outline: none;
 }
-/* 
-.project-creditos {
-  white-space: normal;        
-  overflow-wrap: anywhere;   
-  word-break: break-word;    
-  line-height: 1.5;          
-} */
 
 /* Overlay para ampliar (img + video) */
 .overlay {
@@ -419,4 +412,11 @@ body {
 /* Left arrow rotated 180º */
 .nav-arrow--left img {
   transform: rotate(180deg);
+}
+
+.project-creditos pre {
+  white-space: pre-wrap; /* respeta saltos de línea, pero permite cortar */
+  word-wrap: break-word; /* para palabras muy largas */
+  overflow-wrap: anywhere; /* opcional: corta en cualquier punto si no cabe */
+
 }
