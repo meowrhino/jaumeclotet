@@ -413,8 +413,6 @@ body {
    Créditos (monoespaciado)
    ========================================= */
 .project-creditos {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
   /* Fuente monoespaciada como en el look anterior */
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
     "Courier New", monospace;
