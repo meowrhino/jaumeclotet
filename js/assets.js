@@ -36,8 +36,28 @@ export async function getProjectMeta(slug) {
     const res = await fetch(`data/${slug}/project.json`);
     if (!res.ok) throw new Error('project.json not found for ' + slug);
     const p = await res.json();
+    validateProjectMeta(p, slug);
     _projectCache.set(slug, p);
     return p;
+}
+
+function validateProjectMeta(p, slug){
+    if (!p) {
+        console.warn(`[${slug}] project.json vacío o inválido`);
+        return;
+    }
+    if (!p.titulo && !p.title) {
+        console.warn(`[${slug}] Falta "titulo" en project.json`);
+    }
+    if (!p.sinopsis) {
+        console.warn(`[${slug}] Falta "sinopsis" — se recomienda una breve descripción (para SEO)`);
+    }
+    if (p.galeria && !Array.isArray(p.galeria.media || []) && !Array.isArray(p.galeria.images || [])) {
+        console.warn(`[${slug}] "galeria" no tiene media ni images en array`);
+    }
+    if (p.bg && typeof p.bg === 'string' && !isCssColor(p.bg) && !p.bg.startsWith('img/')) {
+        console.warn(`[${slug}] bg parece ruta inválida o no empieza por img/ → ${p.bg}`);
+    }
 }
 
 // Fondo para tiles/páginas: imagen o color
