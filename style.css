@@ -447,3 +447,26 @@ body {
     max-width: 100%;
   }
 }
+
+/* Créditos: visibilidad de formato en monospace */
+.project-creditos {
+  font-synthesis: weight style;
+}
+
+.project-creditos em {
+  font-style: oblique 12deg; /* muchas mono no traen italic real */
+}
+
+.project-creditos u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.project-creditos a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.project-creditos a:hover {
+  opacity: 0.9;
+}
