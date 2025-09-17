@@ -1,6 +1,6 @@
-/* =========================
+/* =========================================
    Reset & Base
-   ========================= */
+   ========================================= */
 * {
   box-sizing: border-box;
 }
@@ -18,9 +18,9 @@ body {
   font-family: system-ui, sans-serif;
 }
 
-/* =========================
+/* =========================================
    Index (grid de 6)
-   ========================= */
+   ========================================= */
 #index {
   height: 100vh;
   width: 100vw;
@@ -56,19 +56,19 @@ body {
   #index {
     height: auto;
   }
-
   .grid {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, min(50vh, 360px));
     height: auto;
   }
-
   body {
     overflow: auto;
   }
 }
 
-/* Tiles */
+/* =========================================
+   Tiles (home)
+   ========================================= */
 .tile {
   position: relative;
   overflow: hidden;
@@ -95,7 +95,6 @@ body {
   z-index: 2;
   display: block;
 }
-
 .tile .logo {
   max-width: 62%;
   max-height: 62%;
@@ -113,43 +112,37 @@ body {
   justify-content: center;
   background: transparent;
   z-index: 10;
-  pointer-events: none;
-  /* la capa no intercepta clics */
+  pointer-events: none; /* la capa no intercepta clics */
 }
-
 #unlock7.show {
   display: flex;
 }
-
 #unlock7 a {
   pointer-events: auto;
   display: inline-block;
   text-decoration: none;
 }
-
 #unlock7 img {
   max-width: clamp(160px, 30vw, 420px);
   max-height: 40vh;
   filter: none;
 }
 
-/* =========================
+/* =========================================
    Project page
-   ========================= */
+   ========================================= */
 
 /* Contenedor principal */
 #project-root {
   padding: 16px;
   margin: 0 auto;
   max-width: 800px;
-  color: #000;
-  /* texto negro en detalle */
-  background: transparent;
-  /* deja ver el fondo si lo hay */
+  color: #000; /* texto negro en detalle */
+  background: transparent; /* deja ver el fondo si lo hay */
   padding-top: 10vh;
-  /* overflow-x: hidden; */
 }
 
+/* Ancho en viewport >640px */
 @media (min-width: 641px) {
   #project-root {
     width: 80dvw;
@@ -163,7 +156,6 @@ body {
   z-index: -1;
   background: var(--bg-color, transparent);
 }
-
 .project-bg img {
   width: 100%;
   height: 100%;
@@ -179,7 +171,6 @@ body {
   gap: 8px;
   margin-bottom: 12px;
 }
-
 .project-logo {
   max-width: 420px;
   width: 60vw;
@@ -187,9 +178,9 @@ body {
   display: block;
 }
 
-/* Sinopsis: usar párrafos normales (no pre-wrap) */
+/* Sinopsis (en Spectral SC) */
 .project-sinopsis {
-  white-space: normal; /* override del pre-wrap anterior */
+  white-space: normal;
   line-height: 1.35;
   text-align: center;
   max-width: 800px;
@@ -201,8 +192,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-
-/* Inicial un pelín más grande al inicio de cada P */
 .project-sinopsis p::first-letter {
   font-size: 1.22em;
   line-height: 1;
@@ -215,32 +204,28 @@ body {
   line-height: 1.6;
 }
 
-/* Galería: vertical (una imagen/vídeo tras otro) */
+/* Galería: vertical */
 .project-galeria {
   display: block;
   padding: 8px 0;
 }
-
 .project-galeria.column {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
-.project-galeria .gal-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
+.project-galeria .gal-img,
 .project-galeria .gal-video {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 6px;
+}
+.project-galeria .gal-video {
   outline: none;
+}
+
+.project-galeria .gal-img {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 /* Overlay para ampliar (img + video) */
@@ -253,11 +238,9 @@ body {
   justify-content: center;
   z-index: 60;
 }
-
 .overlay.show {
   display: flex;
 }
-
 .overlay .overlay-media {
   max-width: 92vw;
   max-height: 92vh;
@@ -272,7 +255,6 @@ body {
   width: 72px;
   pointer-events: none;
 }
-
 .fun.touchable {
   pointer-events: auto;
 }
@@ -292,25 +274,21 @@ body {
   cursor: pointer;
 }
 
-/* Botón volver (si lo usas) */
+/* Botón volver (legacy; si lo usas) */
 .back-row {
   text-align: center;
 }
-
 .back-bottom {
   display: inline-block;
   margin: 40px auto 10px;
   padding: 10px 16px;
   border: 1px solid #0003;
-  border-radius: 6px;
   color: #000;
   text-decoration: none;
 }
-
 .back-bottom:hover {
   background: #00000010;
 }
-
 .back {
   position: fixed;
   bottom: 16px;
@@ -319,141 +297,67 @@ body {
   text-decoration: none;
   font-size: 1.2em;
   padding: 8px;
-  border-radius: 6px;
 }
 
-/* ===== Comodín (bloques libres con anclas) ===== */
+/* =========================================
+   Comodín (bloques libres con anclas)
+   ========================================= */
 .comodin {
   margin: 16px auto;
   max-width: 800px;
 }
 
+/* Alineación semántica */
 .comodin.align-center {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
 }
-
 .comodin.align-left {
   margin-left: 0;
   text-align: left;
 }
-
 .comodin.align-right {
   margin-right: 0;
   text-align: right;
 }
 
+/* Anchos legacy (compat) */
 .comodin.width-auto {
   max-width: 800px;
 }
-
-.comodin.width-half {
-  max-width: 600px;
-}
-
 .comodin.width-full {
   max-width: none;
   width: min(100%, 1200px);
 }
+.comodin.width-half {
+  max-width: 600px;
+}
 
+/* Nuevos anchos semánticos — en fracciones del contenedor */
+.comodin.width-whole {
+  width: 100%;
+  max-width: none;
+}
+.comodin.width-half {
+  width: 50%;
+}
+.comodin.width-third {
+  width: 33.3333%;
+}
+.comodin.width-fourth {
+  width: 25%;
+}
+
+/* Imagen / vídeo de comodín */
 .comodin-image img,
 .comodin-video video {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 6px;
 }
 
-.comodin figcaption {
-  font-size: 0.9rem;
-  opacity: 0.75;
-  margin-top: 6px;
-}
-
-/* =========================
-   Project navigation (random arrows)
-   ========================= */
-.project-nav {
-  bottom: 6vh; /* distancia al borde inferior del viewport */
-  display: flex;
-  gap: 40px; /* más espacio entre flechas */
-  justify-content: center;
-  align-items: center;
-  margin-top: 15vh; /* separa de los créditos/texto */
-  z-index: 20; /* sobre el fondo si lo hubiera */
-}
-
-.nav-arrow {
-  background: transparent;
-  border: 0;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: transform 0.15s ease;
-}
-
-.nav-arrow img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  image-rendering: auto;
-  display: block;
-}
-
-/* Hover lift */
-.nav-arrow--left:hover {
-  transform: translateX(-2px);
-}
-
-/* Hover lift */
-.nav-arrow--right:hover {
-  transform: translateX(2px);
-}
-
-/* Left arrow rotated 180º */
-.nav-arrow--left img {
-  transform: rotate(180deg);
-}
-
-.project-creditos {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.project-creditos pre {
-  white-space: pre-wrap; /* respeta saltos de línea, pero permite cortar */
-  word-wrap: break-word; /* para palabras muy largas */
-  overflow-wrap: anywhere; /* opcional: corta en cualquier punto si no cabe */
-  font-family: "Spectral SC", serif !important;
-}
-
-/* ===== Comodines: anchos semánticos ===== */
-/* Compatibilidad legacy */
-.comodin.width-whole {
-  max-width: none;
-  width: min(100%, 1200px);
-}
-.comodin.width-half {
-  width: min(100%, 600px);
-}
-.comodin.width-third {
-  width: min(100%, 400px);
-}
-.comodin.width-fourth {
-  width: min(100%, 300px);
-}
-
-@media (max-width: 640px) {
-  .comodin.width-half,
-  .comodin.width-third,
-  .comodin.width-fourth {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* Imagen de comodín con enlace */
+/* Imagen con enlace (accesible) */
 .comodin-image a {
   display: block;
   text-decoration: none;
@@ -463,7 +367,69 @@ body {
   outline-offset: 3px;
 }
 
-/* ===== Créditos en línea ===== */
+.comodin figcaption {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-top: 6px;
+}
+
+/* =========================================
+   Project navigation (random arrows)
+   ========================================= */
+.project-nav {
+  display: flex;
+  gap: 40px; /* espacio entre flechas */
+  justify-content: center;
+  align-items: center;
+  margin-top: 15vh; /* separa de los créditos/texto */
+  z-index: 20;
+}
+.nav-arrow {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.nav-arrow img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  image-rendering: auto;
+  display: block;
+}
+.nav-arrow--left:hover {
+  transform: translateX(-2px);
+}
+.nav-arrow--right:hover {
+  transform: translateX(2px);
+}
+/* Izquierda girada 180º */
+.nav-arrow--left img {
+  transform: rotate(180deg);
+}
+
+/* =========================================
+   Créditos (monoespaciado)
+   ========================================= */
+.project-creditos {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  /* Fuente monoespaciada como en el look anterior */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-variant-ligatures: none;
+}
+
+/* Compat <pre> (si existe en algún proyecto) */
+.project-creditos pre {
+  white-space: pre-wrap; /* respeta saltos de línea, pero permite cortar */
+  word-wrap: break-word; /* compat */
+  overflow-wrap: anywhere; /* corta palabras muy largas */
+  font-family: inherit; /* hereda del contenedor monoespaciado */
+}
+
+/* Estructura por líneas (render actual) */
 .project-creditos .credit-line {
   margin: 0.3rem 0;
   font-size: 0.9rem;
@@ -472,10 +438,14 @@ body {
   font-weight: 700;
 }
 
-/* Créditos con tipografía monoespaciada (look anterior de <pre>) */
-.project-creditos,
-.project-creditos .credit-line {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
-               "Liberation Mono", "Courier New", monospace;
-  font-variant-ligatures: none; /* más limpio en monospace */
+/* =========================================
+   Responsive — Comodines
+   ========================================= */
+@media (max-width: 640px) {
+  .comodin.width-half,
+  .comodin.width-third,
+  .comodin.width-fourth {
+    width: 100%;
+    max-width: 100%;
+  }
 }

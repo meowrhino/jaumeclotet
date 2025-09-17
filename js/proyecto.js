@@ -373,13 +373,12 @@ function createComodinElement(it) {
   if (it.type === "image" && it.src) {
     const fig = document.createElement("figure");
     fig.className = `comodin comodin-image${align}${widthClass}`;
-    // Imagen con enlace opcional
+    // Imagen con enlace opcional (si hay link: abre en nueva pestaña y no participa en overlay)
     const imgTag = `<img src="${it.src}" alt="">`;
     let wrapped = imgTag;
     if (it.link) {
       const href = typeof it.link === "string" ? it.link : it.link.href;
-      const newtab = typeof it.link === "object" && it.link.newtab ? ` target="_blank" rel="noopener noreferrer"` : "";
-      if (href) wrapped = `<a href="${href}"${newtab}>${imgTag}</a>`;
+      if (href) wrapped = `<a href="${href}" target="_blank" rel="noopener noreferrer">${imgTag}</a>`;
     }
     fig.innerHTML = wrapped + (it.caption ? `<figcaption>${it.caption}</figcaption>` : "");
     return fig;
@@ -490,11 +489,12 @@ function setupGalleryOverlay(refresh = false) {
   }
 
   medias.forEach((el) => {
+    // Si es una imagen de comodín envuelta en <a>, no activar overlay (se respeta el enlace)
+    if (el.tagName === "IMG" && el.closest(".comodin a")) return;
+
     el.addEventListener("click", () => {
       if (el.tagName === "VIDEO") {
-        try {
-          el.pause();
-        } catch (_) {}
+        try { el.pause(); } catch (_) {}
         const poster = el.getAttribute("poster") || "";
         showVideo(el.currentSrc || el.src, poster);
       } else {
