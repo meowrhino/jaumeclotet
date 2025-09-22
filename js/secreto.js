@@ -94,45 +94,30 @@
   }
 
   // -------- Animación ruleta + abrir link (siempre nueva pestaña)
-  async function spinAndOpen(imgEl, secretCfg) {
-    // 1) Elegimos el número final primero (independiente del que se estuviera viendo)
-    const finalN = Math.floor(Math.random() * 6) + 1; // 1..6
+// -------- Animación ruleta + abrir link (siempre nueva pestaña)
+async function spinAndOpen(imgEl, secretCfg) {
+  // 1) Elegimos el número final primero
+  const finalN = Math.floor(Math.random() * 6) + 1; // 1..6
 
-    // 2) Abrimos pestaña en blanco en el gesto de usuario (sin 'noopener' para poder navegarla luego)
-    const popup = window.open('about:blank', '_blank');
-
-    // 3) Una vuelta barajada por todas las caras
-    const seq = shuffle([1,2,3,4,5,6]);
-    for (const frame of seq) {
-      imgEl.src = `${SECRET_IMG_BASE}${frame}.png`;
-      await sleep(110); // velocidad de "ruleta"
-    }
-
-    // 4) Mostrar el definitivo y dejarlo visible un instante
-    imgEl.src = `${SECRET_IMG_BASE}${finalN}.png`;
-    await sleep(220); // pequeño delay para que se vea el cambio final
-
-    // 5) Resolver URL y navegar la nueva pestaña
-    const url = resolveSecretUrl(secretCfg, finalN);
-    if (url) {
-      if (popup && !popup.closed) {
-        try {
-          popup.location.replace(url);
-          // Seguridad: anular opener justo después (sin romper la navegación)
-          setTimeout(() => { try { popup.opener = null; } catch {} }, 0);
-        } catch (e) {
-          // Fallback si el navegador no permite replace
-          window.open(url, '_blank');
-        }
-      } else {
-        // Si el popup fue bloqueado o cerrado, abrimos directo
-        window.open(url, '_blank');
-      }
-    } else {
-      console.warn('[secreto] No URL for', finalN);
-      if (popup && !popup.closed) popup.close();
-    }
+  // 2) Una vuelta barajada por todas las caras
+  const seq = shuffle([1,2,3,4,5,6]);
+  for (const frame of seq) {
+    imgEl.src = `${SECRET_IMG_BASE}${frame}.png`;
+    await sleep(110);
   }
+
+  // 3) Mostrar el definitivo y dejarlo visible un instante
+  imgEl.src = `${SECRET_IMG_BASE}${finalN}.png`;
+  await sleep(220);
+
+  // 4) Resolver URL y abrirla en nueva pestaña
+  const url = resolveSecretUrl(secretCfg, finalN);
+  if (url) {
+    window.open(url, '_blank', 'noopener');
+  } else {
+    console.warn('[secreto] No URL for', finalN);
+  }
+}
 
   // -------- Crear e inyectar el ghost
   async function maybeMountGhost() {
