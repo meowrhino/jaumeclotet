@@ -8,7 +8,6 @@ async function loadFeatured() {
   const grid = document.getElementById('projects-grid');
 
   const slugs = data.destacados.map(d => d.slug);
-  const specialSlug = data.secreto?.slug || slugs[slugs.length - 1]; // 7º
 
   for (const slug of slugs) {
     const bg = await getBackground(slug); // <- ahora puede ser color o imagen
@@ -43,51 +42,9 @@ async function loadFeatured() {
     tile.appendChild(a);
     grid.appendChild(tile);
   }
-
-  checkUnlock(slugs, specialSlug);
-}
-
-// slugs únicos + overlay no bloqueante (se configura por CSS)
-async function checkUnlock(slugs, specialSlug) {
-  const uniq = [...new Set(slugs)];
-  const overlay = document.getElementById('unlock7');
-  if (!overlay) return;
-
-  const allSeen = uniq.every(s => localStorage.getItem('proyecto-' + s + '-visto') === '1');
-
-  if (allSeen) {
-    overlay.classList.add('show');
-
-    const logoUrl =
-      (await resolveAsset(specialSlug, ['titol.png', 'img/titol.png'])) ||
-      normalizeImgPath(specialSlug, 'img/titol.png');
-
-    overlay.innerHTML = '';
-    const a = document.createElement('a');
-    a.href = `projecte.html?slug=${encodeURIComponent(specialSlug)}`;
-    a.className = 'logo-link';
-
-    const logo = document.createElement('img');
-    logo.className = 'logo';
-    logo.src = logoUrl;
-    logo.alt = specialSlug;
-
-    a.appendChild(logo);
-    overlay.appendChild(a);
-
-    // capa transparente (si en CSS: #unlock7 { pointer-events:none })
-    overlay.style.background = 'transparent';
-  } else {
-    overlay.classList.remove('show');
-  }
 }
 
 // refresco si cambia localStorage (p. ej., se marca visto desde otra pestaña)
-window.addEventListener('storage', () => {
-  fetch('featured.json')
-    .then(r => r.json())
-    .then(data => checkUnlock(data.destacados.map(d => d.slug), data.secreto?.slug || null))
-    .catch(() => {});
-});
+// (Removed per instructions)
 
 window.addEventListener('DOMContentLoaded', loadFeatured);

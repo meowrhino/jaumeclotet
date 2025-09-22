@@ -9,9 +9,23 @@
 import { isCssColor } from "./assets.js";
 
 // Probabilidades compartidas para navegación de flechas (puedes ajustar)
-const PROB_ALTA = 0.7; // preferido (izq=atrás, der=adelante)
+const PROB_ALTA = 0.7; // preferido (izq=home, der=adelante)
 const PROB_BAJA = 0.2; // lo contrario
 const PROB_LOCA = 0.1; // random
+
+// Guard: advierte si la suma de probabilidades no es 1
+if (Math.abs((PROB_ALTA + PROB_BAJA + PROB_LOCA) - 1) > 1e-6) {
+  console.warn("[arrows] Suma de probabilidades ≠ 1:", PROB_ALTA + PROB_BAJA + PROB_LOCA);
+}
+
+// Selección de tier con las tres probabilidades explícitas (alta/baja/loca)
+function pickTier() {
+  const total = PROB_ALTA + PROB_BAJA + PROB_LOCA;
+  const r = Math.random() * (total > 0 ? total : 1);
+  if (r < PROB_ALTA) return "alta";
+  if (r < PROB_ALTA + PROB_BAJA) return "baja";
+  return "loca"; // resto
+}
 
 // ============ Utilidades básicas ============
 
@@ -234,9 +248,7 @@ function renderProject(p) {
 
     ${
       Array.isArray(p.textos)
-        ? `<section class="project-textos">
-           ${p.textos.map((t) => `<p>${t}</p>`).join("")}
-         </section>`
+        ? `<section class="project-textos">${renderTextos(p.textos)}</section>`
         : ""
     }
 
@@ -354,6 +366,18 @@ function renderCreditos(c) {
     .join("");
 
   return html;
+}
+
+// Textos: array de párrafos; interpreta [link](url), **negrita**, *cursiva*, __subrayado__ y respeta \n -> <br>
+function renderTextos(arr) {
+  if (!Array.isArray(arr) || !arr.length) return "";
+  return arr
+    .map((raw) => {
+      const esc = escapeHtml(String(raw || ""));
+      const html = linkifyEscaped(esc).replace(/\n/g, "<br>");
+      return `<p>${html}</p>`;
+    })
+    .join("");
 }
 
 // ============ Overlay de galería (click para ampliar) ============
@@ -887,17 +911,15 @@ async function setupRandomArrows(currentSlug) {
     const section = document.createElement("section");
     section.className = "project-nav";
 
-    // Selector con probabilidades compartidas
+    // Selector con probabilidades compartidas usando pickTier
     function pickDest(preferred, prevSlug, nextSlug) {
-      const r = Math.random();
-      if (r < PROB_ALTA) {
+      const tier = pickTier();
+      if (tier === "alta") {
         return preferred === "prev" ? prevSlug : nextSlug;
-      } else if (r < PROB_ALTA + PROB_BAJA) {
-        // contrario
-        return preferred === "prev" ? nextSlug : prevSlug;
+      } else if (tier === "baja") {
+        return preferred === "prev" ? nextSlug : prevSlug; // contrario
       } else {
-        // PROB_LOCA: random puro entre prev/next
-        return Math.random() < 0.5 ? prevSlug : nextSlug;
+        return Math.random() < 0.5 ? prevSlug : nextSlug; // loca
       }
     }
 
@@ -921,6 +943,23 @@ async function setupRandomArrows(currentSlug) {
 
       b.addEventListener("click", () => {
         const preferred = side === "left" ? "prev" : "next";
+
+        if (side === "left") {
+          const tier = pickTier();
+          if (tier === "alta") {
+            location.href = `index.html`; // Home
+            return;
+          } else if (tier === "baja") {
+            location.href = `projecte.html?slug=${encodeURIComponent(prev)}`; // Anterior
+            return;
+          } else {
+            const target = Math.random() < 0.5 ? prev : next; // loca → random puro
+            location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+            return;
+          }
+        }
+
+        // DERECHA: se mantiene la lógica original (preferido, contrario, random)
         const target = pickDest(preferred, prev, next);
         location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
       });

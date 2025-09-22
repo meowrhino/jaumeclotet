@@ -21,12 +21,5 @@
       "./img/20vingut_JaumeClotet_07.jpg"
     ]
   },
-  "creditos": "Producció: Gracias por su visita i Javi de la Llave\n\nVídeo edit & FX: Albert Sánchez\n\nSo: Lucas Mathias\n\nEstilisme: Júlia Puig\n\nMuntatge: Jorge Bravo i Pol Ricart Herms\n\nFotografia: Albert Sánchez, Roberto Ruiz, Lola Errando i Gerard Borràs\n\nPremi GAC 2021 a millor exposició en galeria d’artista emergent\n\nAdquirit per la col·lecció DKV\n\n",
-  "comodin": [
-    {
-      "type": "credits",
-      "place": "before:creditos",
-      "text": "Comissariat: Martina Puig\nDisseny: Pau Serra\nProducció: Taller 17m\nSo: Ona Llop\nMúsica: Trio Mirall\nFotografia: Llum Estudi\nAgraïments: EtHALL, ArtNou, amigues i família"
-    }
-  ]
+  "creditos": "Producció: Gracias por su visita i Javi de la Llave\n\nVídeo edit & FX: Albert Sánchez\n\nSo: Lucas Mathias\n\nEstilisme: Júlia Puig\n\nMuntatge: Jorge Bravo i Pol Ricart Herms\n\nFotografia: Albert Sánchez, Roberto Ruiz, Lola Errando i Gerard Borràs\n\nPremi GAC 2021 a millor exposició en galeria d’artista emergent\n\nAdquirit per la col·lecció DKV\n\n"
 }

@@ -5,6 +5,12 @@
   box-sizing: border-box;
 }
 
+:root { --ghost-size: clamp(100px, 10vw, 160px); } /* un poco más grande que antes */
+.secret-ghost {
+  width: var(--ghost-size);
+  height: auto;
+}
+
 html,
 body {
   margin: 0;
