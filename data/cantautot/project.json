@@ -3,7 +3,7 @@
     "titulo": "Cantautot",
     "logo": "./img/titol.png",
     "bg": "./img/fons.jpg",
-    "sinopsis": "((aquet es dalusinasons))\nUn innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
+    "sinopsis": "Una mosca volava per la llum llum llum\ni la llum no la va pagar\nperò aquesta mosca\nno es va quedar a les fosques\nperquè aquesta mosca\nla llum la va punxar\n",
     "elemento_divertido": {
         "src": "./img/fun.png"
     },
@@ -20,5 +20,16 @@
             "./img/cantauttot-foto 4.jpg"
         ]
     },
+    "comodin": [
+        {
+            "id": "cover",
+            "type": "image",
+            "src": "./img/cover.jpeg",
+            "place": "end",
+            "align": "center",
+            "width": "whole",
+            "link": "https://www.youtube.com/watch?v=l1-VElx3tuM"
+        }
+    ],
     "creditos": "Direcció: Jaume Clotet\nProducció musical: Juan Feduchi, Pol Clusella i jaujeje\nConstrucció centaure i muntatge expositiu: Borja Casanovas\nVestuari: Patricia Feliu\nFotografia: Helena Roig i Juan Feduchi\n\nEstrenat en format expositiu dintre de l’exposició “L’idiota” (MAC 2025, Mataró) comissariada per Martí Peran\n\nActuacions:\nExorcismes (Fundació Brossa 2025, Barcelona)\n[tba] Festival Adoberies (La Clota 2025, Vic)"
 }

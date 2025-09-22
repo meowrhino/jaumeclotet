@@ -148,16 +148,29 @@
             }
 
             if (modo === 'creditos') {
-                // Un solo string con \n donde haya saltos (incluye dobles \n si hay línea en blanco)
-                const json = `"creditos": ${jsonString(text)}`;
+                // 1) Compacta cualquier grupo de líneas en blanco a exactamente dos saltos (\n\n)
+                let out = text.replace(/\n[ \t]*\n+/g, '\n\n');
+
+                // 2) Añade una línea en blanco entre líneas no vacías
+                //    (convierte cada salto simple en doble), manteniendo los bloques existentes en \n\n.
+                //    Protegemos primero los dobles saltos para no duplicarlos.
+                out = out.replace(/\n\n/g, '\u0000');
+                out = out.replace(/\n/g, '\n\n');
+                out = out.replace(/\u0000/g, '\n\n').replace(/\n{3,}/g, '\n\n');
+
+                const json = `"creditos": ${jsonString(out)}`;
                 salida.textContent = json;
                 return;
             }
 
             if (modo === 'textos') {
-                // Divide por párrafos (líneas en blanco). Dentro de cada párrafo, sustituye \n por espacios.
+                // Divide por párrafos (líneas en blanco). Dentro de cada párrafo, CONSERVA los \n.
+                // Limpia espacios finales de línea y colapsa múltiples saltos dentro del párrafo a uno solo.
                 const parrafos = text.trim().split(/\n\s*\n+/).map(p =>
-                    p.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim()
+                    p
+                      .replace(/[ \t]+\n/g, '\n')  // quita espacios al final de línea
+                      .replace(/\n{2,}/g, '\n')     // colapsa saltos múltiples dentro del párrafo
+                      .trim()
                 ).filter(Boolean);
 
                 const cuerpo = parrafos.map(p => '  ' + jsonString(p)).join(',\n');
@@ -222,9 +235,6 @@
                 alert('La URL debe empezar por https:// o mailto:');
                 return;
             }
-            const before = `[${text}](`;
-            const after = `)`;
-            // si había selección, la reemplazamos por [sel](url); si no, insertamos [text](url)
             const value = entrada.value;
             const replaced = value.slice(0, start) + `[${text}](${url})` + value.slice(end);
             entrada.value = replaced;

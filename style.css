@@ -184,13 +184,14 @@ body {
   line-height: 1.35;
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 1em;
   overflow-wrap: anywhere;
 
   font-family: "Spectral SC", serif;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+
+  margin-top: 5vh;
 }
 .project-sinopsis p::first-letter {
   font-size: 1.22em;
@@ -305,6 +306,7 @@ body {
 .comodin {
   margin: 16px auto;
   max-width: 800px;
+  margin-top: 10vh;
 }
 
 /* Alineación semántica */

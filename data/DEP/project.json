@@ -2,43 +2,38 @@
   "slug": "DEP",
   "titulo": "DEP",
   "logo": "./img/titol.png",
-  "bg": "#640D5F",
-  "sinopsis": "He decidit marxar\nArribo tard sempre\ni tinc pressa i vaig lent\n\nEl meu gran somni és ser humorista\nFer gràcia i viure de la gràcia\n\nPerò el món de la comèdia no em valora\ni estic com un peix fora de test\nque pixa fora de l’aigua\n\nTinc ganes d’aventura\nÉs hora de complir la meva fantasia\ni viatjar a la meca de l’entreteniment:\nNew Ywork.",
+  "bg": "./img/fons.jpg",
+  "sinopsis": "En un indret no tan llunyà, un artista ni jove ni vell,\npensava deixar de fer art\nquan de cop…\nel LLAPIS se li va convertir en SERP!\n i, corbant-se endimoniadament,\nli va clavar la punta de la mina a la mà!\nAuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu\n",
   "elemento_divertido": {
     "src": "./img/fun.png"
   },
   "textos": [
-    "New Ywork és un monòleg instal·latiu on es desgrana un recorregut vital personal que ha dut a l’artista a estar malhumorat i a voler anar-se’n a la meca de l’humor i del show business.",
-    "Tenir l’idealisme de voler dedicar-se a l’art o a l’espectacle, els alts i baixos del dia a dia, els referents però també les autocomparacions, la paràlisi creativa i, finalment, la fugida cap endavant.",
-    "Jaume Clotet recrea aquest monòleg a través d’una sèrie de peces-acudit, de gags visuals, amb el seu plantejament i el seu desenllaç. Com a bon còmic, mescla referents en diverses capes: els millors acudits dolents, una caricatura de la comèdia local, la mitologia clàssica, George Maciunas o Mary Poppins… L’humor es trasllada al material en si i a la seva disposició espacial, precariament kitsch, amb paper maixé, collages o petits objectes intervinguts. La producció no respon a uns acabats escultòrics polits o veraços, sinó que fa pensar més en un decorat d’opereta, o en un carrer de les festes de Gràcia.",
-    "Text de Pilar Cruz i Daniel Gasol"
+    "D.E.P és un projecte en construcció. Després d’una primera aparició als 50 anys de la Fundació Joan Miró (2025), el projecte evoluciona cap a una exposició i un show performatiu-taller on el públic és convidat a dibuixar. Actualment es desenvolupa amb el suport de la Beca Barcelona Crea 2024."
   ],
   "galeria": {
     "images": [
-      "./img/newYwork-foto 1.jpg",
-      "./img/newYwork-foto 2.jpg",
-      "./img/newYwork-foto 3.jpg",
-      "./img/newYwork-foto 4.jpg",
-      "./img/newYwork-foto 5.jpg",
-      "./img/newYwork-foto 6.jpg",
-      "./img/newYwork-foto 7.jpg",
-      "./img/newYwork-foto 8.jpg",
-      "./img/newYwork-foto 9.jpg",
-      "./img/newYwork-foto 10.jpg",
-      "./img/newYwork-foto 11.jpg"
+      "./img/DEP_JaumeClotet 01.jpg",
+      "./img/DEP_JaumeClotet 02.jpg",
+      "./img/DEP_JaumeClotet 03.jpg",
+      "./img/DEP_JaumeClotet 04.jpg",
+      "./img/DEP_JaumeClotet 05.jpg",
+      "./img/DEP_JaumeClotet 06.jpg",
+      "./img/DEP_JaumeClotet 07.jpg",
+      "./img/DEP_JaumeClotet 08.jpg",
+      "./img/DEP_JaumeClotet 09.jpg",
+      "./img/DEP_JaumeClotet 10.jpg",
+      "./img/DEP_JaumeClotet 11.jpg"
     ]
   },
-
   "comodin": [
-  {
-    "id": "bate",
-    "type": "image",
-    "src": "./img/bate.png",
-    "place": "append:header",
-    "align": "center",
-    "width": "half"
-  }
-],
-
-  "creditos": "Co-produït per ANTIC TEATRE (Barcelona) i Jaume Clotet\nEstrenat al GREC FESTIVAL 2024 (Barcelona)\nAmb el suport del segell musical AUSTROHÚNGARO, de la NAU ESTRUCH 2022/2023 (Sabadell) i del KONVENT (Berga).\n\nDirecció: Jaume Clotet\nProjecte creat i desenvolupat amb Max Feriche, Alicia Garrido i Albert Sánchez\nIntèrprets: Jaume Clotet i Alicia Garrido\nProducció musical: Max Feriche i Jaume Clotet\nVestuari: Alicia Garrido\nVídeo i dissenys: Albert Sánchez\nInstal·lació lumínica: Max Milà amb Altea i Marc\nEscenografia cotxe: CNC Carpinteria Moderna\nDissenys 3D: Léa Ferraton\nTècnic de llums: Marcos Zappia\nFotografia: Anna Izquierdo, Irene Moray, Dani Cantó i Britt Hecker\nMasterització: Adrià Gil"
+    {
+      "id": "boca",
+      "type": "image",
+      "src": "./img/comodin.png",
+      "place": "append:header",
+      "align": "center",
+      "width": "half"
+    }
+  ],
+  "creditos": "Intèrprets: Valeria Pisati i Jaume Clotet\nEscenografia i il·luminació: David Corral\nVestuari: Patricia Feliu\nMúsica: Jaume Clotet i Juan Feduchi\nDisplay en construcció: Borja Casanovas\nFeedbacks: Núria Gomez Gabriel, Jordi Vernis, Raimon Clotet i Ander Peretz de Arenaza\nFotografies: Pep Herrero i Edu Pedrocchi\n"
 }
