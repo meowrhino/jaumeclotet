@@ -9,6 +9,7 @@
 import { isCssColor } from "./assets.js";
 
 // Probabilidades compartidas para navegación de flechas (puedes ajustar)
+// Preferencias: IZQ (alta=Home, baja=Anterior, loca=Random) | DER (alta=Siguiente, baja=Anterior, loca=Random)
 const PROB_ALTA = 0.7; // preferido (izq=home, der=adelante)
 const PROB_BAJA = 0.2; // lo contrario
 const PROB_LOCA = 0.1; // random
@@ -261,7 +262,7 @@ function renderProject(p) {
                  const poster = m.poster ? ` poster="${m.poster}"` : "";
                  return `<video class="gal-video" src="${m.src}" controls playsinline preload="metadata"${poster}></video>`;
                } else {
-                 return `<img class="gal-img" src="${m.src}" loading="lazy" alt="">`;
+                 return `<img class="gal-img" src="${m.src}" loading="lazy" decoding="async" alt="">`;
                }
              })
              .join("")}
@@ -350,7 +351,7 @@ function renderCreditos(c) {
   const html = lines
     .map((line) => {
       const t = line.trim();
-      if (!t) return "";
+      if (!t) return "<br>";
       // Detecta "Etiqueta:" solo si está al principio de la línea y antes de cualquier `[` o `(`
       const m = t.match(/^([^:\[\(]+?):\s*(.*)$/);
       if (m) {
@@ -528,53 +529,18 @@ function resolvePlace(place, anchors, root) {
   return def;
 }
 
-/* Overlay — actualizado para captar también los medios de 'comodin'.
-   Cuando se llama con refresh=true, elimina overlay previo y vuelve a enganchar. */
-function setupGalleryOverlay(refresh = false) {
-  if (refresh) {
-    document.querySelectorAll(".overlay").forEach((n) => n.remove());
-    // quitamos listeners anteriores simplemente recreando todo
-  }
-
+function setupGalleryOverlay(/* refresh = false */) {
+  // [Desactivado] Overlay fullscreen al hacer click en imágenes/vídeos de la galería.
+  // Limpia cualquier overlay existente y elimina listeners previos clonando los nodos.
+  document.querySelectorAll(".overlay").forEach((n) => n.remove());
   const medias = document.querySelectorAll(
     ".project-galeria img, .project-galeria video, .comodin img, .comodin video"
   );
-  if (!medias.length) return;
-
-  const overlay = document.createElement("div");
-  overlay.className = "overlay";
-  document.body.appendChild(overlay);
-
-  function showImage(src) {
-    overlay.innerHTML = `<img class="overlay-media" src="${src}" alt="">`;
-    overlay.classList.add("show");
-  }
-  function showVideo(src, poster) {
-    overlay.innerHTML = `<video class="overlay-media"${
-      poster ? ` poster="${poster}"` : ""
-    } src="${src}" controls playsinline preload="metadata"></video>`;
-    overlay.classList.add("show");
-  }
-
   medias.forEach((el) => {
-    // Si es una imagen de comodín envuelta en <a>, no activar overlay (se respeta el enlace)
-    if (el.tagName === "IMG" && el.closest(".comodin a")) return;
-
-    el.addEventListener("click", () => {
-      if (el.tagName === "VIDEO") {
-        try { el.pause(); } catch (_) {}
-        const poster = el.getAttribute("poster") || "";
-        showVideo(el.currentSrc || el.src, poster);
-      } else {
-        showImage(el.currentSrc || el.src);
-      }
-    });
+    const clone = el.cloneNode(true);
+    el.replaceWith(clone);
   });
-
-  overlay.addEventListener("click", () => {
-    overlay.classList.remove("show");
-    overlay.innerHTML = "";
-  });
+  // Nota: los <a> en comodines siguen funcionando con su link normal.
 }
 
 /* ====== FUN: constantes compartidas (desktop + móvil) ====== */
@@ -941,28 +907,33 @@ async function setupRandomArrows(currentSlug) {
       img.src = "data/arrow.png"; // flecha: ruta indicada por ti
       b.appendChild(img);
 
-      b.addEventListener("click", () => {
-        const preferred = side === "left" ? "prev" : "next";
-
-        if (side === "left") {
+      if (side === "left") {
+        b.addEventListener("click", () => {
+          // IZQUIERDA — mapping pedido:
+          // alta  → Home
+          // baja  → Anterior
+          // loca  → Random entre Anterior/Siguiente
           const tier = pickTier();
           if (tier === "alta") {
-            location.href = `index.html`; // Home
-            return;
-          } else if (tier === "baja") {
-            location.href = `projecte.html?slug=${encodeURIComponent(prev)}`; // Anterior
-            return;
-          } else {
-            const target = Math.random() < 0.5 ? prev : next; // loca → random puro
-            location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+            location.href = `index.html`;
             return;
           }
-        }
-
+          if (tier === "baja") {
+            location.href = `projecte.html?slug=${encodeURIComponent(prev)}`;
+            return;
+          }
+          // loca
+          const target = Math.random() < 0.5 ? prev : next;
+          location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+        });
+      } else {
         // DERECHA: se mantiene la lógica original (preferido, contrario, random)
-        const target = pickDest(preferred, prev, next);
-        location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
-      });
+        b.addEventListener("click", () => {
+          const preferred = "next";
+          const target = pickDest(preferred, prev, next);
+          location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+        });
+      }
       return b;
     };
 

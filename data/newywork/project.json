@@ -37,6 +37,22 @@
     "place": "append:header",
     "align": "center",
     "width": "half"
+  },
+  {
+    "id": "bate",
+    "type": "image",
+    "src": "./img/bate.png",
+    "place": "append:header",
+    "align": "center",
+    "width": "half"
+  },
+  {
+    "id": "bate",
+    "type": "image",
+    "src": "./img/bate.png",
+    "place": "append:header",
+    "align": "center",
+    "width": "half"
   }
 ],
 

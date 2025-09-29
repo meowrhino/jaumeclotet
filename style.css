@@ -5,10 +5,44 @@
   box-sizing: border-box;
 }
 
-:root { --ghost-size: clamp(100px, 10vw, 160px); } /* un poco más grande que antes */
+:root {
+  --ghost-size: clamp(100px, 10vw, 160px);
+  --ghost-rotate: -12deg;           /* inclinación por defecto */
+  --ghost-offset-x: -20px;           /* asomado hacia la derecha (negativo = fuera) */
+  --ghost-offset-y: -10px;           /* asomado hacia abajo     (negativo = fuera) */
+  --ghost-transition: 900ms ease;    /* transición por defecto */
+  --tx: 0px;                         /* translateX controlado desde JS */
+  --ty: 0px;                         /* translateY controlado desde JS */
+}
+
 .secret-ghost {
+  position: fixed;
+  right: var(--ghost-offset-x);
+  bottom: var(--ghost-offset-y);
+  z-index: 9999;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+
   width: var(--ghost-size);
   height: auto;
+  display: block;
+
+  transform-origin: bottom right;
+  transform: translate(var(--tx), var(--ty)) rotate(var(--ghost-rotate));
+  transition: transform var(--ghost-transition);
+  will-change: transåform;
+}
+
+.secret-ghost.is-floating:hover {
+  transition-duration: 250ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .secret-ghost,
+  .secret-ghost.is-floating:hover {
+    transition: none !important;
+  }
 }
 
 html,
