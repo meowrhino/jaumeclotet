@@ -7,12 +7,12 @@
 
 :root {
   --ghost-size: clamp(100px, 10vw, 160px);
-  --ghost-rotate: -12deg;           /* inclinación por defecto */
-  --ghost-offset-x: -20px;           /* asomado hacia la derecha (negativo = fuera) */
-  --ghost-offset-y: -10px;           /* asomado hacia abajo     (negativo = fuera) */
-  --ghost-transition: 900ms ease;    /* transición por defecto */
-  --tx: 0px;                         /* translateX controlado desde JS */
-  --ty: 0px;                         /* translateY controlado desde JS */
+  --ghost-rotate: -12deg; /* inclinación por defecto */
+  --ghost-offset-x: -20px; /* asomado hacia la derecha (negativo = fuera) */
+  --ghost-offset-y: -10px; /* asomado hacia abajo     (negativo = fuera) */
+  --ghost-transition: 900ms ease; /* transición por defecto */
+  --tx: 0px; /* translateX controlado desde JS */
+  --ty: 0px; /* translateY controlado desde JS */
 }
 
 .secret-ghost {
@@ -31,7 +31,7 @@
   transform-origin: bottom right;
   transform: translate(var(--tx), var(--ty)) rotate(var(--ghost-rotate));
   transition: transform var(--ghost-transition);
-  will-change: transåform;
+  will-change: transform;
 }
 
 .secret-ghost.is-floating:hover {
@@ -269,25 +269,6 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
-/* Overlay para ampliar (img + video) */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.96);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 60;
-}
-.overlay.show {
-  display: flex;
-}
-.overlay .overlay-media {
-  max-width: 92vw;
-  max-height: 92vh;
-  display: block;
-}
-
 /* Elemento divertido */
 .fun {
   position: fixed;
@@ -511,4 +492,9 @@ body {
 }
 .project-creditos a:hover {
   opacity: 0.9;
+}
+
+/* 1) Arreglo de typo en will-change */
+.secret-ghost {
+  will-change: transform; /* antes: transåform */
 }
