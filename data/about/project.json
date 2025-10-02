@@ -1,0 +1,24 @@
+{
+  "slug": "about",
+  "titulo": "about",
+  "logo": "./img/titol.png",
+  "bg": "./img/fons.jpg",
+  "sinopsis": "m’ofego al pensar en el meu Statement\nSempre he cregut que la meva pràctica continuava una tradició de comèdia artística, però…\nNo arriba a ser del tot Fluxus perquè sóc massa Fluix.\nPensava que era Situacionista però en veritat només m’estava Situant.\nVolia ser part del Post-Humor i em vaig confondre fent Posts a Instagram…\nEl que faig és un riure estrany,\nuna mena de buf d’aire pel nas,\ncom si et faltés oxigen\ni estiguessis a punt d’ofegar-te.\n",
+  "elemento_divertido": {
+    "src": "./img/fun.png"
+  },
+  "textos": [
+    "Jaume Clotet (Manresa, 1994) és artista visual i performer, graduat en Belles Arts per la Universitat de Barcelona.\nHa exposat en espais com La Capella, etHALL i Habitación 34. La seva mostra 20vingut (etHALL project space, 2020) va rebre el Premi GAC a la millor exposició d’artista emergent.\nHa presentat accions i performances en institucions com la Fundació Joan Miró, el Centre d’Arts Santa Mònica, el CCCC de València, la Fundació Brossa, el Centre d’Art Tecla Sala i el M.A.C. de Mataró. El seu primer espectacle escènic, ALUSINASONS (Antic Teatre, 2024), es va estrenar al Festival Grec 2024.\nHa estat artista resident a Nau Estruch, Espai C, Fabra i Coats, Konvent, Rad’Art (Itàlia) i BilbaoArte.\nDes de 2019 co-dirigeix Cabaret Internet juntament amb Alicia Garrido, un show de comèdia performativa i experimental que acumula 19 edicions."
+  ],
+  "comodin": [
+    {
+      "id": "retrato",
+      "type": "image",
+      "src": "./img/retrato.png",
+      "place": "append:header",
+      "align": "center",
+      "width": "half"
+    }
+  ],
+  "creditos": "[instagram](https://www.instagram.com/jaume.clotet/)\n[mail](mailto:jaumix7@gmail.com)\n"
+}

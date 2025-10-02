@@ -891,6 +891,34 @@ window.addEventListener("DOMContentLoaded", loadProject);
 // --- Random prev/next arrows al final del proyecto ---
 async function setupRandomArrows(currentSlug) {
   try {
+    // Caso especial: ABOUT → solo flecha izquierda a Home (no dependas de featured.json)
+    if (currentSlug === "about") {
+      const root = document.getElementById("project-root");
+      if (root) {
+        const section = document.createElement("section");
+        section.className = "project-nav";
+
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "nav-arrow nav-arrow--left";
+        b.setAttribute("aria-label", "Volver a Home");
+
+        const img = document.createElement("img");
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.src = "data/arrow.png";
+        b.appendChild(img);
+
+        b.addEventListener("click", () => {
+          location.href = "index.html";
+        });
+
+        section.appendChild(b);
+        root.appendChild(section);
+      }
+      return; // corta aquí; no hace falta featured.json
+    }
     const r = await fetch("featured.json", { cache: "no-cache" });
     if (!r.ok) throw new Error("featured.json not found");
     const data = await r.json();
