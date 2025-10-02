@@ -28,33 +28,24 @@
       "./img/newYwork-foto 11.jpg"
     ]
   },
-
   "comodin": [
-  {
-    "id": "bate",
-    "type": "image",
-    "src": "./img/bate.png",
-    "place": "append:header",
-    "align": "center",
-    "width": "half"
-  },
-  {
-    "id": "bate",
-    "type": "image",
-    "src": "./img/bate.png",
-    "place": "append:header",
-    "align": "center",
-    "width": "half"
-  },
-  {
-    "id": "bate",
-    "type": "image",
-    "src": "./img/bate.png",
-    "place": "append:header",
-    "align": "center",
-    "width": "half"
-  }
-],
+    {
+      "id": "bate",
+      "type": "image",
+      "src": "./img/bate.png",
+      "place": "append:header",
+      "align": "center",
+      "width": "half"
+    },
 
+    {
+      "id": "publicacio",
+      "type": "image",
+      "src": "./img/publicacio.png",
+      "link": "https://fatbottombooks.com/books/fanzine/new-ywork",
+      "place": "after:creditos",
+      "align": "center"
+    }
+  ],
   "creditos": "Beca Barcelona Producció 2022-23\nEspai Rampa - La Capella (Barcelona)\n\nConstrucció i instal·lació “Maleta”: Sociedad 0\nVídeo i edició: Bo Bannink\nProducció i vestuari: Alicia Garrido\nDisseny de cartel·les: Miranda Pérez-Hita\n“Cantos Sirena”: Miguel Noguera\n“Exit”: Cris Blanco\nFotografia “Dad?”: Vilma Bravo\nProgramació “En busca de la gràcia”: Dani Sanz\nRunner “RIP BCN”: Miquel Benedito\n“The Goodbye & The Beginning”: Carme Caballé\n“Dad?”: Narcís Clotet\nFotografies: Pep Herrero, Edu Pedrocchi i Pol Ricart\nTransport: T.E.T.E.S\nEquip curatorial La Capella: Daniel Gasol, Pilar Cruz, Marc Vives, Antònia Folguera\nAgraïments: David Armengol, Eli Gras, Fernando Gandasegui, Júlia Puig, Nil Muriscot, Lotema, Ander Pérez de Arenaza, Marta Sesé\n\nPublicació produïda per La Capella 2024\nDisseny gràfic i maquetació: Miranda Pérez-Hita\nFotografies publicació: Pol Rebaque\nPresentat a Fatbottoms (Barcelona)\n"
-}  
+}

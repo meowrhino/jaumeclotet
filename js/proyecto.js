@@ -95,6 +95,9 @@ async function loadProject() {
     const oldBack = document.querySelector(".back");
     if (oldBack) oldBack.remove();
 
+    // Inserta atajo fijo al About (excepto en el propio About)
+    // insertAboutShortcut(slug);
+
     // Inserta las dos flechas que navegan aleatoriamente a prev/next
     setupRandomArrows(slug);
 
@@ -847,6 +850,40 @@ function setupFunFollowerGyro() {
   });
 }
 
+// --- Botón fijo "About" arriba-derecha (solo si no estamos en about) ---
+function insertAboutShortcut(currentSlug) {
+  try {
+    if (currentSlug === "about") return;
+    const root = document.getElementById("project-root");
+    if (!root) return;
+
+    // Evita duplicados si se llamara dos veces
+    if (document.querySelector(".about-shortcut")) return;
+
+    const a = document.createElement("a");
+    a.className = "about-shortcut";
+    a.href = "projecte.html?slug=about";
+    a.setAttribute("aria-label", "Ir a About");
+    a.title = "About";
+
+    const img = document.createElement("img");
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.src = "data/about.png"; // <-- reemplaza la imagen si prefieres otra ruta
+    a.appendChild(img);
+
+    const nav = root.querySelector(".project-nav");
+    if (nav) {
+      nav.insertAdjacentElement("afterend", a); // coloca el botón justo DEBAJO de las flechas
+    } else {
+      root.appendChild(a); // por si aún no existen las flechas
+    }
+  } catch (e) {
+    console.warn("[about-shortcut] skip:", e);
+  }
+}
+
 // ============ Bootstrap ============
 
 window.addEventListener("DOMContentLoaded", loadProject);
@@ -937,8 +974,30 @@ async function setupRandomArrows(currentSlug) {
       return b;
     };
 
-    section.appendChild(mkBtn("left"));
-    section.appendChild(mkBtn("right"));
+    // Evita duplicados de atajo About si venimos de otra render
+    root.querySelectorAll(".about-shortcut").forEach(n => n.remove());
+
+    if (currentSlug === "about") {
+      section.appendChild(mkBtn("left"));
+    } else {
+      const leftBtn = mkBtn("left");
+      section.appendChild(leftBtn);
+      // Crea el atajo About como elemento central
+      const a = document.createElement("a");
+      a.className = "about-shortcut";
+      a.href = "projecte.html?slug=about";
+      a.setAttribute("aria-label", "Ir a About");
+      a.title = "About";
+      const img = document.createElement("img");
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.src = "data/about.png";
+      a.appendChild(img);
+      section.appendChild(a);
+      // Y ahora la flecha derecha
+      section.appendChild(mkBtn("right"));
+    }
     root.appendChild(section);
   } catch (e) {
     console.warn("Arrows setup skipped:", e);

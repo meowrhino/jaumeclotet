@@ -6,7 +6,7 @@
 }
 
 :root {
-  --ghost-size: clamp(100px, 10vw, 160px);
+  /* --ghost-size: clamp(120px, 10vw, 400px); --> editar en el secreto.js */
   --ghost-rotate: -12deg; /* inclinación por defecto */
   --ghost-offset-x: -20px; /* asomado hacia la derecha (negativo = fuera) */
   --ghost-offset-y: -10px; /* asomado hacia abajo     (negativo = fuera) */
@@ -327,7 +327,6 @@ body {
 .comodin {
   margin: 16px auto;
   max-width: 800px;
-  margin-top: 10vh;
 }
 
 /* Alineación semántica */
@@ -401,10 +400,10 @@ body {
    ========================================= */
 .project-nav {
   display: flex;
-  gap: 40px; /* espacio entre flechas */
-  justify-content: center;
+  gap: 50px; /* espacio entre flechas */
+  justify-content: space-between;
   align-items: center;
-  margin-top: 15vh; /* separa de los créditos/texto */
+  /* margin-top: 10vh; */
   z-index: 20;
 }
 .nav-arrow {
@@ -415,12 +414,20 @@ body {
   transition: transform 0.15s ease;
 }
 .nav-arrow img {
-  width: 64px;
-  height: 64px;
+  width: clamp(100px, 10vw, 150px);
+  height: clamp(100px, 10vw, 150px);
   object-fit: contain;
   image-rendering: auto;
   display: block;
 }
+
+@media (max-width: 640px) {
+  .nav-arrow img {
+    width: clamp(72px, 20vw, 120px);
+    height: clamp(72px, 20vw, 120px);
+  }
+}
+
 .nav-arrow--left:hover {
   transform: translateX(-2px);
 }
@@ -430,6 +437,45 @@ body {
 /* Izquierda girada 180º */
 .nav-arrow--left img {
   transform: rotate(180deg);
+}
+
+/* =========================================
+   Shortcut fijo a About (arriba-derecha)
+   ========================================= */
+.about-shortcut {
+  position: static; /* entra en el flujo, aparecerá debajo de .project-nav */
+  display: block;
+  margin: clamp(24px, 5vh, 64px) auto clamp(12px, 2.5vh, 28px);
+  text-align: center;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  line-height: 0;
+}
+.about-shortcut img {
+  width: clamp(120px, 14vw, 200px);
+  margin: 0 auto; /* centra la imagen dentro del enlace */
+  height: auto;
+  display: block;
+  image-rendering: auto;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+}
+.about-shortcut:focus-visible,
+.about-shortcut img:focus-visible {
+  outline: 2px solid #8ed5ff;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* About shortcut como item central dentro de .project-nav */
+.project-nav .about-shortcut {
+  margin: 0 auto; /* sin márgenes verticales grandes, centrado en fila */
+  display: block;
+}
+.project-nav .about-shortcut img {
+  width: clamp(90px, 12vw, 160px); /* un pelín más contenido para caber entre flechas */
 }
 
 /* =========================================

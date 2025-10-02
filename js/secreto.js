@@ -5,7 +5,7 @@
 
   // --- Config centralizada (fácil de tunear desde aquí o la consola) ---
   const GHOST_CFG = {
-    sizeVarDefault: 'clamp(100px, 10vw, 160px)',
+    sizeVarDefault: 'clamp(120px, 10vw, 400px)',
     offsetRight: -50,       // px (negativo = asomado)
     offsetBottom: -50,      // px (negativo = asomado)
     moveIntervalMs: 2200,   // intervalo entre saltos
