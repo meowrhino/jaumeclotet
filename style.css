@@ -544,3 +544,18 @@ body {
 .secret-ghost {
   will-change: transform; /* antes: transåform */
 }
+
+
+.about-web{
+  display:block;
+  text-align:center;
+  margin-block-end: clamp(8px, 2vh, 20px); /* “unos pocos píxeles” del final */
+  font-size: clamp(12px, 2.2dvh, 16px);
+}
+.about-web a{
+  text-decoration: none;
+  color: inherit;
+}
+.about-web a:hover{
+  text-decoration: underline;
+}

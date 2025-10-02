@@ -916,6 +916,20 @@ async function setupRandomArrows(currentSlug) {
 
         section.appendChild(b);
         root.appendChild(section);
+
+        // Añade un badge/link al final del scroll: "web: meowrhino"
+        // Evita duplicados si ya existe
+        if (!root.querySelector('.about-web')) {
+          const p = document.createElement('p');
+          p.className = 'about-web';
+          const a = document.createElement('a');
+          a.href = 'https://meowrhino.github.io/becasDigMeow/';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = 'web: meowrhino';
+          p.appendChild(a);
+          root.appendChild(p);
+        }
       }
       return; // corta aquí; no hace falta featured.json
     }
