@@ -2,15 +2,15 @@
     "slug": "cantautot",
     "titulo": "Cantautot",
     "logo": "./img/titol.png",
-    "bg": "./img/fons.jpg",
+    "bg": "./img/fons.webp",
     "sinopsis": "Una mosca volava per la llum llum llum\ni la llum no la va pagar\nperò aquesta mosca\nno es va quedar a les fosques\nperquè aquesta mosca\nla llum la va punxar\n",
     "elemento_divertido": {
         "src": "./img/fun.png"
     },
     "textos": [
-        "@jaujeje és un jove que no sap cantar i per això decideix convertir la seva vida instagram en un musical. Tampoc no té res més, de manera que és preferible convertir-la en una salmòdia, un cant amb la gràcia de no ser agraciat. A “Caraoque. Cançons by jaujeje”, cantusseja la seva existència a base de confessions videoclip que avorten qualsevol futur: és mandrós, pateix ànsia de bar, desitja ser un núvol multiforme i no tornar a pronunciar una sola paraula. A pesar del desastre, jaujeje acumula seguidors igual d’idiotes. Aquesta notorietat accelera la seva patacada en forma de clown alcoholitzat (Alusinasons). Per fi, una vida tan inútil que ja no necessita saber anglès. Qualsevol revés és una conquesta i no hi ha més èxit que en la caiguda. jaujeje ja s’atreveix amb tot.",
-        "Cantautot és el resultat de la residència de jaujeje a les cel·les del Centre d’art contemporani de Mataró (MAC). Indiferent a la convenció, la masmorra l’ha convertida en la Suite Premium, on la bèstia descansa i s’alimenta per donar el millor de si (the beast of).",
-        "text de Martí Peran"
+  "[jaujeje](https://www.instagram.com/jaujeje/) és un jove que no sap cantar i per això decideix convertir la seva vida instagram en un musical. Tampoc no té res més, de manera que és preferible convertir-la en una salmòdia, un cant amb la gràcia de no ser agraciat. A “Caraoque. Cançons by jaujeje”, cantusseja la seva existència a base de confessions videoclip que avorten qualsevol futur: és mandrós, pateix ànsia de bar, desitja ser un núvol multiforme i no tornar a pronunciar una sola paraula. A pesar del desastre, jaujeje acumula seguidors igual d’idiotes. Aquesta notorietat accelera la seva patacada en forma de clown alcoholitzat (Alusinasons). Per fi, una vida tan inútil que ja no necessita saber anglès. Qualsevol revés és una conquesta i no hi ha més èxit que en la caiguda. jaujeje ja s’atreveix amb tot.",
+  "Cantautot és el resultat de la residència de jaujeje a les cel·les del Centre d’art contemporani de Mataró (MAC). Indiferent a la convenció, la masmorra l’ha convertida en la Suite Premium, on la bèstia descansa i s’alimenta per donar el millor de si (the beast of).",
+  "*text de Martí Peran*"
     ],
     "galeria": {
         "images": [
@@ -22,14 +22,14 @@
     },
     "comodin": [
         {
-            "id": "cover",
+            "id": "cover.png",
             "type": "image",
-            "src": "./img/cover.jpeg",
+            "src": "./img/cover.png",
             "place": "end",
             "align": "center",
             "width": "whole",
-            "link": "https://www.youtube.com/watch?v=l1-VElx3tuM"
+            "link": "https://www.youtube.com/@jaujeje"
         }
     ],
-    "creditos": "Direcció: Jaume Clotet\nProducció musical: Juan Feduchi, Pol Clusella i jaujeje\nConstrucció centaure i muntatge expositiu: Borja Casanovas\nVestuari: Patricia Feliu\nFotografia: Helena Roig i Juan Feduchi\n\nEstrenat en format expositiu dintre de l’exposició “L’idiota” (MAC 2025, Mataró) comissariada per Martí Peran\n\nActuacions:\nExorcismes (Fundació Brossa 2025, Barcelona)\n[tba] Festival Adoberies (La Clota 2025, Vic)"
+    "creditos": "Estrenat en format expositiu dintre de l’exposició “L’idiota” (MAC 2025, Mataró) comissariada per Martí Peran\n\nDirecció: Jaume Clotet\nProducció musical: Juan Feduchi, Pol Clusella i jaujeje\nConstrucció centaure i muntatge expositiu: Borja Casanovas\nVestuari: Patricia Feliu\nFotografia: Helena Roig i Juan Feduchi\n\nActuacions:\nExorcismes (Fundació Brossa 2025, Barcelona)\nL'idiota (MAC 2025, Mataró)\nFestival Adoberies (La Clota 2025, Vic)"
 }

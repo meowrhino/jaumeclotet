@@ -2,7 +2,7 @@
   "slug": "difacil",
   "titulo": "Difàcil",
   "logo": "./img/titol.png",
-  "bg": "./img/fons.jpg",
+  "bg": "./img/fons.webp",
   "sinopsis": "Quan siguis gran\nel teu cor\ns'acabarà\ntransformant\nen cartó",
   "elemento_divertido": {
     "src": "./img/fun.png"
@@ -38,5 +38,5 @@
       "width": "half"
     }
   ],
-  "creditos": "\nEspai Rampa, La Capella 2024 (Barcelona)\nProposta creada juntament amb els infants de [l’ESCOLA ALDANA](https://meowrhino.com)\ndintre de la residència Espais C 2022-2024\nConstrucció de la càmera-biombo i muntatge expositiu: *Borja Casanovas *\nAssessorament edició vídeo: **Albert Sánchez**\nFotografia: __Pep Herrero__\n"
+  "creditos": "Proposta creada juntament amb els infants de l’ESCOLA ALDANA\ndintre de la residència Espais C 2022-2024\nEspai Rampa, La Capella 2024 (Barcelona)\n\nConstrucció de la càmera-biombo i muntatge expositiu: Borja Casanovas\nAssessorament edició vídeo: Albert Sánchez\nFotografia: Pep Herrero"
 }

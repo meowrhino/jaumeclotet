@@ -2,7 +2,7 @@
   "slug": "newywork",
   "titulo": "NEW YWORK",
   "logo": "./img/titol.png",
-  "bg": "./img/fons.jpg",
+  "bg": "./img/fons.webp",
   "sinopsis": "He decidit marxar\nArribo tard sempre\ni tinc pressa i vaig lent\n\nEl meu gran somni és ser humorista\nFer gràcia i viure de la gràcia\n\nPerò el món de la comèdia no em valora\ni estic com un peix fora de test\nque pixa fora de l’aigua\n\nTinc ganes d’aventura\nÉs hora de complir la meva fantasia\ni viatjar a la meca de l’entreteniment:\nNew Ywork.",
   "elemento_divertido": {
     "src": "./img/fun.png"

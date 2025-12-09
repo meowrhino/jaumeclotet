@@ -2,7 +2,7 @@
   "slug": "alusinasons",
   "titulo": "Alusinasons",
   "logo": "./img/titol.png",
-  "bg": "./img/fons.jpg",
+  "bg": "./img/fons.webp",
   "sinopsis": "Un innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
   "elemento_divertido": {
     "src": "./img/fun.png"
@@ -37,5 +37,5 @@
   }
 ],
 
-  "creditos": "Co-produït per ANTIC TEATRE (Barcelona) i Jaume Clotet\nEstrenat al GREC FESTIVAL 2024 (Barcelona)\nAmb el suport del segell musical AUSTROHÚNGARO, de la NAU ESTRUCH 2022/2023 (Sabadell) i del KONVENT (Berga).\n\nDirecció: Jaume Clotet\nProjecte creat i desenvolupat amb Max Feriche, Alicia Garrido i Albert Sánchez\nIntèrprets: Jaume Clotet i Alicia Garrido\nProducció musical: Max Feriche i Jaume Clotet\nVestuari: Alicia Garrido\nVídeo i dissenys: Albert Sánchez\nInstal·lació lumínica: Max Milà amb Altea i Marc\nEscenografia cotxe: CNC Carpinteria Moderna\nDissenys 3D: Léa Ferraton\nTècnic de llums: Marcos Zappia\nFotografia: Anna Izquierdo, Irene Moray, Dani Cantó i Britt Hecker\nMasterització: Adrià Gil"
+"creditos": "Co-producció d'Antic Teatre, Grec 2024 Festival de Barcelona i Jaume Clotet\nEstrenat al Grec Festival 2024 (Barcelona)\nAmb el suport del segell musical Austrohúngaro, de la Nau Estruch 2022/2023 (Sabadell) i del Konvent (Berga)\n \nDirecció: Jaume Clotet\n Desenvolupament idea i creació: Max Feriche, Alicia Garrido i Albert Sánchez\n Intèrprets: Jaume Clotet i Alicia Garrido\n Producció musical: Max Feriche i Jaume Clotet\n Vestuari: Alicia Garrido\n Vídeo i dissenys: Albert Sánchez\n Instal·lació lumínica: Max Milà amb Altea i Marc\n Escenografia cotxe: CNC Carpinteria Moderna\n Dissenys 3D: Léa Ferraton\n Tècnic de llums: Marcos Zappia\n Fotografia: Anna Izquierdo, Irene Moray, Dani Cantó i Britt Hecker\n Masterització: Adrià Gil"
 }

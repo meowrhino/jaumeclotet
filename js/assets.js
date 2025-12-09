@@ -26,8 +26,8 @@ export function isCssColor(str) {
 
 export function normalizeImgPath(slug, path) {
     if (!path) return null;
-    String(path).replace(/^\.?\//, '');
-    if (!s.startsWith('img/')) s = 'img/' + s;
+    let s = String(path).replace(/^\.?\//, ''); // quita ./ o /
+    if (!s.startsWith('img/')) s = 'img/' + s;   // fuerza carpeta img/ por convención
     return `data/${slug}/${s}`;
 }
 
@@ -60,27 +60,41 @@ function validateProjectMeta(p, slug){
     }
 }
 
-// Fondo para tiles/páginas: imagen o color
+// Fondo para tiles/páginas: respeta lo declarado en project.json si existe;
+// si no hay bg, cae al comodín fons.(webp|jpg) de la carpeta.
 export async function getBackground(slug) {
-    // 1) intentar fons.jpg / img/fons.jpg
-    const fons = await resolveAsset(slug, ['fons.jpg', 'img/fons.jpg']);
-    if (fons) return { kind: 'image', value: fons };
+    const headOk = async (url) => {
+        try {
+            const r = await fetch(url, { method: 'HEAD' });
+            return r.ok;
+        } catch (_) { return false; }
+    };
 
-    // 2) mirar project.json
+    // 1) Respetar bg explícito del project.json (sin cambiar extensión)
     try {
         const p = await getProjectMeta(slug);
-        const bg = p.bg;
-        if (typeof bg === 'string') {
-            if (isCssColor(bg)) return { kind: 'color', value: bg };
-            const url = normalizeImgPath(slug, bg);
-            if (url) return { kind: 'image', value: url };
-        } else if (bg && typeof bg === 'object') {
-            if (bg.color && isCssColor(bg.color)) return { kind: 'color', value: bg.color };
-            if (bg.image) {
-                const url = normalizeImgPath(slug, bg.image);
-                if (url) return { kind: 'image', value: url };
+        if (p && Object.prototype.hasOwnProperty.call(p, 'bg')) {
+            const bg = p.bg;
+            if (typeof bg === 'string') {
+                if (isCssColor(bg)) return { kind: 'color', value: bg };
+                const url = normalizeImgPath(slug, bg);
+                if (url && await headOk(url)) return { kind: 'image', value: url };
+                return null; // había bg declarado, no hacemos auto-fallback
+            } else if (bg && typeof bg === 'object') {
+                if (bg.color && isCssColor(bg.color)) return { kind: 'color', value: bg.color };
+                if (bg.image) {
+                    const url = normalizeImgPath(slug, bg.image);
+                    if (url && await headOk(url)) return { kind: 'image', value: url };
+                }
+                return null; // bg explícito pero no resolvible
             }
+            return null; // bg presente pero vacío/invalid
         }
     } catch (_) { }
+
+    // 2) Fallback si no hay bg en JSON: buscar fons.(webp|jpg)
+    const fons = await resolveAsset(slug, ['fons.webp', 'img/fons.webp', 'fons.jpg', 'img/fons.jpg']);
+    if (fons) return { kind: 'image', value: fons };
+
     return null;
 }

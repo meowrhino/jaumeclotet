@@ -2,8 +2,8 @@
   "slug": "about",
   "titulo": "about",
   "logo": "./img/titol.png",
-  "bg": "./img/fons.jpg",
-  "sinopsis": "m’ofego al pensar en el meu Statement\nSempre he cregut que la meva pràctica continuava una tradició de comèdia artística, però…\nNo arriba a ser del tot Fluxus perquè sóc massa Fluix.\nPensava que era Situacionista però en veritat només m’estava Situant.\nVolia ser part del Post-Humor i em vaig confondre fent Posts a Instagram…\nEl que faig és un riure estrany,\nuna mena de buf d’aire pel nas,\ncom si et faltés oxigen\ni estiguessis a punt d’ofegar-te.\n",
+  "bg": "./img/fons.webp",
+  "sinopsis": "m’ofego al pensar en el meu statement\nPensava que la meva pràctica continuava una tradició de comèdia artística,\nperò…\nNo arriba a ser del tot Fluxus\nperquè sóc massa Fluix.\nEm creia Situacionista\nperò en veritat només m’estava Situant.\nVolia ser part del Post-Humor\ni em vaig confondre fent Posts a Instagram…",
   "elemento_divertido": {
     "src": "./img/fun.png"
   },
@@ -20,5 +20,5 @@
       "width": "half"
     }
   ],
-  "creditos": "[instagram](https://www.instagram.com/jaume.clotet/)\n[mail](mailto:jaumix7@gmail.com)\n"
+  "creditos": "[instagram](https://www.instagram.com/jaumeclotet/)\n[mail](mailto:jaumix7@gmail.com)\n\nPremsa:\n[Alusinasons - El Temps](https://www.eltemps.cat/article/61817/el-desafiament-de-la-imaginacio-de-baro-devel-a-jaume-clotet)\n[Alusinasons - El Punt Avui+](https://www.elpuntavui.cat/cultura/article/19-cultura/2442480-el-deliri-d-una-centrifugacio.html)\n[Alusinasons - Núvol](https://www.nuvol.com/teatre-i-dansa/vull-veure-en-guillem-gisbert-ballant-la-masurca-enmig-del-fstvl-b-391921)\n[Alusinasons - Enderrock](https://www.enderrock.cat/noticia/28333/jaujeje-amb-alusinasons-entrem-mon-alcohol-rar-intim-oniric)\n[Alusinasons - Teatron](https://www.tea-tron.com/mambo/blog/2024/06/05/curiosidades-del-grec/)\n[Alusinasons - Vein](https://vein.es/alusinasons-el-primer-disco-de-jaume-clotet/)\n[Cantautot, the beast of jaujeje - TV3](https://www.3cat.cat/3cat/telenoticies-comarques-11022025/video/6324802/?ext=SM_WP_F4_CE24_)\n[Cantautot, the beast of jaujeje - Teatron](https://www.tea-tron.com/mambo/blog/2025/02/07/tarde-de-sabado-en-la-brossa-un-crossover-entre-jaume-clotet-y-los-detectives/)\n[Cantautot, the beast of jaujeje - Núvol](https://www.nuvol.com/teatre-i-dansa/els-fantasmes-de-joan-brossa-414259)\n[Cantautot, the beast of jaujeje - La Xarxa+](https://laxarxames.cat/player/4081673)\n[Difàcil - elDiario.es](https://www.eldiario.es/catalunya/artistas-taller-escuela-publica-regalo-alumnos-ven-no-picasso_1_10174117.html)\n[Difàcil - Nativa](https://nativa.cat/emmarcar-a-proposit-de-difacil/)\n[New Ywork - Teatron](http://www.tea-tron.com/mambo/blog/2022/11/07/a-quien-le-ries-las-gracias/)\n[New Ywork - Núvol](https://www.nuvol.com/art/lhumor-en-orbita-280624)\n[20vingut - Neo2](https://www.neo2.com/20vingut-de-jaume-clotet-en-el-espacio-17m2-ethall/)\n[20vingut - Núvol](https://www.nuvol.com/art/lart-es-llibertat-190648)\n"
 }
