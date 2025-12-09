@@ -1,35 +1,35 @@
 {
   "slug": "DEP",
   "titulo": "DEP",
-  "logo": "./img/titol.png",
+  "logo": "./img/titol.webp",
   "bg": "./img/fons.webp",
   "sinopsis": "En un indret no tan llunyà, un artista ni jove ni vell,\npensava deixar de fer art\nquan de cop…\nel LLAPIS se li va convertir en SERP!\n i, corbant-se endimoniadament,\nli va clavar la punta de la mina a la mà!\nAuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu\n",
   "elemento_divertido": {
-    "src": "./img/fun.png"
+    "src": "./img/fun.webp"
   },
   "textos": [
     "D.E.P és un projecte en construcció. Després d’una primera aparició als 50 anys de la Fundació Joan Miró (2025), el projecte evoluciona cap a una exposició i un show performatiu-taller on el públic és convidat a dibuixar."
   ],
   "galeria": {
     "images": [
-      "./img/DEP_JaumeClotet 01.jpg",
-      "./img/DEP_JaumeClotet 02.jpg",
-      "./img/DEP_JaumeClotet 03.jpg",
-      "./img/DEP_JaumeClotet 04.jpg",
-      "./img/DEP_JaumeClotet 05.jpg",
-      "./img/DEP_JaumeClotet 06.jpg",
-      "./img/DEP_JaumeClotet 07.jpg",
-      "./img/DEP_JaumeClotet 08.jpg",
-      "./img/DEP_JaumeClotet 09.jpg",
-      "./img/DEP_JaumeClotet 10.jpg",
-      "./img/DEP_JaumeClotet 11.jpg"
+      "./img/DEP_JaumeClotet 01.webp",
+      "./img/DEP_JaumeClotet 02.webp",
+      "./img/DEP_JaumeClotet 03.webp",
+      "./img/DEP_JaumeClotet 04.webp",
+      "./img/DEP_JaumeClotet 05.webp",
+      "./img/DEP_JaumeClotet 06.webp",
+      "./img/DEP_JaumeClotet 07.webp",
+      "./img/DEP_JaumeClotet 08.webp",
+      "./img/DEP_JaumeClotet 09.webp",
+      "./img/DEP_JaumeClotet 10.webp",
+      "./img/DEP_JaumeClotet 11.webp"
     ]
   },
   "comodin": [
     {
       "id": "boca",
       "type": "image",
-      "src": "./img/comodin.png",
+      "src": "./img/comodin.webp",
       "place": "append:header",
       "align": "center",
       "width": "half"

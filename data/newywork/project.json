@@ -1,11 +1,11 @@
 {
   "slug": "newywork",
   "titulo": "NEW YWORK",
-  "logo": "./img/titol.png",
+  "logo": "./img/titol.webp",
   "bg": "./img/fons.webp",
   "sinopsis": "He decidit marxar\nArribo tard sempre\ni tinc pressa i vaig lent\n\nEl meu gran somni és ser humorista\nFer gràcia i viure de la gràcia\n\nPerò el món de la comèdia no em valora\ni estic com un peix fora de test\nque pixa fora de l’aigua\n\nTinc ganes d’aventura\nÉs hora de complir la meva fantasia\ni viatjar a la meca de l’entreteniment:\nNew Ywork.",
   "elemento_divertido": {
-    "src": "./img/fun.png"
+    "src": "./img/fun.webp"
   },
   "textos": [
     "New Ywork és un monòleg instal·latiu on es desgrana un recorregut vital personal que ha dut a l’artista a estar malhumorat i a voler anar-se’n a la meca de l’humor i del show business.",
@@ -15,24 +15,24 @@
   ],
   "galeria": {
     "images": [
-      "./img/newYwork-foto 1.jpg",
-      "./img/newYwork-foto 2.jpg",
-      "./img/newYwork-foto 3.jpg",
-      "./img/newYwork-foto 4.jpg",
-      "./img/newYwork-foto 5.jpg",
-      "./img/newYwork-foto 6.jpg",
-      "./img/newYwork-foto 7.jpg",
-      "./img/newYwork-foto 8.jpg",
-      "./img/newYwork-foto 9.jpg",
-      "./img/newYwork-foto 10.jpg",
-      "./img/newYwork-foto 11.jpg"
+      "./img/newYwork-foto 1.webp",
+      "./img/newYwork-foto 2.webp",
+      "./img/newYwork-foto 3.webp",
+      "./img/newYwork-foto 4.webp",
+      "./img/newYwork-foto 5.webp",
+      "./img/newYwork-foto 6.webp",
+      "./img/newYwork-foto 7.webp",
+      "./img/newYwork-foto 8.webp",
+      "./img/newYwork-foto 9.webp",
+      "./img/newYwork-foto 10.webp",
+      "./img/newYwork-foto 11.webp"
     ]
   },
   "comodin": [
     {
       "id": "bate",
       "type": "image",
-      "src": "./img/bate.png",
+      "src": "./img/bate.webp",
       "place": "append:header",
       "align": "center",
       "width": "half"
@@ -41,7 +41,7 @@
     {
       "id": "publicacio",
       "type": "image",
-      "src": "./img/publicacio.png",
+      "src": "./img/publicacio.webp",
       "link": "https://fatbottombooks.com/books/fanzine/new-ywork",
       "place": "after:creditos",
       "align": "center"

@@ -1,11 +1,11 @@
 {
     "slug": "cantautot",
     "titulo": "Cantautot",
-    "logo": "./img/titol.png",
+    "logo": "./img/titol.webp",
     "bg": "./img/fons.webp",
     "sinopsis": "Una mosca volava per la llum llum llum\ni la llum no la va pagar\nperò aquesta mosca\nno es va quedar a les fosques\nperquè aquesta mosca\nla llum la va punxar\n",
     "elemento_divertido": {
-        "src": "./img/fun.png"
+        "src": "./img/fun.webp"
     },
     "textos": [
   "[jaujeje](https://www.instagram.com/jaujeje/) és un jove que no sap cantar i per això decideix convertir la seva vida instagram en un musical. Tampoc no té res més, de manera que és preferible convertir-la en una salmòdia, un cant amb la gràcia de no ser agraciat. A “Caraoque. Cançons by jaujeje”, cantusseja la seva existència a base de confessions videoclip que avorten qualsevol futur: és mandrós, pateix ànsia de bar, desitja ser un núvol multiforme i no tornar a pronunciar una sola paraula. A pesar del desastre, jaujeje acumula seguidors igual d’idiotes. Aquesta notorietat accelera la seva patacada en forma de clown alcoholitzat (Alusinasons). Per fi, una vida tan inútil que ja no necessita saber anglès. Qualsevol revés és una conquesta i no hi ha més èxit que en la caiguda. jaujeje ja s’atreveix amb tot.",
@@ -14,17 +14,17 @@
     ],
     "galeria": {
         "images": [
-            "./img/cantauttot-foto 1.jpg",
-            "./img/cantauttot-foto 2.jpg",
-            "./img/cantauttot-foto 3.jpg",
-            "./img/cantauttot-foto 4.jpg"
+            "./img/cantauttot-foto 1.webp",
+            "./img/cantauttot-foto 2.webp",
+            "./img/cantauttot-foto 3.webp",
+            "./img/cantauttot-foto 4.webp"
         ]
     },
     "comodin": [
         {
-            "id": "cover.png",
+            "id": "cover.webp",
             "type": "image",
-            "src": "./img/cover.png",
+            "src": "./img/cover.webp",
             "place": "end",
             "align": "center",
             "width": "whole",

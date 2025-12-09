@@ -247,6 +247,14 @@ body {
   margin-bottom: 1em;
   line-height: 1.6;
 }
+.project-textos a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.project-textos a:hover {
+  opacity: 0.9;
+}
 
 /* Galería: vertical */
 .project-galeria {

@@ -1,11 +1,11 @@
 {
   "slug": "alusinasons",
   "titulo": "Alusinasons",
-  "logo": "./img/titol.png",
+  "logo": "./img/titol.webp",
   "bg": "./img/fons.webp",
   "sinopsis": "Un innocent\ncau per accident\nen un món d’alcohol\ni es transforma en\nclown",
   "elemento_divertido": {
-    "src": "./img/fun.png"
+    "src": "./img/fun.webp"
   },
   "textos": [
     "ALUSINASONS és una oda transgressora al món festiu i a l’imaginari que l’acompanya: un concert instal·latiu on un personatge es veu dominat i arrossegat per lògiques alcohòliques delirants i caricaturesques.",
@@ -16,12 +16,12 @@
   ],
   "galeria": {
     "images": [
-      "./img/Alusinasons-foto 1.jpg",
-      "./img/Alusinasons-foto 2.jpg",
-      "./img/Alusinasons-foto 3.jpg",
-      "./img/Alusinasons-foto 4.jpg",
-      "./img/Alusinasons-foto 5.jpg",
-      "./img/Alusinasons-foto 6.jpg"
+      "./img/Alusinasons-foto 1.webp",
+      "./img/Alusinasons-foto 2.webp",
+      "./img/Alusinasons-foto 3.webp",
+      "./img/Alusinasons-foto 4.webp",
+      "./img/Alusinasons-foto 5.webp",
+      "./img/Alusinasons-foto 6.webp"
     ]
   },
 
@@ -29,7 +29,7 @@
   {
     "id": "cover",
     "type": "image",
-    "src": "./img/cover.png",
+    "src": "./img/cover.webp",
     "place": "end",
     "align": "center",
     "width": "half",

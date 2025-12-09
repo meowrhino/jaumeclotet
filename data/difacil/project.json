@@ -1,11 +1,11 @@
 {
   "slug": "difacil",
   "titulo": "Difàcil",
-  "logo": "./img/titol.png",
+  "logo": "./img/titol.webp",
   "bg": "./img/fons.webp",
   "sinopsis": "Quan siguis gran\nel teu cor\ns'acabarà\ntransformant\nen cartó",
   "elemento_divertido": {
-    "src": "./img/fun.png"
+    "src": "./img/fun.webp"
   },
   "textos": [
     "Difàcil és un projecte desenvolupat en el marc d’espais c, programa del Consorci d’Educació i l’ICUB que connecta la pràctica artística amb l’educació primària mitjançant processos de convivència de llarga durada. Entre 2022 i 2024, l’artista Jaume Clotet ha treballat a l’Escola Aldana amb la mediació de La Capella i l’acompanyament de Judit López, transformant un espai del centre en un taller-estudi obert tant a la seva pràctica com a la participació dels infants.",
@@ -14,25 +14,25 @@
   ],
   "galeria": {
     "images": [
-      "./img/Difacil_01.jpg",
-      "./img/Difacil_02.jpg",
-      "./img/Difacil_03.jpg",
-      "./img/Difacil_04.jpg",
-      "./img/Difacil_05.jpg",
-      "./img/Difacil_06.jpg",
-      "./img/Difacil_07.jpg",
-      "./img/Difacil_08.jpg",
-      "./img/Difacil_09.jpg",
-      "./img/Difacil_10.jpg",
-      "./img/Difacil_11.jpg",
-      "./img/Difacil_12.jpg"
+      "./img/Difacil_01.webp",
+      "./img/Difacil_02.webp",
+      "./img/Difacil_03.webp",
+      "./img/Difacil_04.webp",
+      "./img/Difacil_05.webp",
+      "./img/Difacil_06.webp",
+      "./img/Difacil_07.webp",
+      "./img/Difacil_08.webp",
+      "./img/Difacil_09.webp",
+      "./img/Difacil_10.webp",
+      "./img/Difacil_11.webp",
+      "./img/Difacil_12.webp"
     ]
   },
   "comodin": [
     {
       "id": "foto",
       "type": "image",
-      "src": "./img/foto.png",
+      "src": "./img/foto.webp",
       "place": "append:header",
       "align": "center",
       "width": "half"
