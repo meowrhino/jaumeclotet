@@ -2,6 +2,9 @@
 (() => {
   const SECRET_IMG_BASE = 'data/0_secret/img/ghost';
   const SECRET_JSON_URL = 'data/0_secret/secreto.json';
+  const SECRET_IMG_WEBP = '.webp';
+  const SECRET_IMG_PNG = '.png';
+  let ghostExt = SECRET_IMG_WEBP; // intentamos WebP primero
 
   // --- Config centralizada (fácil de tunear desde aquí o la consola) ---
   const GHOST_CFG = {
@@ -34,15 +37,18 @@
     };
   }
 
+  const ghostSrc = (n) => `${SECRET_IMG_BASE}${n}${ghostExt}`;
+
   // Preload de frames del dado (evita parpadeos al click)
-  (function preloadGhostFrames(){
+  function preloadGhostFrames() {
     for (let i = 0; i <= 6; i++) {
       const im = new Image();
       im.decoding = 'async';
       im.loading = 'eager';
-      im.src = `${SECRET_IMG_BASE}${i}.png`;
+      im.src = ghostSrc(i);
     }
-  })();
+  }
+  preloadGhostFrames();
 
   // Permite controlar el tamaño vía window.SECRET_GHOST_SIZE (e.g. '120px' o 'clamp(110px,10vw,160px)')
   function applyGhostSizeVar() {
@@ -201,12 +207,12 @@
     // 2) Una vuelta barajada por todas las caras
     const seq = shuffle([1,2,3,4,5,6]);
     for (const frame of seq) {
-      imgEl.src = `${SECRET_IMG_BASE}${frame}.png`;
+      imgEl.src = ghostSrc(frame);
       await sleep(110);
     }
 
     // 3) Mostrar el definitivo y dejarlo visible un instante
-    imgEl.src = `${SECRET_IMG_BASE}${finalN}.png`;
+    imgEl.src = ghostSrc(finalN);
     await sleep(220);
 
     // 4) Resolver URL y abrirla en nueva pestaña
@@ -236,7 +242,18 @@
       ghost.alt = 'ghost';
       ghost.decoding = 'async';
       ghost.loading = 'lazy';
-      ghost.src = `${SECRET_IMG_BASE}0.png`;
+      ghost.src = ghostSrc(0);
+      ghost.onerror = () => {
+        if (ghostExt === SECRET_IMG_WEBP) {
+          console.warn('[secreto] ghost .webp no disponible, probando .png');
+          ghostExt = SECRET_IMG_PNG;
+          ghost.onerror = null; // evita bucle si PNG también falla
+          preloadGhostFrames(); // rehace el preload con la extensión nueva
+          ghost.src = ghostSrc(0);
+        } else {
+          console.warn('[secreto] ghost image no encontrada:', ghost.src);
+        }
+      };
       document.body.appendChild(ghost);
       // Estilo base (quieto) y arranque perezoso en la primera interacción (hover/scroll/touch)
       applyGhostBaseStyle(ghost);
