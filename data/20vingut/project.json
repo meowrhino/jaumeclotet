@@ -1,24 +1,24 @@
 {
   "slug": "20vingut",
   "titulo": "20vingut",
-  "logo": "./img/titol.png",
+  "logo": "./img/titol.webp",
   "bg": "./img/fons.webp",
   "sinopsis": "Ciutadans de Barcelona\nUs prego un xic d’atenció\nPer parlar-vos de la meva\nprop-vinent Exposició a l’espai 17m d’EtHALL\nAllà hi veureu unes noves composicions de dibuixets\nque he fet al llarg de la meva vida.\nTot a 20 euros\nAu i Trieu i remeneu\nQue el dia que jo la dinyi\nAixò pujarà de preu.\n",
   "elemento_divertido": {
-    "src": "./img/fun.png"
+    "src": "./img/fun.webp"
   },
   "textos": [
     "20vingut prolonga i reformula els plantejaments d’[INTEGRAL](https://www.youtube.com/watch?v=kfukoJCSad8) (La Capella, 2019), una performance-mostra concebuda per a un únic dia dins el marc de l’entrega de premis d’ArtNou 2019. Aquella primera versió s’articulava a través de diversos happenings que funcionaven com a dispositius de distanciament irònic envers la pròpia noció d’exposició artística. Després d’un any de pausa i confinament, el projecte reapareix com un procés de reconfiguració, activant i transformant elements de la proposta original en tres peces independents però interconnectades. Dibuixets 1994–2020 reuneix composicions elaborades amb dibuixos acumulats durant més de dues dècades, posant en circulació un arxiu personal que oscil·la entre memòria íntima i registre formal, amb cada peça disponible a 20 €. Integral presenta un díptic de suro amb galetes integrals, combinant materialitat domèstica i aparentment banal amb gestos d’abstracció artística. Late Jau Show és un vídeo-collage que parodia el bloqueig de la pràctica performativa arran de la situació viscuda el 2020, alternant fragments audiovisuals en un flux de sàtira i autoreferència. Com a conjunt, 20vingut es presenta com un espai de reciclatge i mutació, on materials, formats i contextos es recombinen per activar l’humor com a estratègia crítica i la memòria com a matèria viva."
   ],
   "galeria": {
     "images": [
-      "./img/20vingut_JaumeClotet_01.jpg",
-      "./img/20vingut_JaumeClotet_06.jpg",
-      "./img/20vingut_JaumeClotet_02.jpg",
-      "./img/20vingut_JaumeClotet_03.jpg",
-      "./img/20vingut_JaumeClotet_04.jpg",
-      "./img/20vingut_JaumeClotet_05.jpg",
-      "./img/20vingut_JaumeClotet_07.jpg"
+      "./img/20vingut_JaumeClotet_01.webp",
+      "./img/20vingut_JaumeClotet_06.webp",
+      "./img/20vingut_JaumeClotet_02.webp",
+      "./img/20vingut_JaumeClotet_03.webp",
+      "./img/20vingut_JaumeClotet_04.webp",
+      "./img/20vingut_JaumeClotet_05.webp",
+      "./img/20vingut_JaumeClotet_07.webp"
     ]
   },
   "creditos": "Premi GAC 2021 a millor exposició en galeria d’artista emergent\nAdquirit per la col·lecció DKV\n\nProducció: Gracias por su visita i Javi de la Llave\nVídeo edit & FX: Albert Sánchez\nSo: Lucas Mathias\nEstilisme: Júlia Puig\nMuntatge: Jorge Bravo i Pol Ricart Herms\nFotografia: Albert Sánchez, Roberto Ruiz, Lola Errando i Gerard Borràs\n\n"
