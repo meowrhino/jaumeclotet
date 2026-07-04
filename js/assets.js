@@ -55,7 +55,7 @@ function validateProjectMeta(p, slug){
     if (p.galeria && !Array.isArray(p.galeria.media || []) && !Array.isArray(p.galeria.images || [])) {
         console.warn(`[${slug}] "galeria" no tiene media ni images en array`);
     }
-    if (p.bg && typeof p.bg === 'string' && !isCssColor(p.bg) && !p.bg.startsWith('img/')) {
+    if (p.bg && typeof p.bg === 'string' && !isCssColor(p.bg) && !p.bg.replace(/^\.?\//, '').startsWith('img/')) {
         console.warn(`[${slug}] bg parece ruta inválida o no empieza por img/ → ${p.bg}`);
     }
 }
