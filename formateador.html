@@ -1,259 +1,898 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-    <meta charset="utf-8" />
-    <title>Formateador de sinopsis / créditos / textos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        :root {
-            font: 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        }
-
-        body {
-            margin: 24px;
-            color: #222;
-        }
-
-        .wrap {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            gap: 16px;
-        }
-
-        textarea,
-        pre,
-        code,
-        input[type="text"] {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .radios {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .out {
-            min-height: 140px;
-            white-space: pre;
-            background: #0f172a;
-            color: #e5e7eb;
-            padding: 12px;
-            border-radius: 10px;
-            overflow: auto;
-        }
-
-        .row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            background: #fff;
-        }
-
-        /* button.primary {
-            background: #111827;
-            color: #fff;
-            border-color: #111827;
-        } */
-        button+button {
-            margin-left: 4px;
-        }
-
-        small.hint {
-            color: #666;
-        }
-    </style>
+<meta charset="utf-8" />
+<title>Editor de proyecto (project.json)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --border:#d8d8d8;
+    --bg-soft:#f6f6f7;
+    --accent:#111827;
+    --ok:#1a7f37;
+    --warn:#a15c00;
+    --err:#b3261e;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;padding:24px;color:#1b1b1b;background:#fff;}
+  .wrap{max-width:1200px;margin:0 auto;display:grid;gap:20px;}
+  h1{font-size:1.5rem;margin:0 0 4px;}
+  h2{font-size:1.05rem;margin:0 0 10px;}
+  h3{font-size:0.95rem;margin:0 0 6px;}
+  section{border:1px solid var(--border);border-radius:12px;padding:16px;background:#fff;}
+  details.instrucciones{border:1px solid var(--border);border-radius:12px;padding:16px;background:#fffdf5;}
+  details.instrucciones summary{cursor:pointer;font-weight:600;font-size:1.05rem;}
+  details.instrucciones p, details.instrucciones li{color:#333;}
+  details.instrucciones code{background:#eee;padding:1px 5px;border-radius:4px;}
+  label{display:block;font-weight:600;margin:10px 0 4px;font-size:0.88rem;}
+  label small{font-weight:400;color:#777;}
+  input[type="text"], textarea, select{
+    width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;
+    font-family:inherit;font-size:0.92rem;background:#fff;
+  }
+  textarea{min-height:80px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;}
+  .hint{color:#666;font-size:0.82rem;margin:2px 0 0;}
+  .row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+  .row > *{flex:1;min-width:140px;}
+  .row-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;}
+  button{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:0.88rem;}
+  button:hover{background:var(--bg-soft);}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+  button.primary:hover{background:#000;}
+  button.danger{color:var(--err);border-color:#f0c4c0;}
+  button.small{padding:4px 8px;font-size:0.78rem;}
+  .filebtn{display:inline-block;padding:8px 14px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;}
+  .filebtn:hover{background:var(--bg-soft);}
+  .msg{margin-top:8px;font-size:0.85rem;}
+  .msg.ok{color:var(--ok);}
+  .msg.warn{color:var(--warn);}
+  .msg.err{color:var(--err);}
+  .item-card{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--bg-soft);}
+  .item-card .item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .item-head strong{font-size:0.82rem;color:#555;text-transform:uppercase;letter-spacing:.03em;}
+  .item-buttons{display:flex;gap:4px;}
+  .grid2{display:grid;grid-template-columns:1.15fr 0.85fr;gap:20px;align-items:start;}
+  @media (max-width:960px){.grid2{grid-template-columns:1fr;}}
+  .col-preview{position:sticky;top:16px;}
+  .preview-pane{border:1px solid var(--border);border-radius:12px;background:#0f172a;color:#e5e7eb;padding:18px;max-height:80vh;overflow:auto;}
+  .preview-pane img, .preview-pane video{max-width:100%;border-radius:6px;display:block;margin:6px 0;}
+  .preview-pane .ph{border:1px dashed #475569;border-radius:6px;padding:10px;font-size:0.75rem;color:#94a3b8;margin:6px 0;word-break:break-all;}
+  .preview-pane h2{color:#fff;}
+  .preview-header{text-align:center;margin-bottom:14px;}
+  .preview-header .logo-line{font-family:Georgia,serif;letter-spacing:.05em;text-transform:uppercase;font-size:1.1rem;color:#fff;margin-bottom:6px;}
+  .preview-sinopsis p{margin:0 0 6px;text-transform:uppercase;font-size:0.85rem;letter-spacing:.02em;}
+  .preview-textos p{margin:0 0 10px;font-size:0.88rem;}
+  .preview-creditos .credit-line{font-family:ui-monospace,Menlo,monospace;font-size:0.8rem;margin:2px 0;}
+  .preview-galeria{display:flex;flex-direction:column;gap:8px;}
+  .preview-pane a{color:#93c5fd;}
+  .badge{display:inline-block;font-size:0.7rem;padding:1px 7px;border-radius:99px;background:#e5e7eb;color:#333;margin-left:6px;}
+  pre#jsonOut{white-space:pre-wrap;word-break:break-all;background:#0f172a;color:#e5e7eb;padding:12px;border-radius:10px;max-height:400px;overflow:auto;font-size:0.8rem;}
+  fieldset{border:1px solid var(--border);border-radius:8px;padding:10px;margin:0;}
+  legend{font-size:0.8rem;color:#666;padding:0 4px;}
+  .checkline{display:flex;align-items:center;gap:6px;margin:4px 0;}
+  .checkline input{width:auto;}
+  .checkline label{margin:0;font-weight:400;}
+</style>
 </head>
-
 <body>
-    <div class="wrap">
-        <h1>Formateador de “sinopsis”, “créditos” y “textos”</h1>
+<div class="wrap">
 
-        <label for="entrada"><strong>1) Pega aquí tu texto</strong></label>
-        <textarea id="entrada" placeholder="Pega aquí los créditos o el poema de la sinopsis…"></textarea>
+  <h1>Editor visual de proyecto (project.json)</h1>
+  <p class="hint">Esta página crea/edita el archivo <code>project.json</code> de una carpeta <code>data/&lt;slug&gt;/</code> del sitio. No necesita internet ni instalar nada: se abre haciendo doble clic sobre el archivo, o desde GitHub Pages.</p>
 
-        <div class="radios">
-            <strong>2) Elige salida:</strong>
-            <label><input type="radio" name="modo" value="sinopsis" checked> Sinopsis → JSON string</label>
-            <label><input type="radio" name="modo" value="creditos"> Créditos → JSON string</label>
-            <label><input type="radio" name="modo" value="textos"> Textos → array por párrafo</label>
-        </div>
+  <details class="instrucciones" open>
+    <summary>📖 Instrucciones (léelas antes de empezar)</summary>
+    <p><strong>¿Qué es esto?</strong> Un formulario para rellenar los datos de un proyecto (título, texto, fotos, créditos…) sin tocar código. Al final generas un archivo <code>project.json</code> que subes a la carpeta de tu proyecto.</p>
+    <ol>
+      <li><strong>Si el proyecto ya existe</strong>: en "1) Cargar un proyecto" pulsa "Elegir archivo project.json" y selecciona el archivo dentro de <code>data/tu-proyecto/project.json</code>. El formulario se rellenará solo.</li>
+      <li><strong>Si es un proyecto nuevo</strong>: pulsa "Empezar de cero" y escribe un <code>slug</code> (nombre corto sin espacios ni acentos, ej. <code>mi-proyecto</code>). Esa palabra será el nombre de la carpeta en <code>data/</code>.</li>
+      <li>Rellena los campos. A la derecha (o debajo, en móvil) verás una <strong>vista previa</strong> aproximada de cómo quedará.</li>
+      <li>Las rutas de imagen (ej. <code>img/foto.webp</code>) son solo el <em>nombre del archivo</em> tal como lo vas a guardar dentro de la carpeta <code>img/</code> del proyecto. Este editor no sube imágenes, solo apunta a sus nombres.</li>
+      <li>Puedes cargar tus imágenes/vídeos reales solo para previsualizarlos aquí (no se guardan ni se suben a ningún sitio, es solo para que veas el resultado): ver el apartado 2.</li>
+      <li>Cuando termines, pulsa <strong>"Descargar project.json"</strong> al final de la página. Sube ese archivo a <code>data/tu-slug/project.json</code> (sustituyendo el anterior si ya existía).</li>
+    </ol>
+    <p><strong>Sobre el texto con formato</strong> (en "Textos" y "Créditos"): puedes usar:</p>
+    <ul>
+      <li><code>**palabra**</code> → <strong>negrita</strong></li>
+      <li><code>*palabra*</code> → <em>cursiva</em></li>
+      <li><code>__palabra__</code> → <u>subrayado</u></li>
+      <li><code>[texto del enlace](https://ejemplo.com)</code> → enlace clicable</li>
+      <li>Una línea en blanco separa párrafos. Un solo salto de línea se muestra como salto de línea simple.</li>
+    </ul>
+    <p>En "Créditos", si una línea empieza como <code>Etiqueta: contenido</code>, la etiqueta se pone en negrita automáticamente (ej. <code>Dirección: Jaume Clotet</code>).</p>
+    <p>Los apartados marcados como <strong>opcional</strong> puedes dejarlos vacíos sin problema.</p>
+  </details>
 
+  <section>
+    <h2>1) Cargar un proyecto existente <small class="hint">(opcional — sáltate esto si empiezas de cero)</small></h2>
+    <div class="row-actions">
+      <label class="filebtn">📂 Elegir archivo project.json<input type="file" id="fileInput" accept="application/json,.json" hidden></label>
+      <button id="btnEmpezarCero">🆕 Empezar de cero</button>
+      <span id="draftMsg"></span>
+    </div>
+    <details style="margin-top:10px;">
+      <summary>O pega aquí el contenido del JSON</summary>
+      <textarea id="pasteJson" placeholder="Pega aquí el contenido completo de project.json" style="min-height:120px;margin-top:8px;"></textarea>
+      <div class="row-actions"><button id="btnCargarPegado">Cargar JSON pegado</button></div>
+    </details>
+    <div id="cargaMsg" class="msg"></div>
+  </section>
+
+  <section>
+    <h2>2) Previsualizar imágenes/vídeos reales <small class="hint">(opcional, solo visual — no se incluye en el JSON)</small></h2>
+    <p class="hint">Selecciona aquí las fotos y vídeos de tu proyecto (puedes seleccionar varios a la vez) para verlos en la vista previa de la derecha, en vez de solo el nombre del archivo.</p>
+    <input type="file" id="mediaInput" multiple accept="image/*,video/*">
+  </section>
+
+  <div class="grid2">
+    <div class="col-form">
+
+      <section>
+        <h2>Datos básicos</h2>
         <div class="row">
-            <button id="copiar">Copiar</button>
-            <button id="limpiar">Limpiar</button>
-            <button id="btnBold" title="Negrita (**)">B</button>
-            <button id="btnItalic" title="Cursiva (*)">I</button>
-            <button id="btnUnderline" title="Subrayado (__)">U</button>
-            <button id="btnLink" title="Enlace [texto](url)">Link</button>
-            <small class="hint">El resultado aparece abajo. Se actualiza automáticamente.</small>
+          <div>
+            <label>slug (nombre de la carpeta) <small>obligatorio</small></label>
+            <input type="text" id="f-slug" placeholder="mi-proyecto">
+            <p class="hint">Sin espacios, sin acentos, minúsculas. Debe coincidir con el nombre de la carpeta <code>data/&lt;slug&gt;/</code>.</p>
+          </div>
+          <div style="flex:0 0 auto;">
+            <label>&nbsp;</label>
+            <button id="btnSlugDesdeTitulo" class="small">Generar desde el título</button>
+          </div>
         </div>
+        <label>Título <small>obligatorio</small></label>
+        <input type="text" id="f-titulo" placeholder="Nombre del proyecto">
+        <label>Logo <small>opcional — ruta de imagen, ej. img/titol.webp</small></label>
+        <input type="text" id="f-logo" placeholder="img/titol.webp">
+      </section>
 
-        <div class="out" id="salida" aria-label="Salida JSON" tabindex="0"></div>
+      <section>
+        <h2>Fondo (bg) <small class="hint">opcional</small></h2>
+        <div class="row">
+          <div>
+            <label>Color de fondo <small>ej. #0b0b0b o red</small></label>
+            <input type="text" id="f-bgcolor" placeholder="#0b0b0b">
+          </div>
+          <div>
+            <label>Imagen de fondo <small>ruta, ej. img/fons.webp</small></label>
+            <input type="text" id="f-bgimage" placeholder="img/fons.webp">
+          </div>
+        </div>
+        <p class="hint">Si dejas ambos vacíos, el proyecto usará automáticamente <code>fons.webp/jpg</code> de la carpeta si existe. Si rellenas los dos, se usan a la vez (imagen encima de color).</p>
+      </section>
+
+      <section>
+        <h2>Sinopsis <small class="hint">opcional — el texto corto que sale arriba, bajo el logo</small></h2>
+        <textarea id="f-sinopsis" placeholder="Una línea&#10;otra línea&#10;&#10;otro párrafo"></textarea>
+        <p class="hint">Una línea en blanco separa párrafos; los saltos simples se respetan tal cual.</p>
+      </section>
+
+      <section>
+        <h2>Elemento divertido <small class="hint">opcional — icono que sigue el ratón/dedo por la pantalla</small></h2>
+        <label>Imagen <small>ruta, ej. img/fun.webp</small></label>
+        <input type="text" id="f-fun" placeholder="img/fun.webp">
+      </section>
+
+      <section>
+        <h2>Textos <small class="hint">opcional — párrafos largos del cuerpo del proyecto</small></h2>
+        <div id="listaTextos"></div>
+        <div class="row-actions"><button id="btnAddTexto">+ Añadir párrafo</button></div>
+      </section>
+
+      <section>
+        <h2>Galería <small class="hint">opcional — fotos y vídeos del proyecto</small></h2>
+        <div id="listaGaleria"></div>
+        <div class="row-actions">
+          <button id="btnAddImg">+ Añadir imagen</button>
+          <button id="btnAddVid">+ Añadir vídeo</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Créditos <small class="hint">opcional</small></h2>
+        <textarea id="f-creditos" placeholder="Dirección: Nombre&#10;Web: [sitio](https://ejemplo.com)"></textarea>
+      </section>
+
+      <details>
+        <summary style="cursor:pointer;font-weight:600;font-size:1.05rem;padding:8px 0;">Comodines (avanzado, opcional)</summary>
+        <section style="border-top:none;border-top-left-radius:0;border-top-right-radius:0;">
+          <p class="hint">Los "comodines" son piezas extra que se insertan en un punto concreto de la página (una foto junto al título, una cita, un vídeo suelto...). Solo tócalos si sabes lo que quieres colocar; si no, déjalos vacíos.</p>
+          <div id="listaComodin"></div>
+          <div class="row-actions">
+            <button id="btnAddComodin">+ Añadir comodín</button>
+          </div>
+        </section>
+      </details>
+
     </div>
 
-    <script>
-        const entrada = document.getElementById('entrada');
-        const salida = document.getElementById('salida');
-        const radios = document.querySelectorAll('input[name="modo"]');
-        const btnCopiar = document.getElementById('copiar');
-        const btnLimpiar = document.getElementById('limpiar');
+    <div class="col-preview">
+      <h2>Vista previa <span class="badge">aproximada</span></h2>
+      <div class="preview-pane" id="previewPane"></div>
+    </div>
+  </div>
 
-        function normalizarSaltos(s) {
-            // Normaliza saltos (\r\n → \n), recorta espacios antes de salto y compacta >2 saltos
-            return s.replace(/\r\n?/g, '\n')
-                .replace(/[ \t]+\n/g, '\n')
-                .replace(/\n{3,}/g, '\n\n');
-        }
+  <section>
+    <h2>Descargar</h2>
+    <div id="validMsg" class="msg"></div>
+    <div class="row-actions">
+      <button id="btnDescargar" class="primary">⬇️ Descargar project.json</button>
+    </div>
+    <details style="margin-top:10px;">
+      <summary>Ver el JSON en texto (por si quieres copiarlo a mano)</summary>
+      <pre id="jsonOut"></pre>
+    </details>
+  </section>
 
-        function jsonString(value) {
-            // Devuelve el valor como JSON (con comillas y escapado listo)
-            return JSON.stringify(value);
-        }
+</div>
 
-        function generar() {
-            const modo = [...radios].find(r => r.checked).value;
-            let text = entrada.value || '';
-            text = normalizarSaltos(text);
+<script>
+"use strict";
 
-            if (!text.trim()) {
-                salida.textContent = '';
-                return;
-            }
+/* ================= Estado ================= */
+const state = {
+  slug: "", titulo: "", logo: "",
+  bgColor: "", bgImage: "",
+  sinopsis: "",
+  funSrc: "",
+  textos: [],      // array de strings
+  galeria: [],     // array de { type:'image'|'video', src, poster }
+  creditos: "",
+  comodin: []      // array de objetos flexibles, ver comodinDefaults()
+};
 
-            if (modo === 'sinopsis') {
-                // Un solo string con \n donde haya saltos
-                const json = `"sinopsis": ${jsonString(text)}`;
-                salida.textContent = json;
-                return;
-            }
+const mediaMap = new Map(); // basename (lowercase) -> object URL, solo para previsualizar
 
-            if (modo === 'creditos') {
-                // Mantiene 1×\n como salto de línea y compacta 3+ saltos a exactamente \n\n
-                // 1) Normaliza espacios antes de saltos
-                // 2) Convierte grupos de 3 o más saltos en exactamente dos (\n\n)
-                let out = text
-                  .replace(/[ \t]+\n/g, '\n')
-                  .replace(/\n{3,}/g, '\n\n');
+function basename(p){ return String(p || "").split("/").pop().trim(); }
+function resolvePreviewUrl(p){
+  if (!p) return null;
+  return mediaMap.get(basename(p).toLowerCase()) || null;
+}
 
-                const json = `"creditos": ${jsonString(out)}`;
-                salida.textContent = json;
-                return;
-            }
+/* ================= Utilidades tomadas de js/proyecto.js (misma lógica de render) ================= */
+function isCssColor(str) {
+  if (typeof str !== "string") return false;
+  const s = str.trim().toLowerCase();
+  return s.startsWith("#") || s.startsWith("rgb(") || s.startsWith("rgba(") ||
+    s.startsWith("hsl(") || s.startsWith("hsla(") || s.startsWith("oklch(") || s.startsWith("oklab(") ||
+    s.startsWith("linear-gradient(") || s.startsWith("radial-gradient(") ||
+    ["white","black","transparent","red","green","blue","yellow","magenta","cyan","orange","purple","gray","grey"].includes(s);
+}
 
-            if (modo === 'textos') {
-                // Divide por párrafos (líneas en blanco). Dentro de cada párrafo, CONSERVA los \n.
-                // Limpia espacios finales de línea y colapsa múltiples saltos dentro del párrafo a uno solo.
-                const parrafos = text.trim().split(/\n\s*\n+/).map(p =>
-                    p
-                      .replace(/[ \t]+\n/g, '\n')  // quita espacios al final de línea
-                      .replace(/\n{2,}/g, '\n')     // colapsa saltos múltiples dentro del párrafo
-                      .trim()
-                ).filter(Boolean);
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
 
-                const cuerpo = parrafos.map(p => '  ' + jsonString(p)).join(',\n');
-                const json = `"textos": [\n${cuerpo}\n]`;
-                salida.textContent = json;
-                return;
-            }
-        }
+function linkifyEscaped(esc) {
+  if (!esc) return esc;
+  const fixHref = (href) => href ? href.replace(/^(https?):\s*\/\//i, "$1://").trim() : href;
+  esc = esc.replace(/&lt;(strong|b)&gt;([\s\S]*?)&lt;\/\1&gt;/gi, "<strong>$2</strong>");
+  esc = esc.replace(/&lt;(em|i)&gt;([\s\S]*?)&lt;\/\1&gt;/gi, "<em>$2</em>");
+  esc = esc.replace(/&lt;u&gt;([\s\S]*?)&lt;\/u&gt;/gi, "<u>$1</u>");
+  esc = esc.replace(/&lt;a\s+href\s*=\s*(['"])(.*?)\1\s*&gt;([\s\S]*?)&lt;\/a&gt;/gi, (m, _q, href, inner) => {
+    const safe = fixHref(href);
+    if (!/^(https?:\/\/|mailto:)/i.test(safe)) return m;
+    return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+  });
+  esc = esc.replace(/\[([^\]]+)\]\(\s*(https?:\s*\/\/[^\s)]+|mailto:[^\s)]+)\s*\)/g, (m, text, href) => {
+    const safe = fixHref(href);
+    return `<a href="${safe}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  });
+  esc = esc.replace(/__([^_]+?)__/g, "<u>$1</u>");
+  esc = esc.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
+  esc = esc.replace(/(^|[^*])\*([^*]+?)\*(?!\*)/g, (m, p, t) => `${p}<em>${t}</em>`);
+  return esc;
+}
 
-        entrada.addEventListener('input', generar);
-        radios.forEach(r => r.addEventListener('change', generar));
+function renderSinopsisHtml(raw) {
+  const txt = String(raw || "").replace(/\r\n?/g, "\n").trim();
+  if (!txt) return "";
+  const paras = txt.split(/\n\s*\n+/);
+  return paras.map((p) => `<p>${escapeHtml(p).replace(/\n/g, "<br>")}</p>`).join("");
+}
 
-        btnCopiar.addEventListener('click', async () => {
-            const txt = salida.textContent;
-            if (!txt) return;
-            try {
-                await navigator.clipboard.writeText(txt);
-                btnCopiar.textContent = '¡Copiado!';
-                setTimeout(() => (btnCopiar.textContent = 'Copiar'), 1200);
-            } catch {
-                // Fallback: selecciona el contenido para copiar manualmente
-                const range = document.createRange();
-                range.selectNodeContents(salida);
-                const sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        });
+function renderTextosHtml(arr) {
+  if (!Array.isArray(arr) || !arr.length) return "";
+  return arr.map((raw) => {
+    const esc = escapeHtml(String(raw || ""));
+    const html = linkifyEscaped(esc).replace(/\n/g, "<br>");
+    return `<p>${html}</p>`;
+  }).join("");
+}
 
-        btnLimpiar.addEventListener('click', () => {
-            entrada.value = '';
-            salida.textContent = '';
-            entrada.focus();
-        });
+function renderCreditosHtml(c) {
+  if (!c) return "";
+  const raw = typeof c === "string" ? c : (c.contenido || "");
+  const lines = String(raw).replace(/\r\n?/g, "\n").split("\n");
+  return lines.map((line) => {
+    const t = line.trim();
+    if (!t) return "<br>";
+    const m = t.match(/^([^:\[\(]+?):\s*(.*)$/);
+    if (m) {
+      const label = escapeHtml(m[1].trim());
+      const rest = linkifyEscaped(escapeHtml(m[2].trim()));
+      return `<div class="credit-line"><strong>${label}:</strong> ${rest}</div>`;
+    }
+    return `<div class="credit-line">${linkifyEscaped(escapeHtml(t))}</div>`;
+  }).join("");
+}
 
-        function wrapSelection(before, after) {
-            entrada.focus();
-            const start = entrada.selectionStart;
-            const end = entrada.selectionEnd;
-            const value = entrada.value;
-            const sel = value.slice(start, end) || '';
-            const replaced = value.slice(0, start) + before + sel + after + value.slice(end);
-            entrada.value = replaced;
-            // recolocar selección dentro del wrap
-            const newStart = start + before.length;
-            const newEnd = newStart + sel.length;
-            entrada.setSelectionRange(newStart, newEnd);
-            generar();
-        }
+function slugify(s) {
+  return String(s || "")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
-        function addLink() {
-            entrada.focus();
-            const start = entrada.selectionStart;
-            const end = entrada.selectionEnd;
-            let sel = entrada.value.slice(start, end).trim();
-            const text = sel || prompt('Texto del enlace:', '');
-            if (text === null) return; // cancelado
-            let url = prompt('URL (https:// o mailto:):', 'https://');
-            if (url === null) return; // cancelado
-            url = url.replace(/^(https?):\s*\/\//i, '$1://').trim();
-            if (!/^(https?:\/\/|mailto:)/i.test(url)) {
-                alert('La URL debe empezar por https:// o mailto:');
-                return;
-            }
-            const value = entrada.value;
-            const replaced = value.slice(0, start) + `[${text}](${url})` + value.slice(end);
-            entrada.value = replaced;
-            const pos = start + (`[${text}](${url})`).length;
-            entrada.setSelectionRange(pos, pos);
-            generar();
-        }
+/* ================= Carga de un project.json existente ================= */
+function loadFromJsonObject(json) {
+  state.slug = json.slug || "";
+  state.titulo = json.titulo || "";
+  state.logo = json.logo || "";
 
-        // Botones de formato
-        const btnBold = document.getElementById('btnBold');
-        const btnItalic = document.getElementById('btnItalic');
-        const btnUnderline = document.getElementById('btnUnderline');
-        const btnLinkFmt = document.getElementById('btnLink');
+  state.bgColor = ""; state.bgImage = "";
+  const bg = json.bg;
+  if (typeof bg === "string") {
+    if (isCssColor(bg)) state.bgColor = bg; else state.bgImage = bg;
+  } else if (bg && typeof bg === "object") {
+    if (bg.color) state.bgColor = bg.color;
+    if (bg.image) state.bgImage = bg.image;
+  }
 
-        btnBold.addEventListener('click', () => wrapSelection('**', '**'));
-        btnItalic.addEventListener('click', () => wrapSelection('*', '*'));
-        btnUnderline.addEventListener('click', () => wrapSelection('__', '__'));
-        btnLinkFmt.addEventListener('click', addLink);
+  state.sinopsis = json.sinopsis || "";
+  state.funSrc = (json.elemento_divertido && json.elemento_divertido.src) || "";
 
-        // Primera ejecución
-        generar();
-    </script>
+  state.textos = Array.isArray(json.textos) ? [...json.textos] : (json.textos ? [String(json.textos)] : []);
+
+  state.galeria = [];
+  if (json.galeria && Array.isArray(json.galeria.media) && json.galeria.media.length) {
+    state.galeria = json.galeria.media.map((it) => ({ type: it.type === "video" ? "video" : "image", src: it.src || "", poster: it.poster || "" }));
+  } else if (json.galeria) {
+    if (Array.isArray(json.galeria.images)) {
+      state.galeria.push(...json.galeria.images.map((src) => ({ type: "image", src, poster: "" })));
+    }
+    const vids = json.galeria.video || json.galeria.videos;
+    if (Array.isArray(vids)) {
+      state.galeria.push(...vids.map((src) => ({ type: "video", src, poster: "" })));
+    }
+  }
+
+  state.creditos = typeof json.creditos === "string" ? json.creditos : ((json.creditos && json.creditos.contenido) || "");
+
+  state.comodin = Array.isArray(json.comodin) ? json.comodin.map(comodinFromJson) : [];
+
+  syncFormFromState();
+  renderTextosList();
+  renderGaleriaList();
+  renderComodinList();
+  updatePreview();
+  saveDraft();
+}
+
+function comodinFromJson(it) {
+  const base = {
+    type: it.type || "image",
+    id: it.id || "",
+    place: it.place || "",
+    align: it.align || "",
+    width: it.width || "",
+  };
+  if (base.type === "text") {
+    const ps = Array.isArray(it.prose) ? it.prose : (it.prose ? [it.prose] : (it.text ? [it.text] : []));
+    base.rawText = ps.join("\n\n");
+  } else if (base.type === "image") {
+    base.src = it.src || "";
+    base.caption = it.caption || "";
+    base.link = typeof it.link === "string" ? it.link : ((it.link && it.link.href) || "");
+  } else if (base.type === "video") {
+    base.src = it.src || "";
+    base.poster = it.poster || "";
+    base.muted = !!it.muted; base.loop = !!it.loop; base.autoplay = !!it.autoplay;
+  } else if (base.type === "html") {
+    base.raw = it.raw || "";
+  } else if (base.type === "credits") {
+    base.rawText = it.creditos || it.text || it.contenido || "";
+  }
+  return base;
+}
+
+function syncFormFromState() {
+  document.getElementById("f-slug").value = state.slug;
+  document.getElementById("f-titulo").value = state.titulo;
+  document.getElementById("f-logo").value = state.logo;
+  document.getElementById("f-bgcolor").value = state.bgColor;
+  document.getElementById("f-bgimage").value = state.bgImage;
+  document.getElementById("f-sinopsis").value = state.sinopsis;
+  document.getElementById("f-fun").value = state.funSrc;
+  document.getElementById("f-creditos").value = state.creditos;
+}
+
+/* ================= Listas repetibles: Textos ================= */
+function renderTextosList() {
+  const cont = document.getElementById("listaTextos");
+  cont.innerHTML = "";
+  state.textos.forEach((val, i) => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `
+      <div class="item-head">
+        <strong>Párrafo ${i + 1}</strong>
+        <div class="item-buttons">
+          <button class="small" data-act="up" data-i="${i}" title="Subir">↑</button>
+          <button class="small" data-act="down" data-i="${i}" title="Bajar">↓</button>
+          <button class="small danger" data-act="del" data-i="${i}" title="Eliminar">✕</button>
+        </div>
+      </div>
+      <textarea data-act="edit" data-i="${i}" placeholder="Texto del párrafo...">${escapeHtml(val)}</textarea>
+    `;
+    cont.appendChild(card);
+  });
+  cont.querySelectorAll("textarea[data-act='edit']").forEach((ta) => {
+    ta.addEventListener("input", (e) => {
+      state.textos[+e.target.dataset.i] = e.target.value;
+      updatePreview(); saveDraft();
+    });
+  });
+  cont.querySelectorAll("button[data-act]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = +btn.dataset.i, act = btn.dataset.act;
+      if (act === "del") state.textos.splice(i, 1);
+      if (act === "up" && i > 0) [state.textos[i-1], state.textos[i]] = [state.textos[i], state.textos[i-1]];
+      if (act === "down" && i < state.textos.length - 1) [state.textos[i+1], state.textos[i]] = [state.textos[i], state.textos[i+1]];
+      renderTextosList(); updatePreview(); saveDraft();
+    });
+  });
+}
+document.getElementById("btnAddTexto").addEventListener("click", () => {
+  state.textos.push(""); renderTextosList(); updatePreview(); saveDraft();
+});
+
+/* ================= Listas repetibles: Galería ================= */
+function renderGaleriaList() {
+  const cont = document.getElementById("listaGaleria");
+  cont.innerHTML = "";
+  state.galeria.forEach((it, i) => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `
+      <div class="item-head">
+        <strong>${it.type === "video" ? "Vídeo" : "Imagen"} ${i + 1}</strong>
+        <div class="item-buttons">
+          <button class="small" data-act="up" data-i="${i}">↑</button>
+          <button class="small" data-act="down" data-i="${i}">↓</button>
+          <button class="small danger" data-act="del" data-i="${i}">✕</button>
+        </div>
+      </div>
+      <label style="margin-top:0;">Ruta del archivo <small>ej. ${it.type === "video" ? "media/clip.mp4" : "img/foto.webp"}</small></label>
+      <input type="text" data-act="src" data-i="${i}" value="${escapeHtml(it.src)}" placeholder="${it.type === "video" ? "media/clip.mp4" : "img/foto.webp"}">
+      ${it.type === "video" ? `
+        <label>Imagen de portada (poster) <small>opcional</small></label>
+        <input type="text" data-act="poster" data-i="${i}" value="${escapeHtml(it.poster || "")}" placeholder="img/poster.webp">
+      ` : ""}
+    `;
+    cont.appendChild(card);
+  });
+  cont.querySelectorAll("input[data-act='src']").forEach((inp) => {
+    inp.addEventListener("input", (e) => { state.galeria[+e.target.dataset.i].src = e.target.value; updatePreview(); saveDraft(); });
+  });
+  cont.querySelectorAll("input[data-act='poster']").forEach((inp) => {
+    inp.addEventListener("input", (e) => { state.galeria[+e.target.dataset.i].poster = e.target.value; updatePreview(); saveDraft(); });
+  });
+  cont.querySelectorAll("button[data-act]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = +btn.dataset.i, act = btn.dataset.act;
+      if (act === "del") state.galeria.splice(i, 1);
+      if (act === "up" && i > 0) [state.galeria[i-1], state.galeria[i]] = [state.galeria[i], state.galeria[i-1]];
+      if (act === "down" && i < state.galeria.length - 1) [state.galeria[i+1], state.galeria[i]] = [state.galeria[i], state.galeria[i+1]];
+      renderGaleriaList(); updatePreview(); saveDraft();
+    });
+  });
+}
+document.getElementById("btnAddImg").addEventListener("click", () => {
+  state.galeria.push({ type: "image", src: "", poster: "" }); renderGaleriaList(); updatePreview(); saveDraft();
+});
+document.getElementById("btnAddVid").addEventListener("click", () => {
+  state.galeria.push({ type: "video", src: "", poster: "" }); renderGaleriaList(); updatePreview(); saveDraft();
+});
+
+/* ================= Listas repetibles: Comodines ================= */
+function comodinDefaults(type) {
+  const base = { type, id: "", place: "", align: "", width: "" };
+  if (type === "text") base.rawText = "";
+  if (type === "image") { base.src = ""; base.caption = ""; base.link = ""; }
+  if (type === "video") { base.src = ""; base.poster = ""; base.muted = false; base.loop = false; base.autoplay = false; }
+  if (type === "html") base.raw = "";
+  if (type === "credits") base.rawText = "";
+  return base;
+}
+
+function comodinFieldsHtml(it, i) {
+  if (it.type === "text") {
+    return `
+      <label>Texto <small>una línea en blanco separa párrafos</small></label>
+      <textarea data-f="rawText" data-i="${i}" placeholder="Escribe aquí la cita o el texto...">${escapeHtml(it.rawText || "")}</textarea>
+    `;
+  }
+  if (it.type === "image") {
+    return `
+      <label>Ruta de la imagen</label>
+      <input type="text" data-f="src" data-i="${i}" value="${escapeHtml(it.src || "")}" placeholder="img/foto.webp">
+      <label>Pie de foto <small>opcional</small></label>
+      <input type="text" data-f="caption" data-i="${i}" value="${escapeHtml(it.caption || "")}" placeholder="">
+      <label>Enlace al hacer clic <small>opcional, URL completa</small></label>
+      <input type="text" data-f="link" data-i="${i}" value="${escapeHtml(it.link || "")}" placeholder="https://...">
+    `;
+  }
+  if (it.type === "video") {
+    return `
+      <label>Ruta del vídeo</label>
+      <input type="text" data-f="src" data-i="${i}" value="${escapeHtml(it.src || "")}" placeholder="media/clip.mp4">
+      <label>Imagen de portada (poster) <small>opcional</small></label>
+      <input type="text" data-f="poster" data-i="${i}" value="${escapeHtml(it.poster || "")}" placeholder="img/poster.webp">
+      <div class="checkline"><input type="checkbox" data-f="muted" data-i="${i}" ${it.muted ? "checked" : ""}><label>Silenciado (muted)</label></div>
+      <div class="checkline"><input type="checkbox" data-f="loop" data-i="${i}" ${it.loop ? "checked" : ""}><label>En bucle (loop)</label></div>
+      <div class="checkline"><input type="checkbox" data-f="autoplay" data-i="${i}" ${it.autoplay ? "checked" : ""}><label>Reproducción automática</label></div>
+    `;
+  }
+  if (it.type === "html") {
+    return `
+      <label>HTML <small>avanzado — solo si sabes HTML</small></label>
+      <textarea data-f="raw" data-i="${i}" placeholder="<blockquote>...</blockquote>">${escapeHtml(it.raw || "")}</textarea>
+    `;
+  }
+  if (it.type === "credits") {
+    return `
+      <label>Texto de créditos adicionales</label>
+      <textarea data-f="rawText" data-i="${i}" placeholder="Nombre: rol">${escapeHtml(it.rawText || "")}</textarea>
+    `;
+  }
+  return "";
+}
+
+function renderComodinList() {
+  const cont = document.getElementById("listaComodin");
+  cont.innerHTML = "";
+  state.comodin.forEach((it, i) => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `
+      <div class="item-head">
+        <strong>Comodín ${i + 1}</strong>
+        <div class="item-buttons">
+          <button class="small" data-act="up" data-i="${i}">↑</button>
+          <button class="small" data-act="down" data-i="${i}">↓</button>
+          <button class="small danger" data-act="del" data-i="${i}">✕</button>
+        </div>
+      </div>
+      <label>Tipo</label>
+      <select data-act="tipo" data-i="${i}">
+        <option value="image" ${it.type === "image" ? "selected" : ""}>Imagen</option>
+        <option value="video" ${it.type === "video" ? "selected" : ""}>Vídeo</option>
+        <option value="text" ${it.type === "text" ? "selected" : ""}>Texto / cita</option>
+        <option value="credits" ${it.type === "credits" ? "selected" : ""}>Créditos adicionales</option>
+        <option value="html" ${it.type === "html" ? "selected" : ""}>HTML (avanzado)</option>
+      </select>
+      <div data-role="campos-tipo">${comodinFieldsHtml(it, i)}</div>
+      <fieldset style="margin-top:10px;">
+        <legend>Colocación (opcional)</legend>
+        <div class="row">
+          <div>
+            <label>Identificador <small>opcional, para referenciarlo</small></label>
+            <input type="text" data-f="id" data-i="${i}" value="${escapeHtml(it.id || "")}" placeholder="mi-comodin">
+          </div>
+          <div>
+            <label>Posición <small>ej. after:header, end</small></label>
+            <input type="text" data-f="place" data-i="${i}" value="${escapeHtml(it.place || "")}" placeholder="end">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Alineación</label>
+            <select data-f="align" data-i="${i}">
+              <option value="" ${!it.align ? "selected" : ""}>(por defecto)</option>
+              <option value="left" ${it.align === "left" ? "selected" : ""}>Izquierda</option>
+              <option value="center" ${it.align === "center" ? "selected" : ""}>Centro</option>
+              <option value="right" ${it.align === "right" ? "selected" : ""}>Derecha</option>
+            </select>
+          </div>
+          <div>
+            <label>Ancho</label>
+            <select data-f="width" data-i="${i}">
+              <option value="" ${!it.width ? "selected" : ""}>(por defecto, completo)</option>
+              <option value="half" ${it.width === "half" ? "selected" : ""}>Mitad</option>
+              <option value="third" ${it.width === "third" ? "selected" : ""}>Un tercio</option>
+              <option value="fourth" ${it.width === "fourth" ? "selected" : ""}>Un cuarto</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+    `;
+    cont.appendChild(card);
+  });
+
+  cont.querySelectorAll("select[data-act='tipo']").forEach((sel) => {
+    sel.addEventListener("change", (e) => {
+      const i = +e.target.dataset.i;
+      const common = { id: state.comodin[i].id, place: state.comodin[i].place, align: state.comodin[i].align, width: state.comodin[i].width };
+      state.comodin[i] = { ...comodinDefaults(e.target.value), ...common };
+      renderComodinList(); updatePreview(); saveDraft();
+    });
+  });
+
+  cont.querySelectorAll("[data-f]").forEach((el) => {
+    const ev = el.type === "checkbox" ? "change" : "input";
+    el.addEventListener(ev, (e) => {
+      const i = +e.target.dataset.i, f = e.target.dataset.f;
+      state.comodin[i][f] = el.type === "checkbox" ? el.checked : el.value;
+      updatePreview(); saveDraft();
+    });
+  });
+
+  cont.querySelectorAll("button[data-act]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = +btn.dataset.i, act = btn.dataset.act;
+      if (act === "del") state.comodin.splice(i, 1);
+      if (act === "up" && i > 0) [state.comodin[i-1], state.comodin[i]] = [state.comodin[i], state.comodin[i-1]];
+      if (act === "down" && i < state.comodin.length - 1) [state.comodin[i+1], state.comodin[i]] = [state.comodin[i], state.comodin[i+1]];
+      renderComodinList(); updatePreview(); saveDraft();
+    });
+  });
+}
+document.getElementById("btnAddComodin").addEventListener("click", () => {
+  state.comodin.push(comodinDefaults("image")); renderComodinList(); updatePreview(); saveDraft();
+});
+
+/* ================= Campos simples ================= */
+[
+  ["f-slug", "slug"], ["f-titulo", "titulo"], ["f-logo", "logo"],
+  ["f-bgcolor", "bgColor"], ["f-bgimage", "bgImage"],
+  ["f-sinopsis", "sinopsis"], ["f-fun", "funSrc"], ["f-creditos", "creditos"],
+].forEach(([id, key]) => {
+  document.getElementById(id).addEventListener("input", (e) => {
+    state[key] = e.target.value; updatePreview(); saveDraft();
+  });
+});
+
+document.getElementById("btnSlugDesdeTitulo").addEventListener("click", () => {
+  const s = slugify(state.titulo);
+  state.slug = s;
+  document.getElementById("f-slug").value = s;
+  updatePreview(); saveDraft();
+});
+
+document.getElementById("btnEmpezarCero").addEventListener("click", () => {
+  if (!confirm("Esto borra todo lo que hay en el formulario. ¿Continuar?")) return;
+  Object.assign(state, {
+    slug: "", titulo: "", logo: "", bgColor: "", bgImage: "", sinopsis: "", funSrc: "",
+    textos: [], galeria: [], creditos: "", comodin: []
+  });
+  syncFormFromState();
+  renderTextosList(); renderGaleriaList(); renderComodinList();
+  updatePreview(); saveDraft();
+  document.getElementById("cargaMsg").textContent = "";
+});
+
+/* ================= Cargar JSON (archivo / pegado) ================= */
+document.getElementById("fileInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const json = JSON.parse(reader.result);
+      loadFromJsonObject(json);
+      document.getElementById("cargaMsg").innerHTML = `<span class="msg ok">✓ Proyecto "${escapeHtml(json.slug || file.name)}" cargado correctamente.</span>`;
+    } catch (err) {
+      document.getElementById("cargaMsg").innerHTML = `<span class="msg err">✗ El archivo no es un JSON válido: ${escapeHtml(err.message)}</span>`;
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById("btnCargarPegado").addEventListener("click", () => {
+  const txt = document.getElementById("pasteJson").value;
+  try {
+    const json = JSON.parse(txt);
+    loadFromJsonObject(json);
+    document.getElementById("cargaMsg").innerHTML = `<span class="msg ok">✓ JSON pegado cargado correctamente.</span>`;
+  } catch (err) {
+    document.getElementById("cargaMsg").innerHTML = `<span class="msg err">✗ El texto pegado no es un JSON válido: ${escapeHtml(err.message)}</span>`;
+  }
+});
+
+/* ================= Previsualización de imágenes/vídeos reales ================= */
+document.getElementById("mediaInput").addEventListener("change", (e) => {
+  [...e.target.files].forEach((file) => {
+    const url = URL.createObjectURL(file);
+    mediaMap.set(file.name.toLowerCase(), url);
+  });
+  updatePreview();
+});
+
+function previewMediaTag(src, kind, poster) {
+  const url = resolvePreviewUrl(src);
+  if (!src) return "";
+  if (!url) return `<div class="ph">📁 ${escapeHtml(src)}</div>`;
+  if (kind === "video") {
+    const posterUrl = resolvePreviewUrl(poster);
+    return `<video src="${url}" controls playsinline ${posterUrl ? `poster="${posterUrl}"` : ""}></video>`;
+  }
+  return `<img src="${url}" alt="">`;
+}
+
+/* ================= Vista previa general ================= */
+function updatePreview() {
+  const pane = document.getElementById("previewPane");
+  const bgColor = state.bgColor && isCssColor(state.bgColor) ? state.bgColor : "#0f172a";
+  pane.style.background = bgColor;
+
+  let html = "";
+
+  if (state.bgImage) html += previewMediaTag(state.bgImage, "image");
+
+  html += `<div class="preview-header">`;
+  if (state.logo) html += `<div class="logo-line">${escapeHtml(state.titulo || state.logo)}</div>`;
+  else if (state.titulo) html += `<div class="logo-line">${escapeHtml(state.titulo)}</div>`;
+  if (state.sinopsis) html += `<div class="preview-sinopsis">${renderSinopsisHtml(state.sinopsis)}</div>`;
+  html += `</div>`;
+
+  if (state.textos.length) {
+    html += `<div class="preview-textos">${renderTextosHtml(state.textos)}</div>`;
+  }
+
+  if (state.galeria.length) {
+    html += `<div class="preview-galeria">` + state.galeria.map((it) => previewMediaTag(it.src, it.type, it.poster)).join("") + `</div>`;
+  }
+
+  if (state.creditos) {
+    html += `<div class="preview-creditos">${renderCreditosHtml(state.creditos)}</div>`;
+  }
+
+  if (state.funSrc) {
+    html += previewMediaTag(state.funSrc, "image");
+  }
+
+  pane.innerHTML = html || `<p class="hint" style="color:#94a3b8;">La vista previa aparecerá aquí a medida que rellenes el formulario.</p>`;
+
+  updateJsonAndValidation();
+}
+
+/* ================= Construcción del JSON final ================= */
+function buildProjectObject() {
+  const obj = {};
+  obj.slug = state.slug.trim();
+  obj.titulo = state.titulo.trim();
+  if (state.logo.trim()) obj.logo = state.logo.trim();
+
+  const bgColor = state.bgColor.trim(), bgImage = state.bgImage.trim();
+  if (bgColor && bgImage) obj.bg = { color: bgColor, image: bgImage };
+  else if (bgColor) obj.bg = bgColor;
+  else if (bgImage) obj.bg = bgImage;
+
+  if (state.sinopsis.trim()) obj.sinopsis = state.sinopsis;
+
+  const textos = state.textos.filter((t) => t.trim() !== "");
+  if (textos.length) obj.textos = textos;
+
+  const media = state.galeria.filter((it) => it.src && it.src.trim()).map((it) => {
+    const m = { type: it.type, src: it.src.trim() };
+    if (it.type === "video" && it.poster && it.poster.trim()) m.poster = it.poster.trim();
+    return m;
+  });
+  if (media.length) obj.galeria = { media };
+
+  if (state.creditos.trim()) obj.creditos = state.creditos;
+
+  if (state.funSrc.trim()) obj.elemento_divertido = { src: state.funSrc.trim() };
+
+  const comodines = state.comodin.map(comodinToJson).filter(Boolean);
+  if (comodines.length) obj.comodin = comodines;
+
+  return obj;
+}
+
+function comodinToJson(it) {
+  const out = { type: it.type };
+  if (it.type === "text") {
+    const prose = (it.rawText || "").split(/\n\s*\n+/).map((p) => p.trim()).filter(Boolean);
+    if (!prose.length) return null;
+    out.prose = prose;
+  } else if (it.type === "image") {
+    if (!it.src || !it.src.trim()) return null;
+    out.src = it.src.trim();
+    if (it.caption && it.caption.trim()) out.caption = it.caption.trim();
+    if (it.link && it.link.trim()) out.link = it.link.trim();
+  } else if (it.type === "video") {
+    if (!it.src || !it.src.trim()) return null;
+    out.src = it.src.trim();
+    if (it.poster && it.poster.trim()) out.poster = it.poster.trim();
+    if (it.muted) out.muted = true;
+    if (it.loop) out.loop = true;
+    if (it.autoplay) out.autoplay = true;
+  } else if (it.type === "html") {
+    if (!it.raw || !it.raw.trim()) return null;
+    out.raw = it.raw;
+  } else if (it.type === "credits") {
+    if (!it.rawText || !it.rawText.trim()) return null;
+    out.text = it.rawText;
+  } else {
+    return null;
+  }
+  if (it.id && it.id.trim()) out.id = it.id.trim();
+  if (it.place && it.place.trim()) out.place = it.place.trim();
+  if (it.align && ["left","center","right"].includes(it.align)) out.align = it.align;
+  if (it.width && ["half","third","fourth"].includes(it.width)) out.width = it.width;
+  return out;
+}
+
+function updateJsonAndValidation() {
+  const obj = buildProjectObject();
+  const json = JSON.stringify(obj, null, 2);
+  document.getElementById("jsonOut").textContent = json;
+
+  const errors = [];
+  if (!state.slug.trim()) errors.push("Falta el <strong>slug</strong> (nombre de la carpeta).");
+  if (!state.titulo.trim()) errors.push("Falta el <strong>título</strong>.");
+
+  const msg = document.getElementById("validMsg");
+  if (errors.length) {
+    msg.className = "msg err";
+    msg.innerHTML = "⚠️ " + errors.join(" ");
+  } else {
+    msg.className = "msg ok";
+    msg.textContent = "✓ Listo para descargar.";
+  }
+  return { obj, json };
+}
+
+document.getElementById("btnDescargar").addEventListener("click", () => {
+  const { json } = updateJsonAndValidation();
+  if (!state.slug.trim() || !state.titulo.trim()) {
+    alert("Faltan datos obligatorios: revisa que el slug y el título estén rellenos antes de descargar.");
+    return;
+  }
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "project.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* ================= Autoguardado local (borrador) ================= */
+const DRAFT_KEY = "jaumeclotet_editor_draft_v1";
+function saveDraft() {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(buildProjectObject())); } catch (_) {}
+}
+function checkDraftOnLoad() {
+  let draft;
+  try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch (_) { draft = null; }
+  if (!draft || (!draft.slug && !draft.titulo)) return;
+  const box = document.getElementById("draftMsg");
+  box.innerHTML = `<span class="msg warn">Hay un borrador guardado de una sesión anterior (${escapeHtml(draft.slug || "sin slug")}). </span>
+    <button class="small" id="btnRecuperarDraft">Recuperar</button>
+    <button class="small" id="btnDescartarDraft">Descartar</button>`;
+  document.getElementById("btnRecuperarDraft").addEventListener("click", () => {
+    loadFromJsonObject(draft);
+    box.innerHTML = `<span class="msg ok">✓ Borrador recuperado.</span>`;
+  });
+  document.getElementById("btnDescartarDraft").addEventListener("click", () => {
+    localStorage.removeItem(DRAFT_KEY);
+    box.innerHTML = "";
+  });
+}
+
+/* ================= Arranque ================= */
+renderTextosList();
+renderGaleriaList();
+renderComodinList();
+updatePreview();
+checkDraftOnLoad();
+</script>
 </body>
-
 </html>
