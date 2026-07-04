@@ -13,10 +13,8 @@
 
 ## ⏭️ Próximos (alta prioridad)
 - **Alt para galería**: permitir `alt` por imagen en `galeria.media` y caer en `""` si no hay.
-- **Preload/Preconnect** de fuentes (si se usan más familias/pesos).
 - **srcset/sizes** para galería (mejora rendimiento en móvil).
-- **A11y overlay**: `role="dialog"`, `aria-modal="true"`, focus‑trap y cierre con ESC (ya listo) + click.
-- **Docs**: ejemplos de `comodin` con `third/fourth` en README (listo), y snippet de grid para que dos `half` queden en fila.
+- **Docs**: snippet de grid en el README para que dos `half` queden en fila.
 
 ## 🧰 Nice‑to‑have
 - Flechas: navegación con teclado (←/→) y `aria-live` al cambiar de proyecto.
@@ -27,10 +25,9 @@
 
 ## 🧪 Checklist de pruebas
 - Créditos: varias líneas con etiquetas y con links/énfasis mezclados.
-- Comodines: `image` con y sin `link` (overlay debe ignorar las enlazadas).
-- Galería: imágenes y vídeos alternados; overlay + ESC.
+- Comodines: `image` con y sin `link` (las enlazadas abren en pestaña nueva).
+- Galería: imágenes y vídeos alternados.
 - Flechas: respetan `featured.json`; si el slug no está, no aparecen.
-- Deep‑link a `#id` de comodín.
 - Móvil iOS: permiso de giro y degradación a touch/auto.
 
 ## 📌 Decisiones

@@ -1,6 +1,6 @@
-# jaumeclotet — README (2025-02)
+# jaumeclotet — README (2026-07)
 
-Guía rápida para mantener el site tal como funciona hoy (`main.js`, `proyecto.js`, `secreto.js`). Todo está pensado para editar datos en `/data/{slug}/` y refrescar en el navegador con Live Server.
+Guía rápida para mantener el site tal como funciona hoy (`main.js`, `proyecto.js` + módulos, `secreto.js`). Todo está pensado para editar datos en `/data/{slug}/` y refrescar en el navegador con Live Server.
 
 ---
 
@@ -21,8 +21,18 @@ style.css
 /js
   assets.js   # helpers comunes (fondos, colores, paths)
   main.js     # home: grid de tiles
-  proyecto.js # página de proyecto
+  proyecto.js # bootstrap de la página de proyecto (carga JSON, orquesta el resto)
   secreto.js  # fantasma secreto (solo tras ver todos los destacados)
+
+  /proyecto             # módulos usados por js/proyecto.js
+    utils.js       # param(), isTouchDevice(), escapeHtml()
+    meta.js        # <title> + favicon del proyecto
+    normalize.js    # normaliza rutas/datos del project.json (bg, galería, comodín...)
+    render.js       # render principal (header, textos, galería, créditos, fun)
+    comodines.js    # inserta los bloques "comodín" en sus anclas
+    creditos.js     # créditos + markdown-lite (negrita/cursiva/subrayado/links)
+    fun.js          # motor del "elemento divertido" (ratón/giroscopio/auto)
+    arrows.js       # flechas prev/next + atajo About
 
 /data/{slug}/
   project.json
@@ -45,7 +55,7 @@ featured.json  # orden de proyectos (home y flechas)
 
 ---
 
-## 4) Datos de proyecto (`projecte.html` + `js/proyecto.js`)
+## 4) Datos de proyecto (`projecte.html` + `js/proyecto.js` + `js/proyecto/*.js`)
 
 ### 4.1 JSON base (`data/{slug}/project.json`)
 ```json
@@ -81,7 +91,7 @@ featured.json  # orden de proyectos (home y flechas)
 - Preferido: `galeria.media` con items `{type:"image"|"video", src, poster?}`. Compat: `galeria.images` (array) y `galeria.video|videos` (array) se fusionan detrás.
 - Imágenes fuerzan prefijo `img/`; vídeos no. Rutas se normalizan con base `data/{slug}/`.
 - Render: `<img loading="lazy" decoding="async">` con sombra; `<video controls playsinline preload="metadata">` (+ `poster` si viene).
-- **Overlay desactivado**: `setupGalleryOverlay` solo limpia listeners. El clic hace lo nativo (abrir vídeo en el propio reproductor, sin pantalla completa custom).
+- **Sin overlay**: no hay pantalla completa custom al hacer clic; el navegador hace lo nativo (p.ej. abrir controles del vídeo en el propio reproductor).
 
 ### 4.5 Créditos (string → HTML)
 - Acepta string o `{ contenido: "..." }`. Separa por líneas. Si una línea empieza por `Etiqueta: resto`, la etiqueta va en `<strong>`.
@@ -110,7 +120,7 @@ featured.json  # orden de proyectos (home y flechas)
 - Probabilidades: `PROB_ALTA=0.7`, `PROB_BAJA=0.2`, `PROB_LOCA=0.1`.
   - Flecha **izquierda**: alta → **Home**, baja → anterior, loca → random entre anterior/siguiente.
   - Flecha **derecha**: alta → siguiente, baja → anterior, loca → random entre anterior/siguiente.
-- El SVG/raster es `data/arrow.png`; la izquierda rota 180° vía CSS. Se insertan al final de la página y entre ellas aparece un botón About (usa `data/about.png`).
+- El raster es `data/arrow.webp`; la izquierda rota 180° vía CSS. Se insertan al final de la página y entre ellas aparece un botón About (usa `data/about.webp`).
 - Caso especial `slug=about`: solo hay flecha izquierda a Home y se añade un badge con `web: meowrhino` al final.
 
 ---
@@ -119,7 +129,7 @@ featured.json  # orden de proyectos (home y flechas)
 - Corre en home y proyectos. Comprueba si **todos** los slugs de `featured.json.destacados` tienen `localStorage["proyecto-"+slug+"-visto"]="1"`.
 - Si se cumplen, monta un fantasma (`data/0_secret/img/ghost0-6.webp`, fallback `.png`) fijo abajo-derecha. El tamaño se puede forzar con `window.SECRET_GHOST_SIZE = 'clamp(...)'` o `data-ghost-size` en `<body>`.
 - Se queda quieto hasta la primera interacción; luego flota moviéndose. Clic → anima un “dado”, muestra cara 1..6 y abre en nueva pestaña la URL mapeada en `data/0_secret/secreto.json`.
-- Rechequea en el evento `storage` por si desbloqueas en otra pestaña. El antiguo overlay `#unlock7` existe en el HTML pero no tiene lógica activa.
+- Rechequea en el evento `storage` por si desbloqueas en otra pestaña.
 
 ---
 
