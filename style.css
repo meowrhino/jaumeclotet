@@ -146,31 +146,6 @@ body {
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
 }
 
-/* Overlay 7º proyecto (home) */
-#unlock7 {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  z-index: 10;
-  pointer-events: none; /* la capa no intercepta clics */
-}
-#unlock7.show {
-  display: flex;
-}
-#unlock7 a {
-  pointer-events: auto;
-  display: inline-block;
-  text-decoration: none;
-}
-#unlock7 img {
-  max-width: clamp(160px, 30vw, 420px);
-  max-height: 40vh;
-  filter: none;
-}
-
 /* =========================================
    Project page
    ========================================= */
