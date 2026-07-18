@@ -20,6 +20,30 @@ function pickTier() {
   return "loca"; // resto
 }
 
+// Teclado: ←/→ disparan las mismas flechas (con su misma lógica aleatoria)
+function bindArrowKeys(leftBtn, rightBtn) {
+  document.addEventListener("keydown", (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    if (e.key === "ArrowLeft" && leftBtn) leftBtn.click();
+    else if (e.key === "ArrowRight" && rightBtn) rightBtn.click();
+  });
+}
+
+// Precarga suave de un proyecto vecino (JSON + logo) para que la transición vuele
+async function prefetchProject(slug) {
+  try {
+    const r = await fetch(`data/${encodeURIComponent(slug)}/project.json`);
+    if (!r.ok) return;
+    const p = await r.json();
+    if (typeof p.logo === "string" && /\.(webp|png|jpe?g|avif|gif)$/i.test(p.logo)) {
+      const im = new Image();
+      im.src = `data/${encodeURIComponent(slug)}/` + p.logo.replace(/^\.?\//, "");
+    }
+  } catch {}
+}
+
 // --- Random prev/next arrows al final del proyecto ---
 export async function setupRandomArrows(currentSlug) {
   try {
@@ -48,6 +72,7 @@ export async function setupRandomArrows(currentSlug) {
 
         section.appendChild(b);
         root.appendChild(section);
+        bindArrowKeys(b, null);
 
         // Añade un badge/link al final del scroll: "web: meowrhino"
         // Evita duplicados si ya existe
@@ -151,7 +176,8 @@ export async function setupRandomArrows(currentSlug) {
     // Evita duplicados de atajo About si venimos de otra render
     root.querySelectorAll(".about-shortcut").forEach(n => n.remove());
 
-    section.appendChild(mkBtn("left"));
+    const leftBtn = mkBtn("left");
+    section.appendChild(leftBtn);
     // Crea el atajo About como elemento central
     const a = document.createElement("a");
     a.className = "about-shortcut";
@@ -166,8 +192,14 @@ export async function setupRandomArrows(currentSlug) {
     a.appendChild(img);
     section.appendChild(a);
     // Y ahora la flecha derecha
-    section.appendChild(mkBtn("right"));
+    const rightBtn = mkBtn("right");
+    section.appendChild(rightBtn);
     root.appendChild(section);
+
+    bindArrowKeys(leftBtn, rightBtn);
+
+    // Precarga de los vecinos: la navegación (aleatoria) solo puede ir a estos
+    for (const s of new Set([prev, next])) prefetchProject(s);
   } catch (e) {
     console.warn("Arrows setup skipped:", e);
   }

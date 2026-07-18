@@ -12,11 +12,13 @@
 - Deep‑link: `#id` hace scroll a comodines/elementos tras render.
 
 ## ⏭️ Próximos (alta prioridad)
-- **Alt para galería**: permitir `alt` por imagen en `galeria.media` y caer en `""` si no hay.
-- **srcset/sizes** para galería (mejora rendimiento en móvil).
+- **srcset/sizes** para galería: requiere generar variantes de cada imagen (y que la Action las genere para subidas nuevas). Pendiente de decidir si compensa: las imágenes ya van comprimidas en webp.
 - **Docs**: snippet de grid en el README para que dos `half` queden en fila.
 
 ## ✅ Hecho 2026-07
+- `alt` por imagen de galería (project.json + campo en el formateador).
+- Flechas con teclado ←/→ (misma lógica aleatoria).
+- Precarga de prev/next (JSON + logo) al llegar a un proyecto.
 - URLs bonitas `/{slug}/` + redirect desde `projecte.html?slug=X` + 404.html fallback.
 - OpenGraph/description/canonical por proyecto (tools/generar-paginas.mjs + GitHub Action).
 - sitemap.xml y robots.txt generados.

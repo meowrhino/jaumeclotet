@@ -77,7 +77,7 @@ export function renderProject(p) {
                  const poster = m.poster ? ` poster="${m.poster}"` : "";
                  return `<video class="gal-video" src="${m.src}" controls playsinline preload="metadata"${poster}></video>`;
                } else {
-                 return `<img class="gal-img" src="${m.src}" loading="lazy" decoding="async" alt="">`;
+                 return `<img class="gal-img" src="${m.src}" loading="lazy" decoding="async" alt="${escapeHtml(m.alt || "")}">`;
                }
              })
              .join("")}

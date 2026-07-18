@@ -348,7 +348,7 @@ function loadFromJsonObject(json) {
 
   state.galeria = [];
   if (json.galeria && Array.isArray(json.galeria.media) && json.galeria.media.length) {
-    state.galeria = json.galeria.media.map((it) => ({ type: it.type === "video" ? "video" : "image", src: it.src || "", poster: it.poster || "" }));
+    state.galeria = json.galeria.media.map((it) => ({ type: it.type === "video" ? "video" : "image", src: it.src || "", poster: it.poster || "", alt: it.alt || "" }));
   } else if (json.galeria) {
     if (Array.isArray(json.galeria.images)) {
       state.galeria.push(...json.galeria.images.map((src) => ({ type: "image", src, poster: "" })));
@@ -470,7 +470,10 @@ function renderGaleriaList() {
       ${it.type === "video" ? `
         <label>Imagen de portada (poster) <small>opcional</small></label>
         <input type="text" data-act="poster" data-i="${i}" value="${escapeHtml(it.poster || "")}" placeholder="img/poster.webp">
-      ` : ""}
+      ` : `
+        <label>Descripción de la imagen (alt) <small>opcional; la leen lectores de pantalla y Google</small></label>
+        <input type="text" data-act="alt" data-i="${i}" value="${escapeHtml(it.alt || "")}" placeholder="ej. Jaume dibujando sobre la pared">
+      `}
     `;
     cont.appendChild(card);
   });
@@ -479,6 +482,9 @@ function renderGaleriaList() {
   });
   cont.querySelectorAll("input[data-act='poster']").forEach((inp) => {
     inp.addEventListener("input", (e) => { state.galeria[+e.target.dataset.i].poster = e.target.value; updatePreview(); saveDraft(); });
+  });
+  cont.querySelectorAll("input[data-act='alt']").forEach((inp) => {
+    inp.addEventListener("input", (e) => { state.galeria[+e.target.dataset.i].alt = e.target.value; updatePreview(); saveDraft(); });
   });
   cont.querySelectorAll("button[data-act]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -491,7 +497,7 @@ function renderGaleriaList() {
   });
 }
 document.getElementById("btnAddImg").addEventListener("click", () => {
-  state.galeria.push({ type: "image", src: "", poster: "" }); renderGaleriaList(); updatePreview(); saveDraft();
+  state.galeria.push({ type: "image", src: "", poster: "", alt: "" }); renderGaleriaList(); updatePreview(); saveDraft();
 });
 document.getElementById("btnAddVid").addEventListener("click", () => {
   state.galeria.push({ type: "video", src: "", poster: "" }); renderGaleriaList(); updatePreview(); saveDraft();
@@ -779,6 +785,7 @@ function buildProjectObject() {
   const media = state.galeria.filter((it) => it.src && it.src.trim()).map((it) => {
     const m = { type: it.type, src: it.src.trim() };
     if (it.type === "video" && it.poster && it.poster.trim()) m.poster = it.poster.trim();
+    if (it.type === "image" && it.alt && it.alt.trim()) m.alt = it.alt.trim();
     return m;
   });
   if (media.length) obj.galeria = { media };
