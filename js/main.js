@@ -33,7 +33,7 @@ async function loadFeatured() {
     tile.className = 'tile';
 
     const a = document.createElement('a');
-    a.href = `projecte.html?slug=${encodeURIComponent(slug)}`;
+    a.href = `${encodeURIComponent(slug)}/`;
     a.className = 'logo-link';
 
     // Logo: lazy + decoding async; solo el primero eager + prioridad alta

@@ -16,6 +16,13 @@
 - **srcset/sizes** para galería (mejora rendimiento en móvil).
 - **Docs**: snippet de grid en el README para que dos `half` queden en fila.
 
+## ✅ Hecho 2026-07
+- URLs bonitas `/{slug}/` + redirect desde `projecte.html?slug=X` + 404.html fallback.
+- OpenGraph/description/canonical por proyecto (tools/generar-paginas.mjs + GitHub Action).
+- sitemap.xml y robots.txt generados.
+- Página de error amable para slug inválido.
+- Recompresión de 11 imágenes pesadas (~1.2 MB menos).
+
 ## 🧰 Nice‑to‑have
 - Flechas: navegación con teclado (←/→) y `aria-live` al cambiar de proyecto.
 - Precarga de `prev/next` (logo + JSON) para transición más fluida.

@@ -7,7 +7,7 @@
 
 "use strict";
 
-import { param } from "./proyecto/utils.js";
+import { param, escapeHtml } from "./proyecto/utils.js";
 import { setPageMeta } from "./proyecto/meta.js";
 import { normalizePaths } from "./proyecto/normalize.js";
 import { renderProject } from "./proyecto/render.js";
@@ -16,9 +16,11 @@ import { setupRandomArrows } from "./proyecto/arrows.js";
 // ============ Carga de datos del proyecto ============
 
 async function loadProject() {
-  const slug = param("slug");
+  // El slug puede venir de ?slug= (formato viejo), de window.__SLUG__
+  // (páginas generadas /<slug>/ y 404.html) — en ese orden.
+  const slug = param("slug") || window.__SLUG__ || "";
   if (!slug) {
-    console.warn("[projecte] No slug in URL.");
+    renderNotFound("");
     return;
   }
   try {
@@ -44,7 +46,23 @@ async function loadProject() {
     localStorage.setItem("proyecto-" + slug + "-visto", "1");
   } catch (err) {
     console.error("[projecte] load error:", err);
+    renderNotFound(slug);
   }
+}
+
+// Mensaje amable cuando el slug no existe (link roto, proyecto retirado…)
+function renderNotFound(slug) {
+  document.title = "Projecte no trobat · Jaume Clotet";
+  const oldBack = document.querySelector(".back");
+  if (oldBack) oldBack.remove();
+  const root = document.getElementById("project-root");
+  if (!root) return;
+  root.innerHTML = `
+    <div class="not-found">
+      <h1>ups!</h1>
+      <p>aquest projecte${slug ? ` («${escapeHtml(slug)}»)` : ""} no existeix — o encara no.</p>
+      <p><a href="index.html">tornar a l'inici</a></p>
+    </div>`;
 }
 
 // ============ Bootstrap ============

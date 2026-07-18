@@ -1,0 +1,33 @@
+# Regenera las páginas /<slug>/ (SEO + URLs bonitas) cuando cambia el contenido.
+# Así, si se sube un proyecto nuevo a data/, su página se crea sola.
+name: generar paginas de proyecto
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**/project.json"
+      - "featured.json"
+      - "tools/generar-paginas.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tools/generar-paginas.mjs
+      - name: commit si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "sin cambios" && exit 0
+          git commit -m "paginas de proyecto regeneradas (auto)"
+          git push

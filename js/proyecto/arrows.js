@@ -130,19 +130,19 @@ export async function setupRandomArrows(currentSlug) {
             return;
           }
           if (tier === "baja") {
-            location.href = `projecte.html?slug=${encodeURIComponent(prev)}`;
+            location.href = `${encodeURIComponent(prev)}/`;
             return;
           }
           // loca
           const target = Math.random() < 0.5 ? prev : next;
-          location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+          location.href = `${encodeURIComponent(target)}/`;
         });
       } else {
         // DERECHA: se mantiene la lógica original (preferido, contrario, random)
         b.addEventListener("click", () => {
           const preferred = "next";
           const target = pickDest(preferred, prev, next);
-          location.href = `projecte.html?slug=${encodeURIComponent(target)}`;
+          location.href = `${encodeURIComponent(target)}/`;
         });
       }
       return b;
@@ -155,7 +155,7 @@ export async function setupRandomArrows(currentSlug) {
     // Crea el atajo About como elemento central
     const a = document.createElement("a");
     a.className = "about-shortcut";
-    a.href = "projecte.html?slug=about";
+    a.href = "about/";
     a.setAttribute("aria-label", "Ir a About");
     a.title = "About";
     const img = document.createElement("img");

@@ -5,29 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projecte · Jaume Clotet</title>
 
-  <!-- URLs antiguas (projecte.html?slug=X) redirigen al formato nuevo /X/ -->
+  <!-- Fallback de GitHub Pages: cualquier ruta desconocida cae aquí.
+       Si la ruta parece /<slug>/, intentamos renderizar ese proyecto
+       (cubre proyectos nuevos cuya página aún no se ha generado).
+       Nota: el sitio vive en la raíz del dominio (jaumeclotet.com). -->
+  <base href="/">
   <script>
     (function () {
-      var slug = new URLSearchParams(location.search).get("slug");
-      if (slug) location.replace("./" + encodeURIComponent(slug) + "/");
+      var seg = location.pathname.split("/").filter(Boolean)[0] || "";
+      window.__SLUG__ = decodeURIComponent(seg);
     })();
   </script>
 
-  <!-- Performance: preconnect (no cambia tu fuente, sólo acelera) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@200;300;400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
-  <!-- A11y utilitario (estilos de foco y .visually-hidden) -->
-  <!-- <link rel="stylesheet" href="a11y.css"> -->
 </head>
 
 <body>
   <a class="back" href="index.html">volver</a>
   <main id="project-root"></main>
 
-  <!-- Toda la lógica sigue en tu JS de siempre -->
   <script type="module" src="js/proyecto.js"></script>
   <script type="module" src="js/secreto.js"></script>
 </body>

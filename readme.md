@@ -7,7 +7,7 @@ Guía rápida para mantener el site tal como funciona hoy (`main.js`, `proyecto.
 ## 1) Puesta en marcha
 - Abre la carpeta en VS Code.
 - Lanza **Live Server** y abre `index.html`.
-- Para ver un proyecto: `projecte.html?slug=mi-slug`.
+- Para ver un proyecto: `/mi-slug/` (URL bonita; el formato viejo `projecte.html?slug=mi-slug` redirige solo).
 - Si el CSS/JS se queda cacheado, haz **hard reload** (Cmd/Ctrl‑Shift‑R).
 
 ---
@@ -15,8 +15,16 @@ Guía rápida para mantener el site tal como funciona hoy (`main.js`, `proyecto.
 ## 2) Estructura
 ```
 index.html
-projecte.html
+projecte.html   # legacy: redirige ?slug=X a /X/
+404.html        # fallback de GitHub Pages: renderiza /X/ si aun no hay pagina generada
 style.css
+
+/{slug}/index.html  # paginas generadas (SEO/OpenGraph) — NO editar a mano
+sitemap.xml, robots.txt  # tambien generados
+
+/tools
+  generar-paginas.mjs  # genera lo anterior: `node tools/generar-paginas.mjs`
+                       # la GitHub Action lo lanza sola al cambiar data/
 
 /js
   assets.js   # helpers comunes (fondos, colores, paths)
@@ -50,7 +58,7 @@ featured.json  # orden de proyectos (home y flechas)
 - Lee `featured.json.destacados` y crea 6 tiles en un grid **3x2** (2x3 en retrato, 1x6 en móvil).
 - Fondo del tile: prioridad `project.json.bg` (color o imagen); si no existe, fallback a `fons.webp/jpg` de la carpeta. El primer tile se pinta al instante; los demás cargan el fondo con **IntersectionObserver** (rootMargin 300px).
 - Logos: intenta `titol.webp` → `img/titol.webp` → `titol.png` → `img/titol.png`. El primero va `eager` con `fetchPriority=high`; el resto `lazy`.
-- Clic en tile → `projecte.html?slug=...`. El orden es el de `featured.json` (reutilizado por las flechas).
+- Clic en tile → `/{slug}/`. El orden es el de `featured.json` (reutilizado por las flechas).
 - Cada proyecto visitado marca `localStorage["proyecto-"+slug+"-visto"]="1"`; el fantasma secreto usa este estado.
 
 ---
