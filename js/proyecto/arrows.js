@@ -80,7 +80,7 @@ export async function setupRandomArrows(currentSlug) {
           const p = document.createElement('p');
           p.className = 'about-web';
           const a = document.createElement('a');
-          a.href = 'https://meowrhino.github.io/becasDigMeow/';
+          a.href = 'https://meowrhino.studio/';
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
           a.textContent = 'web: meowrhino';
