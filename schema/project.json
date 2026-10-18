@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "projects/<nom>/project.json: un projecte",
+  "description": "projects/<nom>/project.json: un projecte. Les imatges, a img/ de la mateixa carpeta; els vídeos, a media/. VS Code llegeix aquest fitxer (pel \"$schema\" de dalt del JSON) per completar, explicar cada camp i subratllar el que està malament; el build i la vista prèvia el fan servir per revisar.",
+  "type": "object",
+  "required": [
+    "title"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "_": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "El títol: a la pestanya i a Google."
+    },
+    "logo": {
+      "type": "string",
+      "description": "El logo del títol, de img/: \"titol.webp\". Surt a la home i a dalt del projecte."
+    },
+    "bg": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string"
+            }
+          }
+        }
+      ],
+      "description": "El fons: una imatge de img/ (\"fons.webp\") o un color (\"#000000\"). Sense, busca fons.webp."
+    },
+    "synopsis": {
+      "type": "string",
+      "description": "La sinopsi, a dalt. Un salt de línia és una línia nova; una línia en blanc, un paràgraf nou. Surt a Google."
+    },
+    "fun": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "L'element divertit que segueix el ratolí: { \"src\": \"fun.webp\" }",
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "El nom d'una imatge de la carpeta img/ del projecte: \"fons.webp\""
+        }
+      }
+    },
+    "text": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "El text, una llista de paràgrafs. **negreta**, *cursiva*, __subratllat__ i [enllaç](https://…)."
+    },
+    "gallery": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "La galeria: { \"images\": [\"foto 1.webp\", \"foto 2.webp\"] }",
+      "properties": {
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "El nom d'una imatge de la carpeta img/ del projecte: \"fons.webp\""
+          },
+          "description": "Les imatges de img/, en ordre."
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Imatges i vídeos barrejats: [{ \"type\": \"video\", \"src\": \"media/x.webm\" }]"
+        },
+        "video": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "credits": {
+      "type": "string",
+      "description": "Els crèdits, en un sol text: un salt de línia (\\n) per línia."
+    },
+    "extras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "description": "Un bloc extra (comodí): una imatge, un vídeo, un text, html o crèdits, col·locat on diu \"place\".",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "image",
+              "video",
+              "text",
+              "html",
+              "credits"
+            ]
+          },
+          "src": {
+            "type": "string",
+            "description": "La imatge (de img/) o el vídeo (\"media/x.webm\")."
+          },
+          "place": {
+            "type": "string",
+            "description": "On va: \"end\", \"append:header\"…"
+          },
+          "align": {
+            "type": "string"
+          },
+          "width": {
+            "type": "string",
+            "description": "\"whole\", \"half\"…"
+          },
+          "link": {
+            "type": "string",
+            "description": "Opcional: on porta en clicar-hi."
+          },
+          "caption": {
+            "type": "string"
+          },
+          "poster": {
+            "type": "string"
+          },
+          "autoplay": {
+            "type": "boolean"
+          },
+          "loop": {
+            "type": "boolean"
+          },
+          "muted": {
+            "type": "boolean"
+          },
+          "text": {
+            "type": "string"
+          },
+          "prose": {
+            "type": "boolean"
+          },
+          "raw": {
+            "type": "string"
+          },
+          "contenido": {
+            "type": "string"
+          },
+          "creditos": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Opcional: blocs extra (comodins) en llocs concrets."
+    }
+  }
+}

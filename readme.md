@@ -1,71 +1,51 @@
-# jaumeclotet — README (2026-07)
+# jaumeclotet — README (2026-10)
 
-Guía rápida para mantener el site tal como funciona hoy (`main.js`, `proyecto.js` + módulos, `secreto.js`). Todo está pensado para editar datos en `/data/{slug}/` y refrescar en el navegador con Live Server.
+Guía rápida para nosotros (`main.js`, `proyecto.js` + módulos, `secreto.js`). Sigue la receta de [meowrhino/JAMstack](https://github.com/meowrhino/JAMstack) desde el 2026-10-18. Para Jaume: [GUIA.md](GUIA.md). Traspaso: [TRASPASO.md](TRASPASO.md). Si el build falla: [CLAUDE.md](CLAUDE.md).
 
 ---
 
 ## 1) Puesta en marcha
-- Abre la carpeta en VS Code.
-- Lanza **Live Server** y abre `index.html`.
-- Para ver un proyecto: `/mi-slug/` (URL bonita; el formato viejo `projecte.html?slug=mi-slug` redirige solo).
-- Si el CSS/JS se queda cacheado, haz **hard reload** (Cmd/Ctrl‑Shift‑R).
+- **Vista previa**: Live Server sobre la carpeta → `index.html`. Un proyecto se ve en `projecte.html?slug=mi-slug` (las páginas `/mi-slug/` solo existen en `dist/`). Sin `data-built` en `<html>`, `js/carga.js` revisa los JSON con `schema/` y enseña los errores en pantalla.
+- **Build**: `npm ci && node build/build.mjs` → `dist/` (no se commitea): la home y `/<slug>/` con su contenido dentro, og 1200×630 con sharp, sitemap y robots.
+- **Publicar**: la Action (`deploy.yml`, solo en `meowrhino`) a `meowrhino.github.io/jaumeclotet/` sin indexar; la copia de Jaume, Workers Builds (`wrangler.jsonc`).
 
 ---
 
 ## 2) Estructura
 ```
-index.html
-projecte.html   # legacy: redirige ?slug=X a /X/
-404.html        # fallback de GitHub Pages: renderiza /X/ si aun no hay pagina generada
-style.css
-
-/{slug}/index.html  # paginas generadas (SEO/OpenGraph) — NO editar a mano
-sitemap.xml, robots.txt  # tambien generados
-
-/tools
-  generar-paginas.mjs  # genera lo anterior: `node tools/generar-paginas.mjs`
-                       # la GitHub Action lo lanza sola al cambiar data/
+index.html, projecte.html, 404.html, style.css   # plantillas y estilos
+fonts/            # Spectral SC en woff2 (sin Google Fonts)
+build/build.mjs   # → dist/
+schema/           # qué campos lleva cada JSON (VS Code, el build y la vista previa)
 
 /js
-  assets.js   # helpers comunes (fondos, colores, paths)
-  main.js     # home: grid de tiles
-  proyecto.js # bootstrap de la página de proyecto (carga JSON, orquesta el resto)
-  secreto.js  # fantasma secreto (solo tras ver todos los destacados)
+  house.js    # la forma de la casa → la de antes (titulo, sinopsis, galeria…, featured.json)
+  carga.js    # lee data/site.json y projects/<slug>/project.json; projectUrl()
+  validar.js  # el JSON Schema sin dependencias (de JAMstack)
+  assets.js, main.js, proyecto.js, secreto.js, /proyecto/*   # como antes
 
-  /proyecto             # módulos usados por js/proyecto.js
-    utils.js       # param(), isTouchDevice(), escapeHtml()
-    meta.js        # <title> + favicon del proyecto
-    normalize.js    # normaliza rutas/datos del project.json (bg, galería, comodín...)
-    render.js       # render principal (header, textos, galería, créditos, fun)
-    comodines.js    # inserta los bloques "comodín" en sus anclas
-    creditos.js     # créditos + markdown-lite (negrita/cursiva/subrayado/links)
-    fun.js          # motor del "elemento divertido" (ratón/giroscopio/auto)
-    arrows.js       # flechas prev/next + atajo About
-
-/data/{slug}/
-  project.json
-  img/      # logos, galería, fun...
-  media/    # vídeos (opcional)
-  titol.png/titol.webp  # logo del tile
-  fons.jpg/fons.webp    # fondo por defecto si no hay bg en JSON
-
-featured.json  # orden de proyectos (home y flechas)
+data/site.json    # "lists.featured": los proyectos de la home, en orden
+data/             # logo, flecha, about.webp y 0_secret/
+/projects/{slug}/
+  project.json    # title, logo, bg, synopsis, fun, text, gallery, credits, extras
+  img/            # logos, galería, fun…
+  media/          # vídeos (opcional)
 ```
 
 ---
 
 ## 3) Home (`index.html` + `js/main.js`)
-- Lee `featured.json.destacados` y crea 6 tiles en un grid **3x2** (2x3 en retrato, 1x6 en móvil).
+- Lee `data/site.json` → `lists.featured` (vía `carga.js`) y crea 6 tiles en un grid **3x2** (2x3 en retrato, 1x6 en móvil).
 - Fondo del tile: prioridad `project.json.bg` (color o imagen); si no existe, fallback a `fons.webp/jpg` de la carpeta. El primer tile se pinta al instante; los demás cargan el fondo con **IntersectionObserver** (rootMargin 300px).
 - Logos: intenta `titol.webp` → `img/titol.webp` → `titol.png` → `img/titol.png`. El primero va `eager` con `fetchPriority=high`; el resto `lazy`.
-- Clic en tile → `/{slug}/`. El orden es el de `featured.json` (reutilizado por las flechas).
+- Clic en tile → `/{slug}/`. El orden es el de `lists.featured` en `data/site.json` (reutilizado por las flechas).
 - Cada proyecto visitado marca `localStorage["proyecto-"+slug+"-visto"]="1"`; el fantasma secreto usa este estado.
 
 ---
 
 ## 4) Datos de proyecto (`projecte.html` + `js/proyecto.js` + `js/proyecto/*.js`)
 
-### 4.1 JSON base (`data/{slug}/project.json`)
+### 4.1 JSON base (`projects/{slug}/project.json`)
 ```json
 {
   "slug": "mi-slug",
@@ -97,7 +77,7 @@ featured.json  # orden de proyectos (home y flechas)
 
 ### 4.4 Galería
 - Preferido: `galeria.media` con items `{type:"image"|"video", src, poster?}`. Compat: `galeria.images` (array) y `galeria.video|videos` (array) se fusionan detrás.
-- Imágenes fuerzan prefijo `img/`; vídeos no. Rutas se normalizan con base `data/{slug}/`.
+- Imágenes fuerzan prefijo `img/`; vídeos no. Rutas se normalizan con base `projects/{slug}/`.
 - Render: `<img loading="lazy" decoding="async">` con sombra; `<video controls playsinline preload="metadata">` (+ `poster` si viene).
 - **Sin overlay**: no hay pantalla completa custom al hacer clic; el navegador hace lo nativo (p.ej. abrir controles del vídeo en el propio reproductor).
 
@@ -124,7 +104,7 @@ featured.json  # orden de proyectos (home y flechas)
 ---
 
 ## 5) Navegación con flechas
-- Orden sacado de `featured.json.destacados`. Si el slug no está o hay <2 proyectos, no se pintan.
+- Orden sacado de `data/site.json` → `lists.featured` (vía `carga.js`). Si el slug no está o hay <2 proyectos, no se pintan.
 - Probabilidades: `PROB_ALTA=0.7`, `PROB_BAJA=0.2`, `PROB_LOCA=0.1`.
   - Flecha **izquierda**: alta → **Home**, baja → anterior, loca → random entre anterior/siguiente.
   - Flecha **derecha**: alta → siguiente, baja → anterior, loca → random entre anterior/siguiente.
@@ -134,7 +114,7 @@ featured.json  # orden de proyectos (home y flechas)
 ---
 
 ## 6) Fantasma secreto (`js/secreto.js`)
-- Corre en home y proyectos. Comprueba si **todos** los slugs de `featured.json.destacados` tienen `localStorage["proyecto-"+slug+"-visto"]="1"`.
+- Corre en home y proyectos. Comprueba si **todos** los slugs de `data/site.json` → `lists.featured` (vía `carga.js`) tienen `localStorage["proyecto-"+slug+"-visto"]="1"`.
 - Si se cumplen, monta un fantasma (`data/0_secret/img/ghost0-6.webp`, fallback `.png`) fijo abajo-derecha. El tamaño se puede forzar con `window.SECRET_GHOST_SIZE = 'clamp(...)'` o `data-ghost-size` en `<body>`.
 - Se queda quieto hasta la primera interacción; luego flota moviéndose. Clic → anima un “dado”, muestra cara 1..6 y abre en nueva pestaña la URL mapeada en `data/0_secret/secreto.json`.
 - Rechequea en el evento `storage` por si desbloqueas en otra pestaña.

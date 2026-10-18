@@ -1,3 +1,4 @@
+import { getFeatured, getProject, projectUrl } from "../carga.js";
 // arrows.js — flechas de navegación aleatoria prev/next + atajo About
 
 // Probabilidades compartidas para navegación de flechas (puedes ajustar)
@@ -34,12 +35,10 @@ function bindArrowKeys(leftBtn, rightBtn) {
 // Precarga suave de un proyecto vecino (JSON + logo) para que la transición vuele
 async function prefetchProject(slug) {
   try {
-    const r = await fetch(`data/${encodeURIComponent(slug)}/project.json`);
-    if (!r.ok) return;
-    const p = await r.json();
+    const p = await getProject(slug);
     if (typeof p.logo === "string" && /\.(webp|png|jpe?g|avif|gif)$/i.test(p.logo)) {
       const im = new Image();
-      im.src = `data/${encodeURIComponent(slug)}/` + p.logo.replace(/^\.?\//, "");
+      im.src = `projects/${encodeURIComponent(slug)}/img/` + p.logo.replace(/^\.?\/?(img\/)?/, "");
     }
   } catch {}
 }
@@ -80,19 +79,17 @@ export async function setupRandomArrows(currentSlug) {
           const p = document.createElement('p');
           p.className = 'about-web';
           const a = document.createElement('a');
-          a.href = 'https://meowrhino.studio/';
+          a.href = 'https://meowrhino.studio';
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
-          a.textContent = 'web: meowrhino';
+          a.textContent = 'web: meowrhino.studio';
           p.appendChild(a);
           root.appendChild(p);
         }
       }
       return; // corta aquí; no hace falta featured.json
     }
-    const r = await fetch("featured.json", { cache: "no-cache" });
-    if (!r.ok) throw new Error("featured.json not found");
-    const data = await r.json();
+    const data = await getFeatured();
     const arr = Array.isArray(data)
       ? data
       : data.destacados || data.featured || [];
@@ -155,19 +152,19 @@ export async function setupRandomArrows(currentSlug) {
             return;
           }
           if (tier === "baja") {
-            location.href = `${encodeURIComponent(prev)}/`;
+            location.href = projectUrl(prev);
             return;
           }
           // loca
           const target = Math.random() < 0.5 ? prev : next;
-          location.href = `${encodeURIComponent(target)}/`;
+          location.href = projectUrl(target);
         });
       } else {
         // DERECHA: se mantiene la lógica original (preferido, contrario, random)
         b.addEventListener("click", () => {
           const preferred = "next";
           const target = pickDest(preferred, prev, next);
-          location.href = `${encodeURIComponent(target)}/`;
+          location.href = projectUrl(target);
         });
       }
       return b;
@@ -181,7 +178,7 @@ export async function setupRandomArrows(currentSlug) {
     // Crea el atajo About como elemento central
     const a = document.createElement("a");
     a.className = "about-shortcut";
-    a.href = "about/";
+    a.href = projectUrl("about");
     a.setAttribute("aria-label", "Ir a About");
     a.title = "About";
     const img = document.createElement("img");

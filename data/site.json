@@ -1,0 +1,17 @@
+{
+  "$schema": "../schema/site.json",
+  "title": "Jaume Clotet",
+  "url": "https://jaumeclotet.com",
+  "lists": {
+    "featured": {
+      "projects": [
+        "alusinasons",
+        "cantautot",
+        "newywork",
+        "difacil",
+        "vampirtistes",
+        "20vingut"
+      ]
+    }
+  }
+}

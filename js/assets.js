@@ -1,10 +1,12 @@
 // assets.js — helpers compartidos para home y proyecto (ESM)
 
+import { getProject } from './carga.js';
+
 const _projectCache = new Map();
 
 export async function resolveAsset(slug, filenames) {
     for (const name of filenames) {
-        const url = `data/${slug}/${name}`;
+        const url = `projects/${slug}/${name}`;
         try {
             const res = await fetch(url, { method: 'HEAD' });
             if (res.ok) return url;
@@ -28,14 +30,12 @@ export function normalizeImgPath(slug, path) {
     if (!path) return null;
     let s = String(path).replace(/^\.?\//, ''); // quita ./ o /
     if (!s.startsWith('img/')) s = 'img/' + s;   // fuerza carpeta img/ por convención
-    return `data/${slug}/${s}`;
+    return `projects/${slug}/${s}`;
 }
 
 export async function getProjectMeta(slug) {
     if (_projectCache.has(slug)) return _projectCache.get(slug);
-    const res = await fetch(`data/${slug}/project.json`);
-    if (!res.ok) throw new Error('project.json not found for ' + slug);
-    const p = await res.json();
+    const p = await getProject(slug);
     validateProjectMeta(p, slug);
     _projectCache.set(slug, p);
     return p;

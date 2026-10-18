@@ -1,5 +1,5 @@
 /* proyecto.js — bootstrap de la página de proyecto
-   - Carga data/{slug}/project.json, normaliza rutas y renderiza.
+   - Carga projects/{slug}/project.json (carga.js), normaliza rutas y renderiza.
    - Desktop: ratón (intacto).
    - Móvil: giroscopio → touch/drag → auto-animación.
    - Créditos: string (compat con formato viejo).
@@ -12,6 +12,7 @@ import { setPageMeta } from "./proyecto/meta.js";
 import { normalizePaths } from "./proyecto/normalize.js";
 import { renderProject } from "./proyecto/render.js";
 import { setupRandomArrows } from "./proyecto/arrows.js";
+import { getProject } from "./carga.js";
 
 // ============ Carga de datos del proyecto ============
 
@@ -24,13 +25,10 @@ async function loadProject() {
     return;
   }
   try {
-    const url = `data/${slug}/project.json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("HTTP " + res.status + " for " + url);
-    const p = await res.json();
+    const p = await getProject(slug);
 
     // Prefijo base para todas las rutas del JSON
-    const base = `data/${slug}/`;
+    const base = `projects/${slug}/`;
     normalizePaths(p, base);
     setPageMeta(p, slug);
     renderProject(p);

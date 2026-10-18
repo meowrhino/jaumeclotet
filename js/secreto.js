@@ -1,3 +1,4 @@
+import { getFeatured } from "./carga.js";
 // js/secreto.js
 (() => {
   const SECRET_IMG_BASE = 'data/0_secret/img/ghost';
@@ -226,7 +227,7 @@
 
   // -------- Crear e inyectar el ghost
   async function maybeMountGhost() {
-    const featured = await fetchJSON('featured.json');
+    const featured = await getFeatured().catch(() => null);
     if (!featured || !Array.isArray(featured.destacados) || featured.destacados.length === 0) return;
 
     if (!allFeaturedSeen(featured.destacados)) return;

@@ -1,3 +1,9 @@
 .DS_Store
-**/.DS_Store
+node_modules/
+
+# La web generada: la escriu node build/build.mjs i la publica la Action
+dist/
+# Les imatges per compartir (sharp): les fa el build
+.cache/
 .claude/
+**/.DS_Store

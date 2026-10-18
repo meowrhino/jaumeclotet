@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "La malefica llegenda del Vampirtista",
+  "logo": "titol.webp",
+  "bg": "fons.webp",
+  "synopsis": "En un indret no tan llunyà, un artista ni jove ni vell,\npensava deixar de fer art\nquan de cop…\nel LLAPIS se li va convertir en SERP!\n i, corbant-se endimoniadament,\nli va clavar la punta de la mina a la mà!\nAuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu\n",
+  "fun": {
+    "src": "fun.webp"
+  },
+  "text": [
+    "Un espectacle esmunyedís o un taller elàstic que reivindica el dibuix com a forma de resistència davant l’(auto)exigència, el judici i les lògiques de validació del sistema artístic.\n A través d’una faula performativa sobre la figura de l’artista, el públic es capbussa en un ritual col·lectiu en viu on els mals de la pràctica creativa s’exposen, s’exageren i es desconnecten a través del joc, la ximpleria i la complicitat.\n"
+  ],
+  "gallery": {
+    "images": [
+      "DEP_JaumeClotet 01.webp",
+      "DEP_JaumeClotet 02.webp",
+      "DEP_JaumeClotet 03.webp",
+      "DEP_JaumeClotet 04.webp",
+      "DEP_JaumeClotet 05.webp",
+      "DEP_JaumeClotet 06.webp",
+      "DEP_JaumeClotet 07.webp",
+      "DEP_JaumeClotet 08.webp",
+      "DEP_JaumeClotet 09.webp",
+      "DEP_JaumeClotet 10.webp",
+      "DEP_JaumeClotet 11.webp"
+    ]
+  },
+  "credits": "Intèrprets: Valeria Pisati i Jaume Clotet\nEscenografia i il·luminació: David Corral\nVestuari: Vilma López i Patricia Feliu\nMúsica: Jaume Clotet i Juan Feduchi\nDisplay en construcció: Borja Casanovas\nFeedbacks: Núria Gomez Gabriel, Jordi Vernis, Raimon Clotet i Ander Peretz de Arenaza\nFotografies: Pep Herrero i Edu Pedrocchi",
+  "extras": [
+    {
+      "id": "boca",
+      "type": "image",
+      "src": "comodin.webp",
+      "place": "append:header",
+      "align": "center",
+      "width": "half"
+    }
+  ]
+}

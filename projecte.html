@@ -1,22 +1,20 @@
 <!doctype html>
-<html lang="es">
+<html lang="ca">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projecte · Jaume Clotet</title>
 
-  <!-- URLs antiguas (projecte.html?slug=X) redirigen al formato nuevo /X/ -->
+  <!-- projecte.html?slug=X: a la web construïda redirigeix a /X/; a la vista prèvia pinta el projecte -->
   <script>
     (function () {
       var slug = new URLSearchParams(location.search).get("slug");
-      if (slug) location.replace("./" + encodeURIComponent(slug) + "/");
+      // a la web construïda, cap a /X/; a la vista prèvia (Live Server) es pinta aquí mateix
+      if (slug && document.documentElement.hasAttribute("data-built")) location.replace("./" + encodeURIComponent(slug) + "/");
     })();
   </script>
 
   <!-- Performance: preconnect (no cambia tu fuente, sólo acelera) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@200;300;400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
   <!-- A11y utilitario (estilos de foco y .visually-hidden) -->

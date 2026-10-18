@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/site.json: el general de la web",
+  "description": "data/site.json: el nom, el domini i els projectes de la home, en ordre. VS Code llegeix aquest fitxer (pel \"$schema\" de dalt del JSON) per completar, explicar cada camp i subratllar el que està malament; el build i la vista prèvia el fan servir per revisar.",
+  "type": "object",
+  "required": [
+    "title",
+    "lists"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "_": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "El nom de la web."
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^https://[^/]+$",
+      "description": "El domini, sense barra al final: \"https://jaumeclotet.com\". Sense domini, null."
+    },
+    "lists": {
+      "type": "object",
+      "description": "Els projectes que surten a la home, en ordre. Un projecte que no hi és té la seva pàgina igualment (com about).",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "projects"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+              "description": "El nom de la carpeta a projects/: minúscules, números i guions. Surt a l'adreça: /<nom>/"
+            }
+          }
+        }
+      }
+    }
+  }
+}

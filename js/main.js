@@ -1,11 +1,12 @@
 import { resolveAsset, normalizeImgPath, getBackground } from './assets.js';
+import { getFeatured, projectUrl } from './carga.js';
 
 // main.js — Home tiles con lazy loading para fondos/logos y prioridad en el primer tile
 
 async function loadFeatured() {
-  const res = await fetch('featured.json');
-  const data = await res.json();
+  const data = await getFeatured();
   const grid = document.getElementById('projects-grid');
+  grid.replaceChildren(); // los enlaces que escribe el build, para quien no ejecuta JS
 
   // Observer para cargar fondos solo cuando se acerquen al viewport
   const bgObserver = new IntersectionObserver((entries, obs) => {
@@ -33,7 +34,7 @@ async function loadFeatured() {
     tile.className = 'tile';
 
     const a = document.createElement('a');
-    a.href = `${encodeURIComponent(slug)}/`;
+    a.href = projectUrl(slug);
     a.className = 'logo-link';
 
     // Logo: lazy + decoding async; solo el primero eager + prioridad alta

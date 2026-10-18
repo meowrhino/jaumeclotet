@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Difàcil",
+  "logo": "titol.webp",
+  "bg": "fons.webp",
+  "synopsis": "Quan siguis gran\nel teu cor\ns'acabarà\ntransformant\nen cartó",
+  "fun": {
+    "src": "fun.webp"
+  },
+  "text": [
+    "Difàcil és un projecte desenvolupat en el marc d’espais c, programa del Consorci d’Educació i l’ICUB que connecta la pràctica artística amb l’educació primària mitjançant processos de convivència de llarga durada. Entre 2022 i 2024, l’artista Jaume Clotet ha treballat a l’Escola Aldana amb la mediació de La Capella i l’acompanyament de Judit López, transformant un espai del centre en un taller-estudi obert tant a la seva pràctica com a la participació dels infants.",
+    "L’estudi es concep com un espai i un temps compartits, on creació artística i imaginari infantil es contaminen mútuament en un procés obert, sense final predeterminat. El projecte dissol fronteres entre creació professional i amateur, enginy infantil i adult, superficialitat i profunditat.",
+    "Difàcil proposa un procés creatiu flexible i mutable, capaç de qüestionar jerarquies de valor i autoria, i d’elevar resultats aparentment “menys artístics” a la mateixa consideració que les obres més premeditades. A través d’un joc constant, explora la convivència entre oposats i construeix un terreny comú on plaer, experimentació i imaginació esdevenen indissociables."
+  ],
+  "gallery": {
+    "images": [
+      "Difacil_01.webp",
+      "Difacil_02.webp",
+      "Difacil_03.webp",
+      "Difacil_04.webp",
+      "Difacil_05.webp",
+      "Difacil_06.webp",
+      "Difacil_07.webp",
+      "Difacil_08.webp",
+      "Difacil_09.webp",
+      "Difacil_10.webp",
+      "Difacil_11.webp",
+      "Difacil_12.webp"
+    ]
+  },
+  "credits": "Proposta creada juntament amb els infants de l’ESCOLA ALDANA\ndintre de la residència Espais C 2022-2024\nEspai Rampa, La Capella 2024 (Barcelona)\n\nConstrucció de la càmera-biombo i muntatge expositiu: Borja Casanovas\nAssessorament edició vídeo: Albert Sánchez\nFotografia: Pep Herrero",
+  "extras": [
+    {
+      "id": "foto",
+      "type": "image",
+      "src": "foto.webp",
+      "place": "append:header",
+      "align": "center",
+      "width": "half"
+    }
+  ]
+}
