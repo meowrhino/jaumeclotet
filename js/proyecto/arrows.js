@@ -66,6 +66,7 @@ export async function setupRandomArrows(currentSlug) {
         b.appendChild(img);
 
         b.addEventListener("click", () => {
+          try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
           location.href = "index.html";
         });
 
@@ -148,15 +149,18 @@ export async function setupRandomArrows(currentSlug) {
           // loca  → Random entre Anterior/Siguiente
           const tier = pickTier();
           if (tier === "alta") {
+            try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
             location.href = `index.html`;
             return;
           }
           if (tier === "baja") {
+            try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
             location.href = projectUrl(prev);
             return;
           }
           // loca
           const target = Math.random() < 0.5 ? prev : next;
+          try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
           location.href = projectUrl(target);
         });
       } else {
@@ -164,6 +168,7 @@ export async function setupRandomArrows(currentSlug) {
         b.addEventListener("click", () => {
           const preferred = "next";
           const target = pickDest(preferred, prev, next);
+          try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
           location.href = projectUrl(target);
         });
       }

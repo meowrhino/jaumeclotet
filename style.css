@@ -1,3 +1,6 @@
+/* el fondo, también para la transición de la casa (css/transicion.css) */
+:root { --bg: #111; }
+
 @import url("fonts/fonts.css"); /* Spectral SC, en el repo */
 /* =========================================
    Reset & Base

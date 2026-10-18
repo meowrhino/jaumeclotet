@@ -170,7 +170,7 @@ function homePage() {
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'projecte.html'), readFileSync(at('projecte.html'), 'utf8').replace('<html lang="ca">', '<html lang="ca" data-built>'));
-for (const f of ['style.css', 'fonts', 'js', 'data', 'projects']) cpSync(at(f), join(OUT, f), { recursive: true, filter: (x) => !x.endsWith('.DS_Store') });
+for (const f of ['style.css', 'css', 'fonts', 'js', 'data', 'projects']) cpSync(at(f), join(OUT, f), { recursive: true, filter: (x) => !x.endsWith('.DS_Store') });
 writeFileSync(join(OUT, 'index.html'), homePage());
 // 404: la base, des de l'arrel de la web (també en una subcarpeta)
 writeFileSync(join(OUT, '404.html'), swap(readFileSync(at('404.html'), 'utf8'), /<base href="\/">/, `<base href="${BASE}/">`, '404.html')

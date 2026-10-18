@@ -2,6 +2,24 @@
 <html lang="ca">
 <head>
   <meta charset="utf-8">
+    <!-- la transicion de la casa (JAMstack, patrones §6c; js/transicion.js): tapada
+         antes de pintar si se llega de otra pagina de la web -->
+    <script>{
+    const html = document.documentElement;
+    html.classList.add('js');
+    let back = false;
+    try {
+      const d = JSON.parse(sessionStorage.getItem('transicion'));
+      back = !d && performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+      if (d?.carga) html.style.setProperty('--carga', d.carga);
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && (back || d)) html.classList.add('tapada');
+    } catch {}
+    window.revelada = 'onpagereveal' in window ? new Promise((done) => addEventListener('pagereveal', (e) => {
+      const vt = e.viewTransition;
+      if (vt && back && html.classList.contains('tapada')) { html.classList.add('tapando'); done(vt); }
+      else { vt?.ready.catch(() => {}); vt?.skipTransition(); done(null); }   // saltarla rechaza ready: sin error en la consola
+    }, { once: true })) : Promise.resolve(null);
+    }</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projecte · Jaume Clotet</title>
 
@@ -16,6 +34,7 @@
 
   <!-- Performance: preconnect (no cambia tu fuente, sólo acelera) -->
 
+  <link rel="stylesheet" href="css/transicion.css">
   <link rel="stylesheet" href="style.css">
   <!-- A11y utilitario (estilos de foco y .visually-hidden) -->
   <!-- <link rel="stylesheet" href="a11y.css"> -->
@@ -28,5 +47,6 @@
   <!-- Toda la lógica sigue en tu JS de siempre -->
   <script type="module" src="js/proyecto.js"></script>
   <script type="module" src="js/secreto.js"></script>
+  <script src="js/transicion.js" defer></script>
 </body>
 </html>
