@@ -59,7 +59,7 @@ function renderNotFound(slug) {
     <div class="not-found">
       <h1>ups!</h1>
       <p>aquest projecte${slug ? ` («${escapeHtml(slug)}»)` : ""} no existeix — o encara no.</p>
-      <p><a href="index.html">tornar a l'inici</a></p>
+      <p><a href="./">tornar a l'inici</a></p>
     </div>`;
 }
 

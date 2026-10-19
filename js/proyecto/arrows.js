@@ -67,7 +67,7 @@ export async function setupRandomArrows(currentSlug) {
 
         b.addEventListener("click", () => {
           try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
-          location.href = "index.html";
+          location.href = "./";
         });
 
         section.appendChild(b);
@@ -150,7 +150,7 @@ export async function setupRandomArrows(currentSlug) {
           const tier = pickTier();
           if (tier === "alta") {
             try { sessionStorage.setItem('transicion', '{}'); } catch {} // la siguiente página llega tapada (transición de la casa)
-            location.href = `index.html`;
+            location.href = "./";
             return;
           }
           if (tier === "baja") {
